@@ -1,7 +1,7 @@
 ---
 title: "Project Proposal"
 subtitle: "due October 11, 2021 by 11:59 PM "
-author: "Your names and team name here"
+author: "Maggie Lundberg, Isabella Kjaerulff, and Riya Mohan"
 date: ""
 output: pdf_document
 ---
