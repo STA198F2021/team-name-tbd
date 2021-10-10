@@ -35,5 +35,9 @@ Variables of interest include Primary Symptom, Other Associated Symptoms, Cause 
 
 # Data Analysis Plan
 
+As a part of our data analysis, a few of the specific predictors we are looking at are race, symptoms, cause of injury, BGL, and Alcohol/Drug Use Indicators. As a result, the outcomes we will be looking at are primarily related to the quality of care, which we will be able to determine from Response Time, GCS, Barriers to Patient Care, and Vital Signs. Furthermore, in order to address our research questions we will be using race, cause of injury, and symptoms as comparison groups.
+
+In addition, we have identified a few vital statistical methods needed for analysis. These include p-value/t-test (null hypothesis), standard deviation for the symptoms/conditions as related to different vital signs, and conditional probability. As a result, we expect to see a correlation between race and quality of care, blood glucose level, alcohol/drug use indicators, symptoms, and vital signs. We also expect that the null hypothesis can be rejected (P < 0.05) and a standard distribution of vitals will be related to their associated symptoms. Various conditional probabilities are expected to bolster our expected conclusion as well
+
 (Specify the outcome (response, Y) and predictor (explanatory, X) variables you will use to answer your question, as well as the comparison groups you will use, if applicable. You may include very preliminary exploratory data analysis, including some summary statistics and visualizations, along with some explanation on how they help you learn more about your data. Note the statistical method(s) that you believe will be useful in answering your question(s). 
 What results from these specific statistical methods are needed to support your hypothesized answer?)
