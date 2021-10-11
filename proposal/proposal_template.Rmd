@@ -17,7 +17,9 @@ library(tidyverse)
 ```
 
 # Introduction and Data, including Research Questions
-Our data is provided by NEMSIS, the National EMS Information System, and was collected as an effort to help standardize and improve EMS databases. From this data, we ask, what factors influence somebody's process of emergency care in an EMS call? 
+Our data is provided by NEMSIS, the National EMS Information System, and was collected as an effort to help standardize and improve EMS databases. 
+
+Every year, over 16 million patients are treated by EMS. In comparison to White patients, Asian and Hispanic patients were less likely to be evaluated for their pain. White and Black patients were relatively equal in pain assessment frequency, but only 13.9% of Black patients were given pain medication while 20.1% of White patients were given pain medication (Soares et al, 2019). While there are lots of limitations to interpreting EMS treatment of patients, previous findings have shown that race directly leads to a difference of treatment in emergency situations. We wish to dive deeper into this to see if other factors influence patients’ treatment of care. From the data provided by NEMSIS, we ask, what factors influence somebody's process of emergency care in an EMS call? 
 
 To answer our overarching research question, we plan to center our analysis around these questions:
 Is there a correlation between drug use and observed quality of care? 
@@ -41,3 +43,10 @@ In addition, we have identified a few vital statistical methods needed for analy
 
 (Specify the outcome (response, Y) and predictor (explanatory, X) variables you will use to answer your question, as well as the comparison groups you will use, if applicable. You may include very preliminary exploratory data analysis, including some summary statistics and visualizations, along with some explanation on how they help you learn more about your data. Note the statistical method(s) that you believe will be useful in answering your question(s). 
 What results from these specific statistical methods are needed to support your hypothesized answer?)
+
+
+
+
+References:
+
+Soares, W. E., 3rd, Knowles, K. J., 2nd, & Friedmann, P. D. (2019). A Thousand Cuts: Racial and Ethnic Disparities in Emergency Medicine. Medical care, 57(12), 921–923. https://doi.org/10.1097/MLR.0000000000001250
