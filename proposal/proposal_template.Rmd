@@ -9,7 +9,8 @@ output: pdf_document
 # Load Packages
 
 ```{r load-packages, message = FALSE, warning = FALSE}
-library(tidyverse) 
+library(tidyverse)
+
 ``` 
 
 # Load Data
