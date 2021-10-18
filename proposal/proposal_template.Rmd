@@ -14,11 +14,14 @@ library(tidyverse)
 ``` 
 
 # Load Data
-```{r load-data, message = F}
+[to be inserted upon receiving expanded OIT container]
+```{r load-data, message = FALSE, echo = FALSE}
 ```
 
 # Introduction and Data, including Research Questions
-Our data is provided by NEMSIS, the National EMS Information System, and was collected as an effort to help standardize and improve EMS databases. From this data, we ask, what factors influence somebody's process of emergency care in an EMS call? 
+Our data is provided by NEMSIS, the National EMS Information System, and was collected as an effort to help standardize and improve EMS databases. 
+
+Every year, over 16 million patients are treated by EMS. In comparison to White patients, Asian and Hispanic patients were less likely to be evaluated for their pain. White and Black patients were relatively equal in pain assessment frequency, but only 13.9% of Black patients were given pain medication while 20.1% of White patients were given pain medication (Soares et al, 2019). While there are lots of limitations to interpreting EMS treatment of patients, previous findings have shown that race directly leads to a difference of treatment in emergency situations. We wish to dive deeper into this to see if other factors influence patients’ treatment of care. From the data provided by NEMSIS, we ask, what factors influence somebody's process of emergency care in an EMS call? 
 
 To answer our overarching research question, we plan to center our analysis around these questions:
 Is there a correlation between drug use and observed quality of care? 
@@ -32,7 +35,10 @@ Variables of interest include Primary Symptom, Other Associated Symptoms, Cause 
 
 # Glimpse
 
-(Please use `glimpse` for your data, uploaded into the data folder, here.)
+[to be inserted upon receiving expanded OIT container]
+
+We will be using ~500 observations with 10-20 variables as personally approved by the NEMSIS research team for uploading to Github. We will be including a substantial credit line and clarifying the nature of the data as NOT population-based and NOT used to represent public health data. The process will include uploading the data onto a Windows computer, bypassing the encryption with the corresponding Bitlocker passcode, uploading the zip file onto a high-capacity R-studio container, reading it from SAS to R, joining the files, narrowing down the sample to 500 random observations using R code, saving that file, and uploading it to Github in place of the original data set to work from. Currently, we have an open help desk request of number RITM4124724 to obtain access to the high-capacity container.
+
 
 # Data Analysis Plan
 
@@ -40,5 +46,12 @@ As a part of our data analysis, a few of the specific predictors we are looking 
 
 In addition, we have identified a few vital statistical methods needed for analysis. These include p-value/t-test (null hypothesis), standard deviation for the symptoms/conditions as related to different vital signs, and conditional probability. As a result, we expect to see a correlation between race and quality of care, blood glucose level, alcohol/drug use indicators, symptoms, and vital signs. We also expect that the null hypothesis can be rejected (P < 0.05) and a standard distribution of vitals will be related to their associated symptoms. Various conditional probabilities are expected to bolster our expected conclusion as well
 
-(Specify the outcome (response, Y) and predictor (explanatory, X) variables you will use to answer your question, as well as the comparison groups you will use, if applicable. You may include very preliminary exploratory data analysis, including some summary statistics and visualizations, along with some explanation on how they help you learn more about your data. Note the statistical method(s) that you believe will be useful in answering your question(s). 
-What results from these specific statistical methods are needed to support your hypothesized answer?)
+Visualizations may include a faceted histogram or boxplot of distributions of blood pressures by body system conditions associated with the vital signs. Categorical visuals will be of use to us because of the nature of many of our variables, so we will make use of creative dodged and filled bar plots to show alcohol and drug use indicators by race. We can also use a tree map to show proportion related to the total body systems associated with different patient IDs.
+
+Calculations include the proportion of work-related exposures, injuries, and deaths out of the total data set.
+
+
+
+References:
+
+Soares, W. E., 3rd, Knowles, K. J., 2nd, & Friedmann, P. D. (2019). A Thousand Cuts: Racial and Ethnic Disparities in Emergency Medicine. Medical care, 57(12), 921–923. https://doi.org/10.1097/MLR.0000000000001250
