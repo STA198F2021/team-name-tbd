@@ -65,3 +65,7 @@ Calculations include the proportion of work-related exposures, injuries, and dea
 References:
 
 Soares, W. E., 3rd, Knowles, K. J., 2nd, & Friedmann, P. D. (2019). A Thousand Cuts: Racial and Ethnic Disparities in Emergency Medicine. Medical care, 57(12), 921–923. https://doi.org/10.1097/MLR.0000000000001250
+
+
+
+CHANGES FOR RESUBMISSION: We added the data to our project, added more acknowledgements, and did thorough glimpses of our data.
