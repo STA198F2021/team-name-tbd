@@ -44,6 +44,8 @@ glimpse(esituation1)
 glimpse(esituation2)
 ```
 
+We have achieved extraction of three of our variables with the help of Phuc Nguyen and will continue to upload the full data to Github when it is separated into unidentifiable random samples, either by means of working with an experienced R user or obtaining a larger container from the OIT.
+
 
 We will be using ~500 observations with 10-20 variables as personally approved by the NEMSIS research team for uploading to Github. We will be including a substantial credit line and clarifying the nature of the data as NOT population-based and NOT used to represent public health data. The process will include uploading the data onto a Windows computer, bypassing the encryption with the corresponding Bitlocker passcode, uploading the zip file onto a high-capacity R-studio container, reading it from SAS to R, joining the files, narrowing down the sample to 500 random observations using R code, saving that file, and uploading it to Github in place of the original data set to work from. Currently, we have an open help desk request of number RITM4124724 to obtain access to the high-capacity container.
 
