@@ -10,7 +10,10 @@ output: pdf_document
 
 ```{r load-packages, message = FALSE, warning = FALSE}
 library(tidyverse)
-
+library(haven)
+eprocedures <- read_sas("/home/guest/STA198/team-name-tbd/eprocedures_03ref.sas7bdat")
+esituation1 <- read_sas("/home/guest/STA198/team-name-tbd/esituation_10ref.sas7bdat")
+esituation2 <- read_sas("/home/guest/STA198/team-name-tbd/esituation_09ref.sas7bdat")
 ``` 
 
 # Load Data
@@ -35,7 +38,12 @@ Variables of interest include Primary Symptom, Other Associated Symptoms, Cause 
 
 # Glimpse
 
-[to be inserted upon receiving expanded OIT container]
+```{r glimpsedata}
+glimpse(eprocedures)
+glimpse(esituation1)
+glimpse(esituation2)
+```
+
 
 We will be using ~500 observations with 10-20 variables as personally approved by the NEMSIS research team for uploading to Github. We will be including a substantial credit line and clarifying the nature of the data as NOT population-based and NOT used to represent public health data. The process will include uploading the data onto a Windows computer, bypassing the encryption with the corresponding Bitlocker passcode, uploading the zip file onto a high-capacity R-studio container, reading it from SAS to R, joining the files, narrowing down the sample to 500 random observations using R code, saving that file, and uploading it to Github in place of the original data set to work from. Currently, we have an open help desk request of number RITM4124724 to obtain access to the high-capacity container.
 
