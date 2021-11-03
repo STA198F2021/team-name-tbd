@@ -13,7 +13,7 @@ library(tidyverse)
 ``` 
 
 # Load Data
-```{r load-data, message = FALSE, echo = FALSE}
+```{r load-data, message = FALSE, echo = FALSE, warning = FALSE}
 unzip("../data/IHME_DEX_ED_SPENDING_2006_2016_DATA.zip", exdir =  "../data/spending_data_unzip")
 
 spending <- read.csv("../data/spending_data_unzip/IHME_DEX_ED_SPENDING_2006_2016_DATA_Y2021M09D23.CSV")
