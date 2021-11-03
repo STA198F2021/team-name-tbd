@@ -10,33 +10,34 @@ output: pdf_document
 
 ```{r load-packages, message = FALSE, warning = FALSE}
 library(tidyverse)
-
 ``` 
 
 # Load Data
-[to be inserted upon receiving expanded OIT container]
 ```{r load-data, message = FALSE, echo = FALSE}
+unzip("../data/IHME_DEX_ED_SPENDING_2006_2016_DATA.zip", exdir =  "../data/spending_data_unzip")
+
+spending <- read.csv("../data/spending_data_unzip/IHME_DEX_ED_SPENDING_2006_2016_DATA_Y2021M09D23.CSV")
 ```
 
 # Introduction and Data, including Research Questions
-Our data is provided by NEMSIS, the National EMS Information System, and was collected as an effort to help standardize and improve EMS databases. 
 
-Every year, over 16 million patients are treated by EMS. In comparison to White patients, Asian and Hispanic patients were less likely to be evaluated for their pain. White and Black patients were relatively equal in pain assessment frequency, but only 13.9% of Black patients were given pain medication while 20.1% of White patients were given pain medication (Soares et al, 2019). While there are lots of limitations to interpreting EMS treatment of patients, previous findings have shown that race directly leads to a difference of treatment in emergency situations. We wish to dive deeper into this to see if other factors influence patients’ treatment of care. From the data provided by NEMSIS, we ask, what factors influence somebody's process of emergency care in an EMS call? 
-
+Emergency services are a vital component of the care delivery process because it ensures people receive the care they need in a timely manner. However, in recent years, emergency services spending has increased significantly (Scott and Liu 2021), which may cause issues with how accessible these services may be. The amount of money spent on emergency services is one of many ways access to emergency services can be evaluated, especially if this spending is organized based on government versus private spending. We hope to dive deeper into understanding how emergency services spending habits change by age and gender to understand how access changes and what factors influence the process of payment models for emergency care.
+Our data is provided by the Institute of Health Metrics and Evaluation. These Emergency Department (ED) health spending estimates are part of the Disease Expenditure Project (DEX) at IHME, which produced estimates for US spending on health care according to 3 types of payers: public insurance (including Medicare, Medicaid, and other government programs), private insurance, and out-of-pocket payments. This dataset contains ED spending estimates by aggregate health category, age group, sex, and payer for 2006 through 2016.
 To answer our overarching research question, we plan to center our analysis around these questions:
-Is there a correlation between drug use and observed quality of care? 
-Is there a correlation between race and observed quality of care?
-Are there biases present in the EMS quality of care sample size? 
-What is the relationship between symptoms and vital sign ranges?
-Is race correlated to technicians' assessment of GCS?
+-Is there a correlation between gender and types and amounts of emergency services expenditure?
+-Is there a correlation between age and types and amounts of emergency services expenditure?
+-Is there an interaction between age and gender in terms of its relationship with emergency service expenditure?
+Variables of interest include Sex, Age, out-of-pocket expenditure, government expenditure, cause of disease, and private insurance expenditure.
+Citations: 
+Data Set: Institute for Health Metrics and Evaluation (IHME). United States Healthcare Spending in Emergency Departments by Health Condition 2006-2016. Seattle, United States of America: Institute for Health Metrics and Evaluation (IHME), 2021.
+Mentioned Study: Woody Scott K, Liu A, Chen C, Kaldjian AS, Sabbatini AK, Duber, HC, Dieleman JL. Healthcare Spending in U.S. Emergency Departments by Health Condition, 2006-2016. PLOS One. 27 October 2021.
 
-Variables of interest include Primary Symptom, Other Associated Symptoms, Cause of Injury, Barriers to Patient Care, Alcohol/Drug Use Indicators, Protocols Used, Medication Given, Procedure, Procedure Successful/Response to Procedure, Suspected EMS Work Related Exposure/Injury/Death, Race, Initial Patient Acuity vs Final Patient Acuity, and Vital Signs--Blood Pressure, Pulse Oximetry, Respiratory Rate, O2 Saturation, Blood Glucose, Glasgow Coma Score, and Level of Responsiveness.
 
 
 # Glimpse
 
 ```{r glimpsedata}
-
+glimpse(spending)
 ```
 
 We have achieved extraction of three of our variables with the help of Phuc Nguyen and will continue to upload the full data to Github when it is separated into unidentifiable random samples, either by means of working with an experienced R user or obtaining a larger container from the OIT.
