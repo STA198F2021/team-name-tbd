@@ -10,10 +10,7 @@ output: pdf_document
 
 ```{r load-packages, message = FALSE, warning = FALSE}
 library(tidyverse)
-library(haven)
-eprocedures <- read_sas("/home/guest/STA198/team-name-tbd/eprocedures_03ref.sas7bdat")
-esituation1 <- read_sas("/home/guest/STA198/team-name-tbd/esituation_10ref.sas7bdat")
-esituation2 <- read_sas("/home/guest/STA198/team-name-tbd/esituation_09ref.sas7bdat")
+
 ``` 
 
 # Load Data
@@ -39,9 +36,7 @@ Variables of interest include Primary Symptom, Other Associated Symptoms, Cause 
 # Glimpse
 
 ```{r glimpsedata}
-glimpse(eprocedures)
-glimpse(esituation1)
-glimpse(esituation2)
+
 ```
 
 We have achieved extraction of three of our variables with the help of Phuc Nguyen and will continue to upload the full data to Github when it is separated into unidentifiable random samples, either by means of working with an experienced R user or obtaining a larger container from the OIT.
@@ -52,20 +47,17 @@ We will be using ~500 observations with 10-20 variables as personally approved b
 
 # Data Analysis Plan
 
-As a part of our data analysis, a few of the specific predictors we are looking at are race, symptoms, cause of injury, BGL, and Alcohol/Drug Use Indicators. As a result, the outcomes we will be looking at are primarily related to the quality of care, which we will be able to determine from Response Time, GCS, Barriers to Patient Care, and Vital Signs. Furthermore, in order to address our research questions we will be using race, cause of injury, and symptoms as comparison groups.
+As a part of our data analysis, a few of the specific predictors we are looking at are age group, gender, disease type, and type of insurance. We will be looking at how these predictors impact United States healthcare spending by the Emergency Department. 
 
-In addition, we have identified a few vital statistical methods needed for analysis. These include p-value/t-test (null hypothesis), standard deviation for the symptoms/conditions as related to different vital signs, and conditional probability. As a result, we expect to see a correlation between race and quality of care, blood glucose level, alcohol/drug use indicators, symptoms, and vital signs. We also expect that the null hypothesis can be rejected (P < 0.05) and a standard distribution of vitals will be related to their associated symptoms. Various conditional probabilities are expected to bolster our expected conclusion as well
+In addition, we have identified a few vital statistical methods needed for analysis.When looking at gender, which we plan to prephase that it is only Male/Female only because of the nature of the dataset, we ask the question, is there a correlation for Males vs. Females? To test this, we will use a t-test for means of males vs. females and perform a linear Regression. Next we ask, is there correlation for males vs. females GIVEN disease type. We plan to perform a regression for this with an interaction term and conditional probability tests. Age, which is a categorical variable, is the next predictor we want to analyze, asking, is there a correlation for various age groups? An f-test for means of age groups using ANOVA, and a step-down tests for the age groups will be done. We will also see if there a correlation for various age groups GIVEN disease type. Additionally, we want to look at the interaction between gender and age, using a linear regression (Main Effects), linear regression (Interaction Effects), and adjusted R^2 for Gender and Age to determine whether the interaction term is useful in the model. Finally we ask, how does the type of insurance play into this? To test this we will use a t-test and linear regression to see how government spending differs by insurance type. 
 
-Visualizations may include a faceted histogram or boxplot of distributions of blood pressures by body system conditions associated with the vital signs. Categorical visuals will be of use to us because of the nature of many of our variables, so we will make use of creative dodged and filled bar plots to show alcohol and drug use indicators by race. We can also use a tree map to show proportion related to the total body systems associated with different patient IDs.
+Visualizations will include linear regression line plots, plots of residuals, and a boxplot of the distribution of spending faceted by insurance type. 
 
-Calculations include the proportion of work-related exposures, injuries, and deaths out of the total data set.
+WHAT results are we expecting?
 
 
 
 References:
 
-Soares, W. E., 3rd, Knowles, K. J., 2nd, & Friedmann, P. D. (2019). A Thousand Cuts: Racial and Ethnic Disparities in Emergency Medicine. Medical care, 57(12), 921–923. https://doi.org/10.1097/MLR.0000000000001250
 
 
-
-CHANGES FOR RESUBMISSION: We added the data to our project, added more acknowledgements, and did thorough glimpses of our data.
