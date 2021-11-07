@@ -140,3 +140,59 @@ nrow(sigagepairs)
 ```
 
 The pairwise t-tests used for our ANOVA step-down tests suggest that there are 97 different age pairs out of the 171 possible combinations. This tells us that more age pairs are different than are similar and that therefore the majority of age group pairs differ in terms of mean expenditures.
+
+```{r age-expenditure-barplot}
+
+ggplot(data = spending_noall, aes(x = age_group_name, y = mean_all)) +
+  geom_bar(position = "dodge", stat = "identity") +
+  theme(axis.text.x = element_text(angle = 45,hjust = 1)) +
+  scale_y_continuous(labels = scales::comma) +
+  labs(
+    x = "Age Group",
+    y = "Mean Spending of All Payers",
+    title = "Emergency Department Expenditures By Age Group"
+       )
+
+```
+
+```{r age-pub-barplot, fig.height = 2.5, fig.width = 6, echo = FALSE}
+
+ggplot(data = spending_noall, aes(x = age_group_name, y = mean_pub)) +
+  geom_bar(position = "dodge", stat = "identity") +
+  theme(axis.text.x = element_text(angle = 45,hjust = 1)) +
+  scale_y_continuous(labels = scales::comma) +
+  labs(
+    x = "Age Group",
+    y = "Mean Spending of Public Insurance",
+    title = "ED Public Insurance Expenditures By Age Group"
+       )
+
+```
+
+```{r age-pri-barplot, fig.height = 2.5, fig.width = 6, echo = FALSE}
+
+ggplot(data = spending_noall, aes(x = age_group_name, y = mean_pri)) +
+  geom_bar(position = "dodge", stat = "identity") +
+  theme(axis.text.x = element_text(angle = 45,hjust = 1)) +
+  scale_y_continuous(labels = scales::comma) +
+  labs(
+    x = "Age Group",
+    y = "Mean Spending of Public Insurance",
+    title = "ED Public Insurance Expenditures By Age Group"
+       )
+
+```
+
+```{r age-oop-barplot, fig.height = 2.5, fig.width = 6, echo = FALSE}
+
+ggplot(data = spending_noall, aes(x = age_group_name, y = mean_oop)) +
+  geom_bar(position = "dodge", stat = "identity") +
+  theme(axis.text.x = element_text(angle = 45,hjust = 1)) +
+  scale_y_continuous(labels = scales::comma) +
+  labs(
+    x = "Age Group",
+    y = "Mean Spending of Public Insurance",
+    title = "ED Public Insurance Expenditures By Age Group"
+       )
+
+```
