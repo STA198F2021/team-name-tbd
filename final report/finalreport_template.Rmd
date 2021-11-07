@@ -1,16 +1,14 @@
 ---
-title: "Final Report"
+title: "An Investigation of Factors Influencing Emergency Healthcare Expenditures"
 subtitle: "due November 16, 2021 by 11:59 PM "
-author: "Team TBD: Maggie Lundberg, Riya Mohan, and Izzy Kjaerulff"
+author: "Maggie Lundberg, Riya Mohan, and Izzy Kjaerulff"
 date: "11/16/2021"
 output: pdf_document
 ---
 
-Reading Data and Data Clean Up:
 ```{r read_data, warning = FALSE, echo = FALSE}
 unzip("../data/IHME_DEX_ED_SPENDING_2006_2016_DATA.zip", exdir =  "../data/spending_data_unzip")
-```
-```{r, warning = FALSE}
+
 spending <- read.csv("../data/spending_data_unzip/IHME_DEX_ED_SPENDING_2006_2016_DATA_Y2021M09D23.CSV")
 ```
 
@@ -19,7 +17,8 @@ library(tidyverse)
 library(tidymodels)
 ``` 
 
-Emergency spending
+## Abstract
+
 
 ## Gender
 
@@ -80,7 +79,7 @@ The graph of residuals vs the fitted linear lines shows a pattern of clumping ar
 
 !!not sure what else to do for gender since the lin regression is so bad
 
-##Disease category and gov spending
+## Disease category and gov spending
 
 ANOVA:
 null hypothesis: means of spending the same for each disease category
