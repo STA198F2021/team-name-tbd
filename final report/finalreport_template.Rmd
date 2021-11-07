@@ -22,7 +22,7 @@ library(tidymodels)
 
 ## Gender
 
-Does the emergency department spend a different amount of money on males and females? This is looking at all spending, not taking into account type of insurance.
+Is there a difference in insurance type between males and females? Disclaimer: this study only looked at people who identified as either female or male.
 
 ```{r}
 spending_malefemale <- spending %>%
@@ -30,7 +30,9 @@ spending_malefemale <- spending %>%
 
 ```
 
-Here is a boxplot showing the distribution of Emergency Department Government spending based on disease type and gender. ADD interpretation
+
+!!should this be moved to where we are looking at the interaction of factors
+Here is a boxplot showing the distribution of Emergency Department spending based on disease type and gender. ADD interpretation
 ```{r gender-diseasetype-barplot}
 
 ggplot(data = spending_malefemale, aes(x = agg_cause, y = mean_all, fill = sex)) +
@@ -46,38 +48,26 @@ ggplot(data = spending_malefemale, aes(x = agg_cause, y = mean_all, fill = sex))
 
 ```
 
+First this t-test looks at overall differences in mean emergency department spending between males and females
 ```{r gender-t-test}
   t.test(spending_malefemale$mean_all~spending_malefemale$sex) %>%
   print()
 ```
 
-Linear regression model for gender and government spending model
-```{r gender-lin-reg}
-
-spending_malefemale_fit <- linear_reg() %>%
-  set_engine("lm") %>%
-  fit(mean_all~sex, data = spending_malefemale)
-
+Next, performing a t-test on each type of insurance to see if there is a difference in spending between males and females:
+```{r gender-pubspending-ttest}
+t.test(spending_malefemale$mean_pub~spending_malefemale$sex) %>%
+  print()
 ```
-
-```{r gender-diseasetype-augment}
-augment_spendinggenderfit <- augment(spending_malefemale_fit$fit)
+```{r gender-prispending-ttest}
+t.test(spending_malefemale$mean_pri~spending_malefemale$sex) %>%
+  print()
 ```
-
-```{r resid-plot}
-augment_spendinggenderfit %>%
-  ggplot(aes(x = .fitted,
-             y = .resid)) +
-  geom_point() +
-  scale_y_continuous(labels = scales::comma) +
-  scale_x_continuous(labels = scales::comma) +
-  labs(x = "Predicted Government Spending",
-       y = "Residual",
-       title = "Residual Plot for Linear Regression of Gender and Goverment Spending")
+```{r gender-oopspending-ttest}
+t.test(spending_malefemale$mean_oop~spending_malefemale$sex) %>%
+  print()
 ```
-The graph of residuals vs the fitted linear lines shows a pattern of clumping around two areas -- slightly above 300,000,000 and slightly below 420,000,000. The clumping pattern indicates a linear model is not a good fit to model the relationship here. 
-
-!!not sure what else to do for gender since the lin regression is so bad
+All three of these t-tests indicate evidence to reject the null hypothesis that emergency department spending is the same for males and females who have public insurance, private insurance, or pay out of pocket. On average, females pay more than males for each type of emergency department spending. 
 
 ## Disease category and gov spending
 
