@@ -15,7 +15,8 @@ spending <- read.csv("../data/spending_data_unzip/IHME_DEX_ED_SPENDING_2006_2016
 ```{r load-packages, message = FALSE, warning = FALSE, echo = FALSE}
 library(tidyverse)
 library(tidymodels)
-``` 
+```
+
 
 ## Abstract
 
@@ -30,23 +31,6 @@ spending_malefemale <- spending %>%
 
 ```
 
-
-!!should this be moved to where we are looking at the interaction of factors
-Here is a boxplot showing the distribution of Emergency Department spending based on disease type and gender. ADD interpretation
-```{r gender-diseasetype-barplot}
-
-ggplot(data = spending_malefemale, aes(x = agg_cause, y = mean_all, fill = sex)) +
-  geom_bar(position = "dodge", stat = "identity") +
-  theme(axis.text.x = element_text(angle = 45,hjust = 1)) +
-  scale_y_continuous(labels = scales::comma) +
-  labs(
-    x = "Disease Type",
-    y = "Government Spending",
-    title = "Emergency Department Spending Based on Disease Type and Gender",
-    fill = "Gender"
-       )
-
-```
 
 First this t-test looks at overall differences in mean emergency department spending between males and females
 ```{r gender-t-test}
@@ -79,7 +63,7 @@ summary(aov(mean_all~agg_cause,data=spending_malefemale))
 ```
 
 Based on the p-value here of these data or more extreme data it is highly unlikely the null hypothesis is true. Therefore, we perform step-down tests using a Holm correction for multiple comparisons
-```{r}
+```{r diseasecat-stepdown-ttests}
 diseasepair <- pairwise.t.test(spending_malefemale$mean_all,    spending_malefemale$agg_cause, p.adj = "holm")
 sigpairs <- broom::tidy(diseasepair) %>%
   filter(p.value<0.05) %>%
@@ -89,6 +73,7 @@ nrow(sigpairs)
 The step-down t tests indicate 61 disease category pairs are different out of ??
 ## hey i'm just making this blue so you'll see but i'm pretty sure that the possible pairs is just the combination formula with all the fun factorial stuff, so if there are 15 groups as indicated in ur overall test, then there are 105 possible combinations. but also idk if the "all ages" group will mess u up because it changed the response in my age comparison my brain is kinda foggy though
 , indicating most disease categories do differ in the amount of government spending by the emergency department. 
+
 
 
 ## Age
@@ -183,6 +168,25 @@ ggplot(data = spending_noall, aes(x = age_group_name, y = mean_oop)) +
     x = "Age Group",
     y = "Mean Spending of Public Insurance",
     title = "ED Public Insurance Expenditures By Age Group"
+       )
+
+```
+
+
+##Interaction
+!!should this be moved to where we are looking at the interaction of factors?
+Here is a boxplot showing the distribution of Emergency Department spending based on disease type and gender. ADD interpretation
+```{r gender-diseasetype-barplot}
+
+ggplot(data = spending_malefemale, aes(x = agg_cause, y = mean_all, fill = sex)) +
+  geom_bar(position = "dodge", stat = "identity") +
+  theme(axis.text.x = element_text(angle = 45,hjust = 1)) +
+  scale_y_continuous(labels = scales::comma) +
+  labs(
+    x = "Disease Type",
+    y = "Government Spending",
+    title = "Emergency Department Spending Based on Disease Type and Gender",
+    fill = "Gender"
        )
 
 ```
