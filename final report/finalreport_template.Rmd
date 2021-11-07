@@ -97,53 +97,47 @@ sigpairs <- broom::tidy(diseasepair) %>%
   arrange(group1,group2)
 nrow(sigpairs)
 ```
-The step-down t tests indicate 61 disease category pairs are different out of ?? , indicating most disease categories do differ in the amount of government spending by the emergency department. 
-
-
+The step-down t tests indicate 61 disease category pairs are different out of ??
+## hey i'm just making this blue so you'll see but i'm pretty sure that the possible pairs is just the combination formula with all the fun factorial stuff, so if there are 15 groups as indicated in ur overall test, then there are 105 possible combinations. but also idk if the "all ages" group will mess u up because it changed the response in my age comparison my brain is kinda foggy though
+, indicating most disease categories do differ in the amount of government spending by the emergency department. 
 
 
 ## Age
 
+!! had to take out the observations with "All Ages" because I think it will just mess up the pairs but let me know what you think or whether you think there's anything we can do with that group
+
+```{r delete-allages}
+
+spending_noall <- spending_malefemale %>%
+  filter(age_group_name != "All Ages")
+
+```
+
+
 We wonder whether there is a correlation between government healthcare expenditures in the emergency department and age. The age variable is categorical, split into 19 groups that generally include 5 years each, apart from the first (<1 year) and last (85 plus) groups. 
 
-To address this question, we began by rearranging and subsetting our given data set. We collapsed group observations divided by years into one and created two distinct age groups divided at the 45-year mark (below 45 and 45 plus) instead of the original 19. Doing so made it possible to do an F test on the newly defined age groups, which necessitates that there are 2 levels in the grouping factor.
+To address this question, we began by using an overall test with ANOVA.
 
-!! trying to figure out how to turn all those groups into 2
+Below is an overall test of the null hypothesis that all of the means for age groups across the years are equal, as opposed to the alternative that at least one mean is different.
 
-```{r age-new-dataset}
+```{r age-anova}
 
-age_year_combined <- spending_malefemale %>%
-  group_by(age_group_name) %>%
-  summarize_at(vars(mean_all),funs(mean(.,na.rm=TRUE))) %>%
-  print()
+summary(aov(mean_all~age_group_name,data = spending_noall))
 
 ```
 
-```{r age-under45-dataset}
+In this F-test (ndf = 18, ddf = 6229), a significant difference among age groups was identified. Our p-value tells us that this data (or data more extreme) would be very unlikely if the null hypothesis were true because it shows statistical significance at an alpha well below 0.05. Therefore, we reject the null hypothesis that the mean expenditures for all age groups are equal.
 
-under45 <- age_year_combined %>%
-  filter(age_group_name %in% c("<1 year", "1 to 4", "5 to 9", "10 to 14", "15 to 19", "20 to 24", "25 to 29", "30 to 34", "35 to 39", "40 to 44")) %>%
-  summarize_at(vars(mean_all),funs(mean(.,na.rm=TRUE))) %>%
-  print()
+To see which specific means may be different from one another, we used planned step-down tests with a Holm correction to minimize Type I errors.
 
-```
+```{r age-stepdown}
 
-```{r age-above45-dataset}
-
-above45 <- age_year_combined %>%
-  filter(age_group_name %in% c("45 to 49", "50 to 54", "55 to 59", "60 to 64", "65 to 69", "70 to 74", "75 to 79", "80 to 84", "85 plus")) %>%
-  summarize_at(vars(mean_all),funs(mean(.,na.rm=TRUE))) %>%
-  print()
-
-```
-!! this won't work until there are only 2 levels for the grouping factor 
-
-```{r age-ftest, eval = FALSE}
-
-var.test(mean_all ~ age_group_name, age_year_combined, 
-         alternative = "two.sided")
+agepair <- pairwise.t.test(spending_noall$mean_all, spending_noall$age_group_name, p.adj = "holm")
+sigagepairs <- broom::tidy(agepair) %>%
+  filter(p.value<0.05) %>%
+  arrange(group1,group2)
+nrow(sigagepairs)
 
 ```
 
-
-
+The pairwise t-tests used for our ANOVA step-down tests suggest that there are 97 different age pairs out of the 171 possible combinations. This tells us that more age pairs are different than are similar and that therefore the majority of age group pairs differ in terms of mean expenditures.
