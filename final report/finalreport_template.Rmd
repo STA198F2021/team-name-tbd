@@ -25,12 +25,29 @@ Emergency spending
 
 Does the emergency department spend a different amount of money on males and females? This is looking at all spending, not taking into account type of insurance.
 
-!! there was a both category i filtered out bc not sure what to do with ?
-
-```{r gender-t-test}
+Here is a boxplot showing the distribution of Emergency Department Government spending based on disease type and gender. ADD interpretation
+```{r}
 spending_malefemale <- spending %>%
   filter(sex %in% c("Female", "Male"))
 
+```
+
+```{r gender-diseasetype-barplot}
+
+ggplot(data = spending_malefemale, aes(x = agg_cause, y = mean_all, fill = sex)) +
+  geom_bar(position = "dodge", stat = "identity") +
+  theme(axis.text.x = element_text(angle = 45,hjust = 1)) +
+  scale_y_continuous(labels = scales::comma) +
+  labs(
+    x = "Disease Type",
+    y = "Government Spending",
+    title = "Emergency Department Spending Based on Disease Type and Gender",
+    fill = "Gender"
+       )
+
+```
+
+```{r gender-t-test}
   t.test(spending_malefemale$mean_all~spending_malefemale$sex) %>%
   print()
 ```
@@ -40,8 +57,7 @@ Linear regression model for gender and government spending model
 
 spending_malefemale_fit <- linear_reg() %>%
   set_engine("lm") %>%
-  fit(mean_all~sex, data = spending_malefemale) %>%
-  tidy()
+  fit(mean_all~sex, data = spending_malefemale)
 
 ```
 
@@ -55,27 +71,19 @@ spending_malefemale_disease_fit <- linear_reg() %>%
 
 ```
 
-```{r gender-diseasetype-barplot}
-
-ggplot(data = spending_malefemale, aes(x = agg_cause, y = mean_all, fill = sex)) +
-  geom_bar(position = "dodge", stat = "identity") +
-  theme(axis.text.x = element_text(angle = 45,hjust = 1)) +
-  labs(
-    x = "Disease Type",
-    y = "Government Spending",
-    title = "Total Emergency Department Spending Based on Disease Type and Gender",
-       )
-
+!! ok obviously this isnt right
+```{r}
+augment_spendinggenderfit <- augment(spending_malefemale_fit$fit)
 ```
 
-!! I was going to fit the linear reg line to this but since the x is categorical it wouldn't make much sense? That's why i added the barchart instead/in addtion
-```{r}
-
-ggplot(data = spending_malefemale, aes(x = agg_cause, y = mean_all, color = sex)) + 
+```{r geompoint}
+ggplot(data = spending_malefemale, mapping = aes(x = mean_all, y = agg_cause, color = sex)) + 
   geom_point(size = 0.25) +
+  geom_line(data = augment_spendinggenderfit, mapping = aes(x = mean_all, y = .fitted))+
   theme(axis.text.x = element_text(angle = 45,hjust = 1))
 
 ```
+
 
 
 !! Could we do anova for disease type??
