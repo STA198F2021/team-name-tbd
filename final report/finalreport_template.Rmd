@@ -1,95 +1,17 @@
 ---
-title: "An Investigation of Factors Influencing Emergency Healthcare Expenditures"
+title: "Final Report"
 subtitle: "due November 16, 2021 by 11:59 PM "
-author: "Maggie Lundberg, Riya Mohan, and Izzy Kjaerulff"
+author: "Team TBD: Maggie Lundberg, Riya Mohan, and Izzy Kjaerulff"
 date: "11/16/2021"
 output: pdf_document
 ---
 
-```{r read_data, warning = FALSE, echo = FALSE}
+Reading Data and Data Clean Up:
+```{r read_data}
 unzip("../data/IHME_DEX_ED_SPENDING_2006_2016_DATA.zip", exdir =  "../data/spending_data_unzip")
-
-spending <- read.csv("../data/spending_data_unzip/IHME_DEX_ED_SPENDING_2006_2016_DATA_Y2021M09D23.CSV")
 ```
-
-```{r load-packages, message = FALSE, warning = FALSE, echo = FALSE}
-library(tidyverse)
-library(tidymodels)
-``` 
-
-## Abstract
-
-
-## Gender
-
-Does the emergency department spend a different amount of money on males and females? This is looking at all spending, not taking into account type of insurance.
-
 ```{r}
-spending_malefemale <- spending %>%
-  filter(sex %in% c("Female", "Male"))
-
-```
-
-Here is a boxplot showing the distribution of Emergency Department Government spending based on disease type and gender. ADD interpretation
-```{r gender-diseasetype-barplot}
-
-ggplot(data = spending_malefemale, aes(x = agg_cause, y = mean_all, fill = sex)) +
-  geom_bar(position = "dodge", stat = "identity") +
-  theme(axis.text.x = element_text(angle = 45,hjust = 1)) +
-  scale_y_continuous(labels = scales::comma) +
-  labs(
-    x = "Disease Type",
-    y = "Government Spending",
-    title = "Emergency Department Spending Based on Disease Type and Gender",
-    fill = "Gender"
-       )
-
-```
-
-```{r gender-t-test}
-  t.test(spending_malefemale$mean_all~spending_malefemale$sex) %>%
-  print()
-```
-
-Linear regression model for gender and government spending model
-```{r gender-lin-reg}
-
-spending_malefemale_fit <- linear_reg() %>%
-  set_engine("lm") %>%
-  fit(mean_all~sex, data = spending_malefemale)
-
-```
-
-```{r gender-diseasetype-augment}
-augment_spendinggenderfit <- augment(spending_malefemale_fit$fit)
-```
-
-```{r resid-plot}
-augment_spendinggenderfit %>%
-  ggplot(aes(x = .fitted,
-             y = .resid)) +
-  geom_point() +
-  scale_y_continuous(labels = scales::comma) +
-  scale_x_continuous(labels = scales::comma) +
-  labs(x = "Predicted Government Spending",
-       y = "Residual",
-       title = "Residual Plot for Linear Regression of Gender and Goverment Spending")
-```
-The graph of residuals vs the fitted linear lines shows a pattern of clumping around two areas -- slightly above 300,000,000 and slightly below 420,000,000. The clumping pattern indicates a linear model is not a good fit to model the relationship here. 
-
-!!not sure what else to do for gender since the lin regression is so bad
-
-## Disease category and gov spending
-
-ANOVA:
-null hypothesis: means of spending the same for each disease category
-assume outcomes are normally distributed, same variance, and samples are independent
-```{r ANOVAtest}
-summary(aov(mean_all~agg_cause,data=spending_malefemale))
-```
-
-Based on the p-value here of these data or more extreme data it is highly unlikely the null hypothesis is true. Therefore, we perform step-down tests using a Holm correction for multiple comparisons
-```{r}
+<<<<<<< HEAD
 diseasepair <- pairwise.t.test(spending_malefemale$mean_all,    spending_malefemale$agg_cause, p.adj = "holm")
 sigpairs <- broom::tidy(diseasepair) %>%
   filter(p.value<0.05) %>%
@@ -185,18 +107,8 @@ ggplot(data = spending_noall, aes(x = age_group_name, y = mean_pri)) +
     title = "ED Public Insurance Expenditures By Age Group"
        )
 
+=======
+spending <- read.csv("../data/spending_data_unzip/IHME_DEX_ED_SPENDING_2006_2016_DATA_Y2021M09D23.CSV")
+>>>>>>> f3c9049a743a3ef9d049f5d57e0025e90e6755d1
 ```
 
-```{r age-oop-barplot, fig.height = 2.5, fig.width = 6, echo = FALSE}
-
-ggplot(data = spending_noall, aes(x = age_group_name, y = mean_oop)) +
-  geom_bar(position = "dodge", stat = "identity") +
-  theme(axis.text.x = element_text(angle = 45,hjust = 1)) +
-  scale_y_continuous(labels = scales::comma) +
-  labs(
-    x = "Age Group",
-    y = "Mean Spending of Public Insurance",
-    title = "ED Public Insurance Expenditures By Age Group"
-       )
-
-```

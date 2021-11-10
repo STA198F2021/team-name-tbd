@@ -13,7 +13,7 @@ library(tidyverse)
 ``` 
 
 # Load Data
-```{r load-data, message = FALSE, echo = FALSE, warning = FALSE}
+```{r load-data, message = FALSE, echo = FALSE}
 unzip("../data/IHME_DEX_ED_SPENDING_2006_2016_DATA.zip", exdir =  "../data/spending_data_unzip")
 
 spending <- read.csv("../data/spending_data_unzip/IHME_DEX_ED_SPENDING_2006_2016_DATA_Y2021M09D23.CSV")
@@ -27,8 +27,11 @@ To answer our overarching research question, we plan to center our analysis arou
 -Is there a correlation between gender and types and amounts of emergency services expenditure?
 -Is there a correlation between age and types and amounts of emergency services expenditure?
 -Is there an interaction between age and gender in terms of its relationship with emergency service expenditure?
+Variables of interest include Sex, Age, out-of-pocket expenditure, government expenditure, cause of disease, and private insurance expenditure.
+Citations: 
+Data Set: Institute for Health Metrics and Evaluation (IHME). United States Healthcare Spending in Emergency Departments by Health Condition 2006-2016. Seattle, United States of America: Institute for Health Metrics and Evaluation (IHME), 2021.
+Mentioned Study: Woody Scott K, Liu A, Chen C, Kaldjian AS, Sabbatini AK, Duber, HC, Dieleman JL. Healthcare Spending in U.S. Emergency Departments by Health Condition, 2006-2016. PLOS One. 27 October 2021.
 
-Variables of interest include Sex, Age, out-of-pocket expenditure, government expenditure, cause of disease, and private insurance expenditure. Our expectation is that results will suggest that government healthcare spending will be higher in older populations when compared to younger populations, whereas private spending will be higher in those younger populations.
 
 
 # Glimpse
@@ -36,6 +39,11 @@ Variables of interest include Sex, Age, out-of-pocket expenditure, government ex
 ```{r glimpsedata}
 glimpse(spending)
 ```
+
+We have achieved extraction of three of our variables with the help of Phuc Nguyen and will continue to upload the full data to Github when it is separated into unidentifiable random samples, either by means of working with an experienced R user or obtaining a larger container from the OIT.
+
+
+We will be using ~500 observations with 10-20 variables as personally approved by the NEMSIS research team for uploading to Github. We will be including a substantial credit line and clarifying the nature of the data as NOT population-based and NOT used to represent public health data. The process will include uploading the data onto a Windows computer, bypassing the encryption with the corresponding Bitlocker passcode, uploading the zip file onto a high-capacity R-studio container, reading it from SAS to R, joining the files, narrowing down the sample to 500 random observations using R code, saving that file, and uploading it to Github in place of the original data set to work from. Currently, we have an open help desk request of number RITM4124724 to obtain access to the high-capacity container.
 
 
 # Data Analysis Plan
@@ -46,13 +54,11 @@ In addition, we have identified a few vital statistical methods needed for analy
 
 Visualizations will include linear regression line plots, plots of residuals, and a boxplot of the distribution of spending faceted by insurance type. 
 
-
+WHAT results are we expecting?
 
 
 
 References:
 
-Data Set: Institute for Health Metrics and Evaluation (IHME). United States Healthcare Spending in Emergency Departments by Health Condition 2006-2016. Seattle, United States of America: Institute for Health Metrics and Evaluation (IHME), 2021.
 
-Mentioned Study: Woody Scott K, Liu A, Chen C, Kaldjian AS, Sabbatini AK, Duber, HC, Dieleman JL. Healthcare Spending in U.S. Emergency Departments by Health Condition, 2006-2016. PLOS One. 27 October 2021.
 
