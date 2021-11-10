@@ -142,7 +142,11 @@ nrow(sigagepairs)
 The pairwise t-tests used for our ANOVA step-down tests suggest that there are 97 different age pairs out of the 171 possible combinations. This tells us that more age pairs are different than are similar and that therefore the majority of age group pairs differ in terms of mean expenditures.
 
 ```{r age-expenditure-barplot}
-
+# spending_noall %>%
+  # select the variables want, including the mean for the groups, age_group_name
+  # pivot_longer -> cols, names_to = "whateveryouwant", values_to = "customname %>%
+  # ggplot(aes(x = age_group_name, y = customname, color = whateveryouwant))
+  
 ggplot(data = spending_noall, aes(x = age_group_name, y = mean_all)) +
   geom_bar(position = "dodge", stat = "identity") +
   theme(axis.text.x = element_text(angle = 45,hjust = 1)) +
