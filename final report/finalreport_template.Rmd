@@ -87,60 +87,47 @@ These graphs of the log distribution of the various spending means appear to be 
 
 Does the emergency department spend a different amount of money on males and females? This is looking at all spending, not taking into account type of insurance.
 
-```{r}
+```{r filter-for-gender}
 spending_malefemale <- spending %>%
   filter(sex %in% c("Female", "Male"))
 
 ```
 
-Here is a boxplot showing the distribution of Emergency Department Government spending based on disease type and gender. ADD interpretation
-```{r gender-diseasetype-barplot}
-
-ggplot(data = spending_malefemale, aes(x = agg_cause, y = mean_all, fill = sex)) +
-  geom_bar(position = "dodge", stat = "identity") +
-  theme(axis.text.x = element_text(angle = 45,hjust = 1)) +
-  scale_y_continuous(labels = scales::comma) +
-  labs(
-    x = "Disease Type",
-    y = "Government Spending",
-    title = "Emergency Department Spending Based on Disease Type and Gender",
-    fill = "Gender"
-       )
-
+In order to analyze spending, we must convert all mean spending reports to log scale.
+```{r logscaleconversion}
+spending_malefemale <- spending_malefemale %>%
+  filter(mean_all != 0) %>%
+  filter(mean_pub != 0) %>%
+  filter(mean_pri != 0) %>%
+  filter(mean_oop != 0) %>%
+  mutate(lmean_all = log(mean_all)) %>%
+  mutate(lmean_pub = log(mean_pub)) %>%
+  mutate(lmean_pri = log(mean_pri)) %>%
+  mutate(lmean_oop = log(mean_oop))
+  
 ```
 
+First this t-test looks at overall differences in log mean emergency department spending between males and females
 ```{r gender-t-test}
-  t.test(spending_malefemale$mean_all~spending_malefemale$sex) %>%
+  t.test(spending_malefemale$lmean_all~spending_malefemale$sex) %>%
   print()
 ```
+Next, performing a t-test on each type of insurance to see if there is a difference in spending between males and females:
 
-Linear regression model for gender and government spending model
-```{r gender-lin-reg}
-
-spending_malefemale_fit <- linear_reg() %>%
-  set_engine("lm") %>%
-  fit(mean_all~sex, data = spending_malefemale)
-
+```{r gender-pubspending-ttest}
+t.test(spending_malefemale$lmean_pub~spending_malefemale$sex) %>%
+  print()
 ```
-
-```{r gender-diseasetype-augment}
-augment_spendinggenderfit <- augment(spending_malefemale_fit$fit)
+```{r gender-prispending-ttest}
+t.test(spending_malefemale$lmean_pri~spending_malefemale$sex) %>%
+  print()
 ```
-
-```{r resid-plot}
-augment_spendinggenderfit %>%
-  ggplot(aes(x = .fitted,
-             y = .resid)) +
-  geom_point() +
-  scale_y_continuous(labels = scales::comma) +
-  scale_x_continuous(labels = scales::comma) +
-  labs(x = "Predicted Government Spending",
-       y = "Residual",
-       title = "Residual Plot for Linear Regression of Gender and Goverment Spending")
+```{r gender-oopspending-ttest}
+t.test(spending_malefemale$lmean_oop~spending_malefemale$sex) %>%
+  print()
 ```
-The graph of residuals vs the fitted linear lines shows a pattern of clumping around two areas -- slightly above 300,000,000 and slightly below 420,000,000. The clumping pattern indicates a linear model is not a good fit to model the relationship here. 
+All three of these t-tests indicate that there is not enough evidence to reject the null hypothesis that emergency department spending is the same for males and females who have public insurance, private insurance, or pay out of pocket. Add specific numbers
 
-!!not sure what else to do for gender since the lin regression is so bad
 
 ## Disease category and gov spending
 
@@ -148,12 +135,12 @@ ANOVA:
 null hypothesis: means of spending the same for each disease category
 assume outcomes are normally distributed, same variance, and samples are independent
 ```{r ANOVAtest}
-summary(aov(mean_all~agg_cause,data=spending_malefemale))
+summary(aov(lmean_all~agg_cause,data=spending_malefemale))
 ```
 
 Based on the p-value here of these data or more extreme data it is highly unlikely the null hypothesis is true. Therefore, we perform step-down tests using a Holm correction for multiple comparisons
 ```{r}
-diseasepair <- pairwise.t.test(spending_malefemale$mean_all,    spending_malefemale$agg_cause, p.adj = "holm")
+diseasepair <- pairwise.t.test(spending_malefemale$lmean_all,    spending_malefemale$agg_cause, p.adj = "holm")
 sigpairs <- broom::tidy(diseasepair) %>%
   filter(p.value<0.05) %>%
   arrange(group1,group2)
@@ -260,6 +247,26 @@ ggplot(data = spending_noall, aes(x = age_group_name, y = mean_oop)) +
     x = NULL,
     y = NULL,
     title = "Out of Pocket Expenditures"
+       )
+
+```
+
+
+
+##Interaction
+!!should this be moved to where we are looking at the interaction of factors?
+Here is a barplot showing the distribution of Emergency Department spending based on disease type and gender. ADD interpretation
+```{r gender-diseasetype-barplot}
+
+ggplot(data = spending_malefemale, aes(x = agg_cause, y = lmean_all, fill = sex)) +
+  geom_bar(position = "dodge", stat = "identity") +
+  theme(axis.text.x = element_text(angle = 45,hjust = 1)) +
+  scale_y_continuous(labels = scales::comma) +
+  labs(
+    x = "Disease Type",
+    y = "Government Spending",
+    title = "Emergency Department Spending Based on Disease Type and Gender",
+    fill = "Gender"
        )
 
 ```
