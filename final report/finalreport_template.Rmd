@@ -6,7 +6,7 @@ date: "11/16/2021"
 output: pdf_document
 ---
 
-```{r read_data, warning = FALSE, echo = FALSE}
+```{r read_data, warning = FALSE, echo = FALSE, fig.height = 3, fig.width = 3}
 unzip("../data/IHME_DEX_ED_SPENDING_2006_2016_DATA.zip", exdir =  "../data/spending_data_unzip")
 
 spending <- read.csv("../data/spending_data_unzip/IHME_DEX_ED_SPENDING_2006_2016_DATA_Y2021M09D23.CSV")
@@ -19,6 +19,69 @@ library(tidymodels)
 
 ## Abstract
 
+
+## Nature of the Data
+```{r distribution_pub, echo= FALSE, fig.height = 3, fig.width = 3}
+spending %>%
+  ggplot(aes(x = mean_pub)) +
+    geom_histogram(fill = "#28739F") +
+    labs(title = "Normal Distribution of Mean Public Spending",
+         x = "Mean Public Spending", 
+         y = NULL)
+
+```
+
+```{r distribution_pri, echo= FALSE, fig.height = 3, fig.width = 3}
+spending %>%
+  ggplot(aes(x = mean_pri)) +
+    geom_histogram(fill = "#28739F") +
+    labs(title = "Normal Distribution of Mean Private Spending",
+         x = "Mean Private Spending", 
+         y = NULL)
+
+```
+
+```{r distribution_oop, echo= FALSE, fig.height = 3, fig.width = 3}
+spending %>%
+  ggplot(aes(x = mean_oop)) +
+    geom_histogram(fill = "#28739F") +
+    labs(title = "Normal Distribution of Mean Out-of-Pocket Spending",
+         x = "Mean Out-of-Pocket Spending", 
+         y = NULL)
+
+```
+The normal distribution for public spending, private spending, and out-of-pocket pending all show a severe right skew in the data. Therefore, all three variables do not meet the normal distribution assumption needed for many tests, such as ANOVA; however, this can easily be resolved by applying a log transformation to the data to give a fairly normal distribution of the data.
+
+```{r log_pub, echo= FALSE, fig.height = 3, fig.width = 3}
+spending %>%
+  ggplot(aes(x = log(mean_pub))) +
+    geom_histogram(fill = "#28739F") +
+    labs(title = "Log Normal Distribution of Mean Public Spending",
+         x = "Log Mean Public Spending", 
+         y = NULL)
+
+```
+
+```{r log_pri, echo= FALSE, fig.height = 3, fig.width = 3}
+spending %>%
+  ggplot(aes(x = log(mean_pri))) +
+    geom_histogram(fill = "#28739F") +
+    labs(title = "Log Normal Distribution of Mean Private Spending",
+         x = "Log Mean Private Spending", 
+         y = NULL)
+
+```
+
+```{r log_oop, echo= FALSE, fig.height = 3, fig.width = 3}
+spending %>%
+  ggplot(aes(x = log(mean_oop))) +
+    geom_histogram(fill = "#28739F") +
+    labs(title = "Log Normal Distribution of Mean Out-of-Pocket Spending",
+         x = "Log Mean Out-of-Pocket Spending", 
+         y = NULL)
+
+```
+These graphs of the log distribution of the various spending means appear to be fairly normal in distribution, which means they meet the requirements to be used in various analyses.
 
 ## Gender
 
