@@ -15,6 +15,7 @@ spending <- read.csv("../data/spending_data_unzip/IHME_DEX_ED_SPENDING_2006_2016
 ```{r load-packages, message = FALSE, warning = FALSE, echo = FALSE}
 library(tidyverse)
 library(tidymodels)
+
 ``` 
 
 ## Abstract
@@ -136,7 +137,7 @@ The t-tests for each type of insurance indicate that there is not enough evidenc
 ## Disease category and Emergency Spending
 
 
-```{r}
+```{r filter-logdata}
 spending <- spending %>%
   filter(mean_all != 0) %>%
   filter(mean_pub != 0) %>%
@@ -149,7 +150,7 @@ spending <- spending %>%
 ```
 
 In order to determine emergency department spending based on disease type, an ANOVA test is performed due to the data for spending on the log scale being normally distributed, relatively similar variance, and independent. 
-ANOVA:
+
 The null hypothesis for this ANOVA test is that the overall mean of spending are the same for each disease category
 
 ```{r ANOVAtest}
@@ -413,4 +414,6 @@ spendingovertime_fit <- linear_reg() %>%
 tidy(spendingovertime_fit)
 
 ```
+
+
 
