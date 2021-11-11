@@ -330,3 +330,63 @@ glance(interoop_fit)$adj.r.squared
 ```
 
 In order to test the possibility that there is a joint interaction of gender and age, a main effects and interaction effects linear regression model has been fit to the data. As a whole, it shows that the interaction of gender and age slightly increases the accuracy of the regression for public and private spending as seen by the increased adjusted R^2 value. However, for out-of-pocket spending, it decreases the adjusted R^2 value. Nevertheless, overall, the adjusted R^2 values for all three types of spending are incredibly low, which further point to our conclusion that age may not affect the level of spending from different sources.
+
+
+
+## Age and Disease Type Interaction
+``` {r agedismain_pub}
+agedismainpub_fit <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(mean_pub ~ agg_cause + age_group_id, data = spending)
+tidy(agedismainpub_fit)
+
+glance(agedismainpub_fit)$adj.r.squared
+```
+
+``` {r agedisinter_pub}
+agedisinterpub_fit <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(mean_pub ~ agg_cause + age_group_id + agg_cause*age_group_id, data = spending)
+tidy(agedisinterpub_fit)
+
+glance(agedisinterpub_fit)$adj.r.squared
+```
+
+
+``` {r agedismain_pri}
+agedismainpri_fit <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(mean_pri ~ agg_cause + age_group_id, data = spending)
+tidy(agedismainpri_fit)
+
+glance(agedismainpri_fit)$adj.r.squared
+```
+
+``` {r agedisinter_pri}
+agedisinterpri_fit <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(mean_pri ~ agg_cause + age_group_id + agg_cause*age_group_id, data = spending)
+tidy(agedisinterpri_fit)
+
+glance(agedisinterpri_fit)$adj.r.squared
+```
+
+
+
+``` {r agedismain_oop}
+agedismainoop_fit <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(mean_oop ~ agg_cause + age_group_id, data = spending)
+tidy(agedismainoop_fit)
+
+glance(agedismainoop_fit)$adj.r.squared
+```
+
+``` {r agedisinter_oop}
+agedisinteroop_fit <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(mean_oop ~ agg_cause + age_group_id + agg_cause*age_group_id, data = spending)
+tidy(agedisinteroop_fit)
+
+glance(agedisinteroop_fit)$adj.r.squared
+```
