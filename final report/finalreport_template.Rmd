@@ -85,7 +85,7 @@ These graphs of the log distribution of the various spending means appear to be 
 
 ## Gender
 
-Does the emergency department spend a different amount of money on males and females? This is looking at all spending, not taking into account type of insurance.
+Do males and females spend a different amount of money on emergency services? 
 
 ```{r filter-for-gender}
 spending_malefemale <- spending %>%
@@ -112,43 +112,61 @@ First this t-test looks at overall differences in log mean emergency department 
   t.test(spending_malefemale$lmean_all~spending_malefemale$sex) %>%
   print()
 ```
-Next, performing a t-test on each type of insurance to see if there is a difference in spending between males and females:
+This t-test shows that for mean spending of all emergency services payment types, the p value of 0.1543 (95% CI -0.0315862, 0.1996079) indicates there is not a significant difference between male and female spending. 
 
+Next, we perform a t-test on each type of insurance to see if there is a difference in spending between males and females:
 ```{r gender-pubspending-ttest}
 t.test(spending_malefemale$lmean_pub~spending_malefemale$sex) %>%
   print()
 ```
+The t-test on emergency services spending for people who have public insurance indicates there is not a significant difference between male and female spending, with p value of 0.0697 (95% CI -0.00833746, 0.21532602).
 ```{r gender-prispending-ttest}
 t.test(spending_malefemale$lmean_pri~spending_malefemale$sex) %>%
   print()
 ```
+The t-test on emergency services spending for people who have private insurance indicates there is not a significant difference between male and female spending, with p value of 0.4803 (95% CI -0.08283085, 0.17603825).
 ```{r gender-oopspending-ttest}
 t.test(spending_malefemale$lmean_oop~spending_malefemale$sex) %>%
   print()
 ```
-All three of these t-tests indicate that there is not enough evidence to reject the null hypothesis that emergency department spending is the same for males and females who have public insurance, private insurance, or pay out of pocket. Add specific numbers
+The t-test on emergency services spending for people who pay out of pocket indicates there is not a significant difference between male and female spending, with p value of 0.3272 (95% CI -0.0615859, 0.1846904).
+
+The t-tests for each type of insurance indicate that there is not enough evidence to reject the null hypothesis that emergency department spending is the same for males and females who have public insurance, private insurance, or pay out of pocket, leading us to the conclusion that gender does not influence emergency spending in the forms of payment studied here. 
+
+## Disease category and Emergency Spending
 
 
-## Disease category and gov spending
-
-ANOVA:
-null hypothesis: means of spending the same for each disease category
-assume outcomes are normally distributed, same variance, and samples are independent
-```{r ANOVAtest}
-summary(aov(lmean_all~agg_cause,data=spending_malefemale))
+```{r}
+spending <- spending %>%
+  filter(mean_all != 0) %>%
+  filter(mean_pub != 0) %>%
+  filter(mean_pri != 0) %>%
+  filter(mean_oop != 0) %>%
+  mutate(lmean_all = log(mean_all)) %>%
+  mutate(lmean_pub = log(mean_pub)) %>%
+  mutate(lmean_pri = log(mean_pri)) %>%
+  mutate(lmean_oop = log(mean_oop))
 ```
 
-Based on the p-value here of these data or more extreme data it is highly unlikely the null hypothesis is true. Therefore, we perform step-down tests using a Holm correction for multiple comparisons
+In order to determine emergency department spending based on disease type, an ANOVA test is performed due to the data for spending on the log scale being normally distributed, relatively similar variance, and independent. 
+ANOVA:
+The null hypothesis for this ANOVA test is that the overall mean of spending are the same for each disease category
+
+```{r ANOVAtest}
+summary(aov(lmean_all~agg_cause,data=spending))
+```
+
+Based on the p-value here of <2e-16, these data or more extreme data it is highly unlikely the null hypothesis is true. Therefore, we perform step-down tests using a Holm correction for multiple comparisons.
 ```{r}
-diseasepair <- pairwise.t.test(spending_malefemale$lmean_all,    spending_malefemale$agg_cause, p.adj = "holm")
+diseasepair <- pairwise.t.test(spending$lmean_all,    spending$agg_cause, p.adj = "holm")
 sigpairs <- broom::tidy(diseasepair) %>%
   filter(p.value<0.05) %>%
   arrange(group1,group2)
 nrow(sigpairs)
 ```
-The step-down t tests indicate 61 disease category pairs are different out of 105
-## idk if the "all ages" group will mess u up because it changed the response in my age comparison
-, indicating most disease categories do differ in the amount of government spending by the emergency department. 
+The step-down t tests indicate 95 disease category pairs are different out of 105, indicating most disease categories do differ in the amount of government spending by the emergency department. 
+
+ADD treemap if possible
 
 
 ## Age
@@ -251,25 +269,6 @@ ggplot(data = spending_noall, aes(x = age_group_name, y = mean_oop)) +
 
 ```
 
-
-
-##Interaction
-!!should this be moved to where we are looking at the interaction of factors?
-Here is a barplot showing the distribution of Emergency Department spending based on disease type and gender. ADD interpretation
-```{r gender-diseasetype-barplot}
-
-ggplot(data = spending_malefemale, aes(x = agg_cause, y = lmean_all, fill = sex)) +
-  geom_bar(position = "dodge", stat = "identity") +
-  theme(axis.text.x = element_text(angle = 45,hjust = 1)) +
-  scale_y_continuous(labels = scales::comma) +
-  labs(
-    x = "Disease Type",
-    y = "Government Spending",
-    title = "Emergency Department Spending Based on Disease Type and Gender",
-    fill = "Gender"
-       )
-
-```
 
 ## Gender and Age Interaction
 ``` {r maineffects_pub}
@@ -390,3 +389,28 @@ tidy(agedisinteroop_fit)
 
 glance(agedisinteroop_fit)$adj.r.squared
 ```
+
+##Spending Over Time
+
+!! I kinda like this but idk if it adds anything but it is fun
+```{r}
+spending %>%
+  ggplot(aes(x = agg_cause,
+             y = lmean_all,
+             fill = year_id)) +
+  geom_bar(position = "fill", stat = "identity") +
+  theme(axis.text.x = element_text(angle = 45,hjust = 1)) +
+  labs(x = "Disease Category",
+       y = "Mean Spending (log$)",
+       fill = "Year")
+```
+
+
+```{r}
+spendingovertime_fit <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(lmean_all ~ year_id, data = spending)
+tidy(spendingovertime_fit)
+
+```
+
