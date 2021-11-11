@@ -270,3 +270,63 @@ ggplot(data = spending_malefemale, aes(x = agg_cause, y = lmean_all, fill = sex)
        )
 
 ```
+
+## Gender and Age Interaction
+``` {r maineffects_pub}
+mainefpub_fit <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(mean_pub ~ sex + age_group_id, data = spending)
+tidy(mainefpub_fit)
+
+glance(mainefpub_fit)$adj.r.squared
+```
+
+``` {r interaction_pub}
+interpub_fit <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(mean_pub ~ sex + age_group_id + sex*age_group_id, data = spending)
+tidy(interpub_fit)
+
+glance(interpub_fit)$adj.r.squared
+```
+
+
+``` {r maineffects_pri}
+mainefpri_fit <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(mean_pri ~ sex + age_group_id, data = spending)
+tidy(mainefpri_fit)
+
+glance(mainefpri_fit)$adj.r.squared
+```
+
+``` {r interaction_pri}
+interpri_fit <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(mean_pri ~ sex + age_group_id + sex*age_group_id, data = spending)
+tidy(interpri_fit)
+
+glance(interpri_fit)$adj.r.squared
+```
+
+
+
+``` {r maineffects_oop}
+mainefoop_fit <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(mean_oop ~ sex + age_group_id, data = spending)
+tidy(mainefoop_fit)
+
+glance(mainefoop_fit)$adj.r.squared
+```
+
+``` {r interaction_oop}
+interoop_fit <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(mean_oop ~ sex + age_group_id + sex*age_group_id, data = spending)
+tidy(interoop_fit)
+
+glance(interoop_fit)$adj.r.squared
+```
+
+In order to test the possibility that there is a joint interaction of gender and age, a main effects and interaction effects linear regression model has been fit to the data. As a whole, it shows that the interaction of gender and age slightly increases the accuracy of the regression for public and private spending as seen by the increased adjusted R^2 value. However, for out-of-pocket spending, it decreases the adjusted R^2 value. Nevertheless, overall, the adjusted R^2 values for all three types of spending are incredibly low, which further point to our conclusion that age may not affect the level of spending from different sources.
