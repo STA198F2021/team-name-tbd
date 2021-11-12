@@ -162,6 +162,26 @@ meanpubdiseasecatfit <- linear_reg() %>%
 
 ```
 
+```{r}
+augmentaggcausefit <- augment(meanpubdiseasecatfit$fit)
+```
+
+!!this is weird, we need to discuss
+```{r}
+augmentaggcausefit %>%
+  ggplot(aes(x = .fitted,
+             y = .resid)) +
+  geom_point()
+```
+
+```{r}
+ggplot(data = spending_malefemale, mapping = aes(x = agg_cause, 
+                                                 y = lmean_all)) +
+  geom_point(size = 0.25) +
+  geom_line(data = augmentaggcausefit, mapping = aes(x = agg_cause, y = .fitted)) +
+  scale_y_continuous(name="mean all", limits=c(0, 50))
+  
+```
 
 
 
@@ -401,7 +421,7 @@ spending_malefemale %>%
        y = "Mean Spending (log$)")
 ```
 
-
+!! can we divide this to have a predictor for each year?
 ```{r}
 spendingovertime_fit <- linear_reg() %>%
   set_engine("lm") %>%
