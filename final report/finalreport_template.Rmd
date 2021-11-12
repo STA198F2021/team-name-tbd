@@ -22,8 +22,14 @@ library(tidymodels)
 
 
 ## Nature of the Data
+The data includes summary of both male and female spending as "both", so in order to perform an analysis on this data, we decided to exclude the both data points to avoid double counting? It is important to acknowledge that this data only included those who identified as either male or female, so this is not a complete representationof the population. 
+```{r filter-for-gender}
+spending_malefemale <- spending %>%
+   filter(sex %in% c("Female", "Male"))
+```
+
 ```{r distribution_pub, echo= FALSE, warning = FALSE, fig.height = 3, fig.width = 3}
-spending %>%
+spending_malefemale %>%
   ggplot(aes(x = mean_pub)) +
     geom_histogram(fill = "#28739F") +
     labs(title = "Normal Distribution of Mean Public Spending",
@@ -33,7 +39,7 @@ spending %>%
 ```
 
 ```{r distribution_pri, echo= FALSE, warning = FALSE, fig.height = 3, fig.width = 3}
-spending %>%
+spending_malefemale %>%
   ggplot(aes(x = mean_pri)) +
     geom_histogram(fill = "#28739F") +
     labs(title = "Normal Distribution of Mean Private Spending",
@@ -43,7 +49,7 @@ spending %>%
 ```
 
 ```{r distribution_oop, echo= FALSE, warning = FALSE, fig.height = 3, fig.width = 3}
-spending %>%
+spending_malefemale %>%
   ggplot(aes(x = mean_oop)) +
     geom_histogram(fill = "#28739F") +
     labs(title = "Normal Distribution of Mean Out-of-Pocket Spending",
@@ -54,7 +60,7 @@ spending %>%
 The normal distribution for public spending, private spending, and out-of-pocket pending all show a severe right skew in the data. Therefore, all three variables do not meet the normal distribution assumption needed for many tests, such as ANOVA; however, this can easily be resolved by applying a log transformation to the data to give a fairly normal distribution of the data.
 
 ```{r log_pub, echo= FALSE, warning = FALSE, fig.height = 3, fig.width = 3}
-spending %>%
+spending_malefemale %>%
   ggplot(aes(x = log(mean_pub))) +
     geom_histogram(fill = "#28739F") +
     labs(title = "Log Normal Distribution of Mean Public Spending",
@@ -64,7 +70,7 @@ spending %>%
 ```
 
 ```{r log_pri, echo= FALSE, warning = FALSE, fig.height = 3, fig.width = 3}
-spending %>%
+spending_malefemale %>%
   ggplot(aes(x = log(mean_pri))) +
     geom_histogram(fill = "#28739F") +
     labs(title = "Log Normal Distribution of Mean Private Spending",
@@ -74,7 +80,7 @@ spending %>%
 ```
 
 ```{r log_oop, echo= FALSE, warning = FALSE, fig.height = 3, fig.width = 3}
-spending %>%
+spending_malefemale %>%
   ggplot(aes(x = log(mean_oop))) +
     geom_histogram(fill = "#28739F") +
     labs(title = "Log Normal Distribution of Mean Out-of-Pocket Spending",
@@ -82,19 +88,8 @@ spending %>%
          y = NULL)
 
 ```
-These graphs of the log distribution of the various spending means appear to be fairly normal in distribution, which means they meet the requirements to be used in various analyses.
+These graphs of the log distribution of the various spending means appear to be fairly normal in distribution, which means they meet the requirements to be used in various analyses. In order to convert to log scale, those with mean_all, mean_pub, mean_pri, and mean_oop equal to zero must be excluded.
 
-## Gender
-
-Do males and females spend a different amount of money on emergency services? 
-
-```{r filter-for-gender}
-spending_malefemale <- spending %>%
-  filter(sex %in% c("Female", "Male"))
-
-```
-
-In order to analyze spending, we must convert all mean spending reports to log scale.
 ```{r logscaleconversion}
 spending_malefemale <- spending_malefemale %>%
   filter(mean_all != 0) %>%
@@ -107,6 +102,10 @@ spending_malefemale <- spending_malefemale %>%
   mutate(lmean_oop = log(mean_oop))
   
 ```
+
+
+## Gender
+Our first question in this analysis is if males and females spend a different amount of money on emergency services.
 
 First this t-test looks at overall differences in log mean emergency department spending between males and females
 ```{r gender-t-test}
@@ -136,47 +135,34 @@ The t-tests for each type of insurance indicate that there is not enough evidenc
 
 ## Disease category and Emergency Spending
 
-
-```{r filter-logdata}
-spending <- spending %>%
-  filter(mean_all != 0) %>%
-  filter(mean_pub != 0) %>%
-  filter(mean_pri != 0) %>%
-  filter(mean_oop != 0) %>%
-  mutate(lmean_all = log(mean_all)) %>%
-  mutate(lmean_pub = log(mean_pub)) %>%
-  mutate(lmean_pri = log(mean_pri)) %>%
-  mutate(lmean_oop = log(mean_oop))
-```
-
 In order to determine emergency department spending based on disease type, an ANOVA test is performed due to the data for spending on the log scale being normally distributed, relatively similar variance, and independent. 
 
 The null hypothesis for this ANOVA test is that the overall mean of spending are the same for each disease category
 
 ```{r ANOVAtest}
-summary(aov(lmean_all~agg_cause,data=spending))
+summary(aov(lmean_all~agg_cause,data=spending_malefemale))
 ```
 
 Based on the p-value here of <2e-16, these data or more extreme data it is highly unlikely the null hypothesis is true. Therefore, we perform step-down tests using a Holm correction for multiple comparisons.
 ```{r}
-diseasepair <- pairwise.t.test(spending$lmean_all,    spending$agg_cause, p.adj = "holm")
+diseasepair <- pairwise.t.test(spending_malefemale$lmean_all,    spending_malefemale$agg_cause, p.adj = "holm")
 sigpairs <- broom::tidy(diseasepair) %>%
   filter(p.value<0.05) %>%
   arrange(group1,group2)
 nrow(sigpairs)
 ```
-The step-down t tests indicate 95 disease category pairs are different out of 105, indicating most disease categories do differ in the amount of government spending by the emergency department. 
+The step-down t tests indicate 92 disease category pairs are different out of 105, indicating most disease categories do differ in the amount of government spending by the emergency department. 
+!!not sure how to interpet anova i dont think this is right
 
 ```{r}
 meanpubdiseasecatfit <- linear_reg() %>%
   set_engine("lm") %>%
-  fit(mean_pub ~ agg_cause, data = spending)
+  fit(mean_pub ~ agg_cause, data = spending_malefemale)
   tidy(meanpubdiseasecatfit)
 
 ```
 
 
-ADD treemap if possible
 
 
 ## Age
@@ -404,7 +390,7 @@ glance(agedisinteroop_fit)$adj.r.squared
 
 !! I kinda like this but idk if it adds anything but it is fun, need to make the words smaller so you can read it
 ```{r}
-spending %>%
+spending_malefemale %>%
   ggplot(aes(x = year_id,
              y = lmean_all,
              fill = agg_cause)) +
@@ -419,7 +405,7 @@ spending %>%
 ```{r}
 spendingovertime_fit <- linear_reg() %>%
   set_engine("lm") %>%
-  fit(lmean_all ~ year_id, data = spending)
+  fit(lmean_all ~ year_id, data = spending_malefemale)
 tidy(spendingovertime_fit)
 
 ```
