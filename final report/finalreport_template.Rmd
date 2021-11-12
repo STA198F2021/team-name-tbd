@@ -22,7 +22,7 @@ library(tidymodels)
 
 
 ## Nature of the Data
-```{r distribution_pub, echo= FALSE, fig.height = 3, fig.width = 3}
+```{r distribution_pub, echo= FALSE, warning = FALSE, fig.height = 3, fig.width = 3}
 spending %>%
   ggplot(aes(x = mean_pub)) +
     geom_histogram(fill = "#28739F") +
@@ -32,7 +32,7 @@ spending %>%
 
 ```
 
-```{r distribution_pri, echo= FALSE, fig.height = 3, fig.width = 3}
+```{r distribution_pri, echo= FALSE, warning = FALSE, fig.height = 3, fig.width = 3}
 spending %>%
   ggplot(aes(x = mean_pri)) +
     geom_histogram(fill = "#28739F") +
@@ -42,7 +42,7 @@ spending %>%
 
 ```
 
-```{r distribution_oop, echo= FALSE, fig.height = 3, fig.width = 3}
+```{r distribution_oop, echo= FALSE, warning = FALSE, fig.height = 3, fig.width = 3}
 spending %>%
   ggplot(aes(x = mean_oop)) +
     geom_histogram(fill = "#28739F") +
@@ -53,7 +53,7 @@ spending %>%
 ```
 The normal distribution for public spending, private spending, and out-of-pocket pending all show a severe right skew in the data. Therefore, all three variables do not meet the normal distribution assumption needed for many tests, such as ANOVA; however, this can easily be resolved by applying a log transformation to the data to give a fairly normal distribution of the data.
 
-```{r log_pub, echo= FALSE, fig.height = 3, fig.width = 3}
+```{r log_pub, echo= FALSE, warning = FALSE, fig.height = 3, fig.width = 3}
 spending %>%
   ggplot(aes(x = log(mean_pub))) +
     geom_histogram(fill = "#28739F") +
@@ -63,7 +63,7 @@ spending %>%
 
 ```
 
-```{r log_pri, echo= FALSE, fig.height = 3, fig.width = 3}
+```{r log_pri, echo= FALSE, warning = FALSE, fig.height = 3, fig.width = 3}
 spending %>%
   ggplot(aes(x = log(mean_pri))) +
     geom_histogram(fill = "#28739F") +
@@ -73,7 +73,7 @@ spending %>%
 
 ```
 
-```{r log_oop, echo= FALSE, fig.height = 3, fig.width = 3}
+```{r log_oop, echo= FALSE, warning = FALSE, fig.height = 3, fig.width = 3}
 spending %>%
   ggplot(aes(x = log(mean_oop))) +
     geom_histogram(fill = "#28739F") +
@@ -166,6 +166,15 @@ sigpairs <- broom::tidy(diseasepair) %>%
 nrow(sigpairs)
 ```
 The step-down t tests indicate 95 disease category pairs are different out of 105, indicating most disease categories do differ in the amount of government spending by the emergency department. 
+
+```{r}
+meanpubdiseasecatfit <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(mean_pub ~ agg_cause, data = spending)
+  tidy(meanpubdiseasecatfit)
+
+```
+
 
 ADD treemap if possible
 
