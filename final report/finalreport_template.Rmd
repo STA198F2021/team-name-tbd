@@ -151,8 +151,8 @@ sigpairs <- broom::tidy(diseasepair) %>%
   arrange(group1,group2)
 nrow(sigpairs)
 ```
-The step-down t tests indicate 92 disease category pairs are different out of 105, indicating most disease categories do differ in the amount of government spending by the emergency department. 
-!!not sure how to interpet anova i dont think this is right
+The step-down t tests indicate 92 disease category pairs are different out of 105, indicating most disease categories do differ in the amount of government spending by the emergency department. There is lots of variation!!
+
 
 ```{r disease_fit, echo= FALSE, warning = FALSE}
 meanpubdiseasecatfit <- linear_reg() %>%
@@ -161,28 +161,9 @@ meanpubdiseasecatfit <- linear_reg() %>%
   tidy(meanpubdiseasecatfit)
 
 ```
-
-```{r aug_agg_fit, echo= FALSE, warning = FALSE}
-augmentaggcausefit <- augment(meanpubdiseasecatfit$fit)
+```{r}
+glance(meanpubdiseasecatfit)$adj.r.squared
 ```
-
-!!this is weird, we need to discuss
-```{r aug_agg_fit_visualize, echo= FALSE, warning = FALSE}
-augmentaggcausefit %>%
-  ggplot(aes(x = .fitted,
-             y = .resid)) +
-  geom_point()
-```
-
-```{r cause_graph, echo= FALSE, warning = FALSE}
-ggplot(data = spending_malefemale, mapping = aes(x = agg_cause, 
-                                                 y = lmean_all)) +
-  geom_point(size = 0.25) +
-  geom_line(data = augmentaggcausefit, mapping = aes(x = agg_cause, y = .fitted)) +
-  scale_y_continuous(name="mean all", limits=c(0, 50))
-  
-```
-
 
 
 ## Age
