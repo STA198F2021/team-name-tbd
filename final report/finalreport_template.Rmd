@@ -397,6 +397,16 @@ In order to test the possibility that there is a joint interaction of gender and
 
 
 ## Age and Disease Type Interaction
+```{r rsquared_table, echo = FALSE, warning = FALSE}
+Payer <- c("Public Spending", "Private Spending", "Out-of-Pocket Spending")
+Main_Effects <- c(0.506887, 0.5054947, 0.5161683)
+Interaction <- c(0.529351, 0.5149051, 0.5261024)
+
+models.data <- data.frame(Payer, Main_Effects, Interaction, stringsAsFactors=FALSE)
+
+knitr::kable(models.data, caption="R^2 Values for the Main Effects and Interaction Models Analyzing Disease Type and Age")
+```
+
 ``` {r agedismain_pub, echo = FALSE, warning = FALSE, message = FALSE}
 agedismainpub_fit <- linear_reg() %>%
   set_engine("lm") %>%
