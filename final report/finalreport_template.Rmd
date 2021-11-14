@@ -1,12 +1,16 @@
 ---
 title: "An Investigation of Factors Influencing Emergency Healthcare Expenditures"
-subtitle: "due November 16, 2021 by 11:59 PM "
-author: "Maggie Lundberg, Riya Mohan, and Izzy Kjaerulff"
-date: "11/16/2021"
+author: "Maggie Lundberg, Riya Mohan, Izzy Kjaerulff"
 output: pdf_document
+fontsize: 10pt
+header-includes:
+  \usepackage{float}
+  \usepackage{array}
+  \usepackage{fancyhdr}
+  \usepackage{times}
 ---
 
-```{r read_data, warning = FALSE, echo = FALSE, fig.height = 3, fig.width = 3}
+```{r read_data, warning = FALSE, echo = FALSE, message = FALSE, fig.height = 3, fig.width = 3}
 unzip("../data/IHME_DEX_ED_SPENDING_2006_2016_DATA.zip", exdir =  "../data/spending_data_unzip")
 
 spending <- read.csv("../data/spending_data_unzip/IHME_DEX_ED_SPENDING_2006_2016_DATA_Y2021M09D23.CSV")
@@ -22,12 +26,12 @@ library(tidymodels)
 
 ## Nature of the Data
 The data includes summary of both male and female spending as "both", so in order to perform an analysis on this data, we decided to exclude the both data points to avoid double counting? It is important to acknowledge that this data only included those who identified as either male or female, so this is not a complete representationof the population. 
-```{r filter-for-gender, echo= FALSE, warning = FALSE}
+```{r filter-for-gender, echo= FALSE, warning = FALSE, message = FALSE}
 spending_malefemale <- spending %>%
    filter(sex %in% c("Female", "Male"))
 ```
 
-```{r distribution_pub, echo= FALSE, warning = FALSE, fig.height = 3, fig.width = 3}
+```{r distribution_pub, echo= FALSE, warning = FALSE, fig.height = 3, fig.width = 3, message = FALSE}
 spending_malefemale %>%
   ggplot(aes(x = mean_pub)) +
     geom_histogram(fill = "#28739F") +
@@ -37,7 +41,7 @@ spending_malefemale %>%
 
 ```
 
-```{r distribution_pri, echo= FALSE, warning = FALSE, fig.height = 3, fig.width = 3}
+```{r distribution_pri, echo= FALSE, warning = FALSE, fig.height = 3, fig.width = 3, message = FALSE}
 spending_malefemale %>%
   ggplot(aes(x = mean_pri)) +
     geom_histogram(fill = "#28739F") +
@@ -47,7 +51,7 @@ spending_malefemale %>%
 
 ```
 
-```{r distribution_oop, echo= FALSE, warning = FALSE, fig.height = 3, fig.width = 3}
+```{r distribution_oop, echo= FALSE, warning = FALSE, fig.height = 3, fig.width = 3, message = FALSE}
 spending_malefemale %>%
   ggplot(aes(x = mean_oop)) +
     geom_histogram(fill = "#28739F") +
@@ -58,7 +62,7 @@ spending_malefemale %>%
 ```
 The normal distribution for public spending, private spending, and out-of-pocket pending all show a severe right skew in the data. Therefore, all three variables do not meet the normal distribution assumption needed for many tests, such as ANOVA; however, this can easily be resolved by applying a log transformation to the data to give a fairly normal distribution of the data.
 
-```{r log_pub, echo= FALSE, warning = FALSE, fig.height = 3, fig.width = 3}
+```{r log_pub, echo= FALSE, warning = FALSE, fig.height = 3, fig.width = 3, message = FALSE}
 spending_malefemale %>%
   ggplot(aes(x = log(mean_pub))) +
     geom_histogram(fill = "#28739F") +
@@ -68,7 +72,7 @@ spending_malefemale %>%
 
 ```
 
-```{r log_pri, echo= FALSE, warning = FALSE, fig.height = 3, fig.width = 3}
+```{r log_pri, echo= FALSE, warning = FALSE, fig.height = 3, fig.width = 3, message = FALSE}
 spending_malefemale %>%
   ggplot(aes(x = log(mean_pri))) +
     geom_histogram(fill = "#28739F") +
@@ -78,7 +82,7 @@ spending_malefemale %>%
 
 ```
 
-```{r log_oop, echo= FALSE, warning = FALSE, fig.height = 3, fig.width = 3}
+```{r log_oop, echo= FALSE, warning = FALSE, fig.height = 3, fig.width = 3, message = FALSE}
 spending_malefemale %>%
   ggplot(aes(x = log(mean_oop))) +
     geom_histogram(fill = "#28739F") +
@@ -89,7 +93,7 @@ spending_malefemale %>%
 ```
 These graphs of the log distribution of the various spending means appear to be fairly normal in distribution, which means they meet the requirements to be used in various analyses. In order to convert to log scale, those with mean_all, mean_pub, mean_pri, and mean_oop equal to zero must be excluded.
 
-```{r logscaleconversion, echo= FALSE, warning = FALSE}
+```{r logscaleconversion, echo= FALSE, warning = FALSE, message = FALSE}
 spending_malefemale <- spending_malefemale %>%
   filter(mean_all != 0) %>%
   filter(mean_pub != 0) %>%
@@ -107,24 +111,24 @@ spending_malefemale <- spending_malefemale %>%
 Our first question in this analysis is if males and females spend a different amount of money on emergency services.
 
 First this t-test looks at overall differences in log mean emergency department spending between males and females
-```{r gender-t-test, echo= FALSE, warning = FALSE}
+```{r gender-t-test, echo= FALSE, warning = FALSE, message = FALSE}
   t.test(spending_malefemale$lmean_all~spending_malefemale$sex) %>%
   print()
 ```
 This t-test shows that for mean spending of all emergency services payment types, the p value of 0.1543 (95% CI -0.0315862, 0.1996079) indicates there is not a significant difference between male and female spending. 
 
 Next, we perform a t-test on each type of insurance to see if there is a difference in spending between males and females:
-```{r gender-pubspending-ttest, echo= FALSE, warning = FALSE}
+```{r gender-pubspending-ttest, echo= FALSE, warning = FALSE, message = FALSE}
 t.test(spending_malefemale$lmean_pub~spending_malefemale$sex) %>%
   print()
 ```
 The t-test on emergency services spending for people who have public insurance indicates there is not a significant difference between male and female spending, with p value of 0.0697 (95% CI -0.00833746, 0.21532602).
-```{r gender-prispending-ttest, echo= FALSE, warning = FALSE}
+```{r gender-prispending-ttest, echo= FALSE, warning = FALSE, message = FALSE}
 t.test(spending_malefemale$lmean_pri~spending_malefemale$sex) %>%
   print()
 ```
 The t-test on emergency services spending for people who have private insurance indicates there is not a significant difference between male and female spending, with p value of 0.4803 (95% CI -0.08283085, 0.17603825).
-```{r gender-oopspending-ttest, echo= FALSE, warning = FALSE}
+```{r gender-oopspending-ttest, echo= FALSE, warning = FALSE, message = FALSE}
 t.test(spending_malefemale$lmean_oop~spending_malefemale$sex) %>%
   print()
 ```
@@ -138,12 +142,12 @@ In order to determine emergency department spending based on disease type, an AN
 
 The null hypothesis for this ANOVA test is that the overall mean of spending are the same for each disease category
 
-```{r ANOVAtest, echo= FALSE, warning = FALSE}
+```{r ANOVAtest, echo= FALSE, warning = FALSE, message = FALSE}
 summary(aov(lmean_all~agg_cause,data=spending_malefemale))
 ```
 
 Based on the p-value here of <2e-16, these data or more extreme data it is highly unlikely the null hypothesis is true. Therefore, we perform step-down tests using a Holm correction for multiple comparisons.
-```{r disease_pair, echo= FALSE, warning = FALSE}
+```{r disease_pair, echo= FALSE, warning = FALSE, message = FALSE}
 diseasepair <- pairwise.t.test(spending_malefemale$lmean_all,    spending_malefemale$agg_cause, p.adj = "holm")
 sigpairs <- broom::tidy(diseasepair) %>%
   filter(p.value<0.05) %>%
@@ -153,7 +157,7 @@ nrow(sigpairs)
 The step-down t tests indicate 92 disease category pairs are different out of 105, indicating most disease categories do differ in the amount of government spending by the emergency department. There is lots of variation!!
 
 
-```{r disease_fit, echo= FALSE, warning = FALSE}
+```{r disease_fit, echo= FALSE, warning = FALSE, message = FALSE}
 meanalldiseasecatfit <- linear_reg() %>%
   set_engine("lm") %>%
   fit(lmean_all ~ agg_cause, data = spending_malefemale)
@@ -169,7 +173,7 @@ glance(meanalldiseasecatfit)$r.squared
 
 !! had to take out the observations with "All Ages" because I think it will just mess up the pairs but let me know what you think or whether you think there's anything we can do with that group
 
-```{r delete-allages, echo= FALSE, warning = FALSE}
+```{r delete-allages, echo= FALSE, warning = FALSE, message = FALSE}
 
 spending_noall <- spending_malefemale %>%
   filter(age_group_name != "All Ages")
@@ -183,7 +187,7 @@ To address this question, we began by using an overall test with ANOVA.
 
 Below is an overall test of the null hypothesis that all of the means for age groups across the years are equal, as opposed to the alternative that at least one mean is different.
 
-```{r age-anova, echo= FALSE, warning = FALSE}
+```{r age-anova, echo= FALSE, warning = FALSE, message = FALSE}
 
 summary(aov(lmean_all~age_group_name,data = spending_noall))
 
@@ -193,7 +197,7 @@ In this F-test (ndf = 18, ddf = 6229), a significant difference among age groups
 
 To see which specific means may be different from one another, we used planned step-down tests with a Holm correction to minimize Type I errors.
 
-```{r age-stepdown, echo= FALSE, warning = FALSE}
+```{r age-stepdown, echo= FALSE, warning = FALSE, message = FALSE}
 
 agepair <- pairwise.t.test(spending_noall$lmean_all, spending_noall$age_group_name, p.adj = "holm")
 sigagepairs <- broom::tidy(agepair) %>%
@@ -204,17 +208,17 @@ nrow(sigagepairs)
 ```
 
 The pairwise t-tests used for our ANOVA step-down tests suggest that there are 99 different age pairs out of the 171 possible combinations. This tells us that more age pairs are different than are similar and that therefore the majority of age group pairs differ in terms of mean expenditures.
-```{r}
+```{r agefit, message = FALSE}
 agefit <- linear_reg() %>%
   set_engine("lm") %>%
   fit(lmean_all ~ age_group_name, data = spending_malefemale)
   tidy(agefit)
 
 ```
-```
 
 
-```{r age-expenditure-barplot, echo= FALSE, warning = FALSE}
+```{r age-expenditure-barplot, echo = FALSE, warning = FALSE, message = FALSE}
+
   # select the variables want, including the mean for the groups, age_group_name
   # pivot_longer -> cols, names_to = "whateveryouwant", values_to = "customname %>%
   # ggplot(aes(x = age_group_name, y = customname, color = whateveryouwant))
@@ -231,7 +235,7 @@ ggplot(data = spending_noall, aes(x = age_group_name, y = lmean_all)) +
 
 ```
 
-```{r age-pub-barplot, fig.height = 2.5, fig.width = 6, echo = FALSE, warning = FALSE}
+```{r age-pub-barplot, fig.height = 2.5, fig.width = 6, echo = FALSE, warning = FALSE, message = FALSE}
 
 ggplot(data = spending_noall, aes(x = age_group_name, y = lmean_pub)) +
   geom_bar(position = "dodge", stat = "identity") +
@@ -245,7 +249,7 @@ ggplot(data = spending_noall, aes(x = age_group_name, y = lmean_pub)) +
 
 ```
 
-```{r age-pri-barplot, fig.height = 2.5, fig.width = 6, echo = FALSE, warning = FALSE}
+```{r age-pri-barplot, fig.height = 2.5, fig.width = 6, echo = FALSE, warning = FALSE, message = FALSE}
 
 ggplot(data = spending_noall, aes(x = age_group_name, y = lmean_pri)) +
   geom_bar(position = "dodge", stat = "identity") +
@@ -259,7 +263,7 @@ ggplot(data = spending_noall, aes(x = age_group_name, y = lmean_pri)) +
 
 ```
 
-```{r age-oop-barplot, fig.height = 2.5, fig.width = 6, echo = FALSE, warning = FALSE}
+```{r age-oop-barplot, fig.height = 2.5, fig.width = 6, echo = FALSE, warning = FALSE, message = FALSE}
 
 ggplot(data = spending_noall, aes(x = age_group_name, y = lmean_oop)) +
   geom_bar(position = "dodge", stat = "identity") +
@@ -276,7 +280,8 @@ ggplot(data = spending_noall, aes(x = age_group_name, y = lmean_oop)) +
 
 
 ## Gender and Age Interaction
-``` {r maineffects_pub, echo= FALSE, warning = FALSE}
+
+``` {r maineffects_pub, echo = FALSE, warning = FALSE, message = FALSE}
 mainefpub_fit <- linear_reg() %>%
   set_engine("lm") %>%
   fit(lmean_pub ~ sex + age_group_id, data = spending_malefemale)
@@ -295,7 +300,7 @@ glance(interpub_fit)$adj.r.squared
 ```
 
 
-``` {r maineffects_pri, echo= FALSE, warning = FALSE}
+``` {r maineffects_pri, echo = FALSE, warning = FALSE, message = FALSE}
 mainefpri_fit <- linear_reg() %>%
   set_engine("lm") %>%
   fit(lmean_pri ~ sex + age_group_id, data = spending_malefemale)
@@ -304,7 +309,7 @@ tidy(mainefpri_fit)
 glance(mainefpri_fit)$adj.r.squared
 ```
 
-``` {r interaction_pri, echo= FALSE, warning = FALSE}
+``` {r interaction_pri, echo = FALSE, warning = FALSE, message = FALSE}
 interpri_fit <- linear_reg() %>%
   set_engine("lm") %>%
   fit(lmean_pri ~ sex + age_group_id + sex*age_group_id, data = spending_malefemale)
@@ -315,7 +320,7 @@ glance(interpri_fit)$adj.r.squared
 
 
 
-``` {r maineffects_oop, echo= FALSE, warning = FALSE}
+``` {r maineffects_oop, echo = FALSE, warning = FALSE, message = FALSE}
 mainefoop_fit <- linear_reg() %>%
   set_engine("lm") %>%
   fit(lmean_oop ~ sex + age_group_id, data = spending_malefemale)
@@ -324,7 +329,7 @@ tidy(mainefoop_fit)
 glance(mainefoop_fit)$adj.r.squared
 ```
 
-``` {r interaction_oop, echo= FALSE, warning = FALSE}
+``` {r interaction_oop, echo = FALSE, warning = FALSE, message = FALSE}
 interoop_fit <- linear_reg() %>%
   set_engine("lm") %>%
   fit(lmean_oop ~ sex + age_group_id + sex*age_group_id, data = spending_malefemale)
@@ -338,7 +343,7 @@ In order to test the possibility that there is a joint interaction of gender and
 
 
 ## Age and Disease Type Interaction
-``` {r agedismain_pub, echo= FALSE, warning = FALSE}
+``` {r agedismain_pub, echo = FALSE, warning = FALSE, message = FALSE}
 agedismainpub_fit <- linear_reg() %>%
   set_engine("lm") %>%
   fit(lmean_pub ~ agg_cause + age_group_id, data = spending_malefemale)
@@ -347,7 +352,7 @@ tidy(agedismainpub_fit)
 glance(agedismainpub_fit)$adj.r.squared
 ```
 
-``` {r agedisinter_pub, echo= FALSE, warning = FALSE}
+``` {r agedisinter_pub, echo = FALSE, warning = FALSE, message = FALSE}
 agedisinterpub_fit <- linear_reg() %>%
   set_engine("lm") %>%
   fit(lmean_pub ~ agg_cause + age_group_id + agg_cause*age_group_id, data = spending_malefemale)
@@ -357,7 +362,7 @@ glance(agedisinterpub_fit)$adj.r.squared
 ```
 
 
-``` {r agedismain_pri, echo= FALSE, warning = FALSE}
+``` {r agedismain_pri, echo = FALSE, warning = FALSE, message = FALSE}
 agedismainpri_fit <- linear_reg() %>%
   set_engine("lm") %>%
   fit(lmean_pri ~ agg_cause + age_group_id, data = spending_malefemale)
@@ -366,7 +371,7 @@ tidy(agedismainpri_fit)
 glance(agedismainpri_fit)$adj.r.squared
 ```
 
-``` {r agedisinter_pri, echo= FALSE, warning = FALSE}
+``` {r agedisinter_pri, echo = FALSE, warning = FALSE, message = FALSE}
 agedisinterpri_fit <- linear_reg() %>%
   set_engine("lm") %>%
   fit(lmean_pri ~ agg_cause + age_group_id + agg_cause*age_group_id, data = spending_malefemale)
@@ -377,7 +382,7 @@ glance(agedisinterpri_fit)$adj.r.squared
 
 
 
-``` {r agedismain_oop, echo= FALSE, warning = FALSE}
+``` {r agedismain_oop, echo = FALSE, warning = FALSE, message = FALSE}
 agedismainoop_fit <- linear_reg() %>%
   set_engine("lm") %>%
   fit(lmean_oop ~ agg_cause + age_group_id, data = spending_malefemale)
@@ -386,7 +391,7 @@ tidy(agedismainoop_fit)
 glance(agedismainoop_fit)$adj.r.squared
 ```
 
-``` {r agedisinter_oop, echo= FALSE, warning = FALSE}
+``` {r agedisinter_oop, echo = FALSE, warning = FALSE, message = FALSE}
 agedisinteroop_fit <- linear_reg() %>%
   set_engine("lm") %>%
   fit(lmean_oop ~ agg_cause + age_group_id + agg_cause*age_group_id, data = spending_malefemale)
@@ -398,7 +403,7 @@ glance(agedisinteroop_fit)$adj.r.squared
 ##Spending Over Time
 
 !! I kinda like this but idk if it adds anything but it is fun, need to make the words smaller so you can read it
-```{r spending_time_graph, echo= FALSE, warning = FALSE}
+```{r spending_time_graph, echo = FALSE, warning = FALSE, message = FALSE}
 spending_malefemale %>%
   ggplot(aes(x = year_id,
              y = lmean_all,
@@ -411,7 +416,7 @@ spending_malefemale %>%
 ```
 
 !! can we divide this to have a predictor for each year?
-```{r spending_time_fit, echo= FALSE, warning = FALSE}
+```{r spending_time_fit, echo = FALSE, warning = FALSE, message = FALSE}
 spendingovertime_fit <- linear_reg() %>%
   set_engine("lm") %>%
   fit(lmean_all ~ year_id, data = spending_malefemale)
