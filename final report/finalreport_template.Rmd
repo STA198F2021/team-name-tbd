@@ -1,7 +1,15 @@
 ---
 title: "An Investigation of Social Factors Influencing Emergency Healthcare Expenditure"
 author: "Maggie Lundberg, Riya Mohan, Izzy Kjaerulff"
-output: pdf_document
+output:
+  pdf_document:
+    fig_caption: yes
+    fig_crop: no
+    highlight: pygments
+    keep_tex: yes
+    number_sections: yes
+    toc: yes
+    toc_depth: 2
 fontsize: 10pt
 header-includes:
   \usepackage{float}
@@ -19,6 +27,16 @@ spending <- read.csv("../data/spending_data_unzip/IHME_DEX_ED_SPENDING_2006_2016
 ```{r load-packages, message = FALSE, warning = FALSE, echo = FALSE}
 library(tidyverse)
 library(tidymodels)
+
+library(knitr)
+  opts_chunk$set(fig.path='figure/graphics-',
+                 cache.path='cache/graphics-',
+                 fig.align='center',
+                 external=TRUE,
+                 echo=TRUE,
+                 warning=FALSE,
+                 fig.pos='H'
+                )
 ``` 
 
 ## Abstract
@@ -38,7 +56,7 @@ spending_malefemale <- spending %>%
 
 ## Normal Distribution of Payer Groups
 
-```{r distribution_pub, echo= FALSE, warning = FALSE, fig.height = 2, fig.width = 2, message = FALSE}
+```{r distribution_pub, echo= FALSE, warning = FALSE, fig.height = 2, fig.width = 2, message = FALSE, fig.show="hold"}
 spending_malefemale %>%
   ggplot(aes(x = mean_pub)) +
     geom_histogram(fill = "#28739F") +
@@ -51,9 +69,6 @@ spending_malefemale %>%
          x = "Mean Public Spending", 
          y = NULL)
 
-```
-
-```{r distribution_pri, echo= FALSE, warning = FALSE, fig.height = 2, fig.width = 2, message = FALSE}
 spending_malefemale %>%
   ggplot(aes(x = mean_pri)) +
     geom_histogram(fill = "#28739F") +
@@ -66,9 +81,6 @@ spending_malefemale %>%
          x = "Mean Private Spending", 
          y = NULL)
 
-```
-
-```{r distribution_oop, echo= FALSE, warning = FALSE, fig.height = 2, fig.width = 2, message = FALSE}
 spending_malefemale %>%
   ggplot(aes(x = mean_oop)) +
     geom_histogram(fill = "#28739F") +
@@ -84,7 +96,7 @@ spending_malefemale %>%
 ```
 The normal distribution for public spending, private spending, and out-of-pocket pending all show a severe right skew in the data. Therefore, all three variables do not meet the normal distribution assumption needed for many tests, such as ANOVA; however, this can easily be resolved by applying a log transformation to the data to give a fairly normal distribution of the data.
 
-```{r log_pub, echo= FALSE, warning = FALSE, fig.height = 3, fig.width = 3, message = FALSE}
+```{r log_pub, echo= FALSE, warning = FALSE, fig.height = 3, fig.width = 3, message = FALSE, fig.show="hold"}
 spending_malefemale %>%
   ggplot(aes(x = log(mean_pub))) +
     geom_histogram(fill = "#28739F") +
@@ -92,9 +104,6 @@ spending_malefemale %>%
          x = "Log Mean Public Spending", 
          y = NULL)
 
-```
-
-```{r log_pri, echo= FALSE, warning = FALSE, fig.height = 3, fig.width = 3, message = FALSE}
 spending_malefemale %>%
   ggplot(aes(x = log(mean_pri))) +
     geom_histogram(fill = "#28739F") +
@@ -102,9 +111,6 @@ spending_malefemale %>%
          x = "Log Mean Private Spending", 
          y = NULL)
 
-```
-
-```{r log_oop, echo= FALSE, warning = FALSE, fig.height = 3, fig.width = 3, message = FALSE}
 spending_malefemale %>%
   ggplot(aes(x = log(mean_oop))) +
     geom_histogram(fill = "#28739F") +
