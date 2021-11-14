@@ -514,9 +514,13 @@ glance(agedismainoop_fit)$adj.r.squared
 agedisinteroop_fit <- linear_reg() %>%
   set_engine("lm") %>%
   fit(lmean_oop ~ agg_cause + age_group_id + agg_cause*age_group_id, data = spending_malefemale)
-tidy(agedisinteroop_fit)
 
 glance(agedisinteroop_fit)$adj.r.squared
+
+agedisinteroop_fit_print <- agedisinteroop_fit %>%
+  tidy()
+
+knitr::kable(agedisinteroop_fit_print, caption = "Temp")
 ```
 
 \newpage
