@@ -223,6 +223,10 @@ meanalldiseasecatfit <- linear_reg() %>%
   fit(lmean_all ~ agg_cause, data = spending_malefemale)
   tidy(meanalldiseasecatfit)
 
+  meanalldiseasecatfit_print <- meanalldiseasecatfit %>%
+  tidy()%>%
+  select(term, estimate, p.value)
+knitr::kable(meanalldiseasecatfit_print, caption = "Temp")
 ```
 ```{r}
 glance(meanalldiseasecatfit)$adj.r.squared
@@ -248,6 +252,12 @@ spendingovertime_fit <- linear_reg() %>%
   set_engine("lm") %>%
   fit(lmean_all ~ as.factor(year_id) * agg_cause, data = spending_malefemale_year)
 tidy(spendingovertime_fit)
+
+
+spendingovertimefit_print <- spendingovertime_fit %>%
+  tidy()%>%
+  select(term, estimate, p.value)
+knitr::kable(spendingovertimefit_print, caption = "Temp")
 
 ```
 ```{r}
@@ -474,9 +484,10 @@ glance(agedismainpub_fit)$adj.r.squared
 agedisinterpub_fit <- linear_reg() %>%
   set_engine("lm") %>%
   fit(lmean_pub ~ agg_cause + age_group_id + agg_cause*age_group_id, data = spending_malefemale)
+
 tidy(agedisinterpub_fit)
 
-glance(agedisinterpub_fit)$adj.r.squared
+glance(agedisinterpub_fit$adj.r.squared)
 ```
 
 
@@ -513,9 +524,14 @@ glance(agedismainoop_fit)$adj.r.squared
 agedisinteroop_fit <- linear_reg() %>%
   set_engine("lm") %>%
   fit(lmean_oop ~ agg_cause + age_group_id + agg_cause*age_group_id, data = spending_malefemale)
-tidy(agedisinteroop_fit)
 
 glance(agedisinteroop_fit)$adj.r.squared
+
+agedisinteroop_fit_print <- agedisinteroop_fit %>%
+  tidy()%>%
+  select(term, estimate, p.value)
+
+knitr::kable(agedisinteroop_fit_print, caption = "Temp")
 ```
 
 \newpage
