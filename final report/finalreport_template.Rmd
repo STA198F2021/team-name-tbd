@@ -15,7 +15,6 @@ spending <- read.csv("../data/spending_data_unzip/IHME_DEX_ED_SPENDING_2006_2016
 ```{r load-packages, message = FALSE, warning = FALSE, echo = FALSE}
 library(tidyverse)
 library(tidymodels)
-
 ``` 
 
 ## Abstract
@@ -155,14 +154,14 @@ The step-down t tests indicate 92 disease category pairs are different out of 10
 
 
 ```{r disease_fit, echo= FALSE, warning = FALSE}
-meanpubdiseasecatfit <- linear_reg() %>%
+meanalldiseasecatfit <- linear_reg() %>%
   set_engine("lm") %>%
-  fit(mean_pub ~ agg_cause, data = spending_malefemale)
-  tidy(meanpubdiseasecatfit)
+  fit(lmean_all ~ agg_cause, data = spending_malefemale)
+  tidy(meanalldiseasecatfit)
 
 ```
 ```{r}
-glance(meanpubdiseasecatfit)$adj.r.squared
+glance(meanalldiseasecatfit)$r.squared
 ```
 
 
@@ -186,7 +185,7 @@ Below is an overall test of the null hypothesis that all of the means for age gr
 
 ```{r age-anova, echo= FALSE, warning = FALSE}
 
-summary(aov(mean_all~age_group_name,data = spending_noall))
+summary(aov(lmean_all~age_group_name,data = spending_noall))
 
 ```
 
@@ -196,7 +195,7 @@ To see which specific means may be different from one another, we used planned s
 
 ```{r age-stepdown, echo= FALSE, warning = FALSE}
 
-agepair <- pairwise.t.test(spending_noall$mean_all, spending_noall$age_group_name, p.adj = "holm")
+agepair <- pairwise.t.test(spending_noall$lmean_all, spending_noall$age_group_name, p.adj = "holm")
 sigagepairs <- broom::tidy(agepair) %>%
   filter(p.value<0.05) %>%
   arrange(group1,group2)
@@ -204,20 +203,29 @@ nrow(sigagepairs)
 
 ```
 
-The pairwise t-tests used for our ANOVA step-down tests suggest that there are 97 different age pairs out of the 171 possible combinations. This tells us that more age pairs are different than are similar and that therefore the majority of age group pairs differ in terms of mean expenditures.
+The pairwise t-tests used for our ANOVA step-down tests suggest that there are 99 different age pairs out of the 171 possible combinations. This tells us that more age pairs are different than are similar and that therefore the majority of age group pairs differ in terms of mean expenditures.
+```{r}
+agefit <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(lmean_all ~ age_group_name, data = spending_malefemale)
+  tidy(agefit)
+
+```
+```
+
 
 ```{r age-expenditure-barplot, echo= FALSE, warning = FALSE}
   # select the variables want, including the mean for the groups, age_group_name
   # pivot_longer -> cols, names_to = "whateveryouwant", values_to = "customname %>%
   # ggplot(aes(x = age_group_name, y = customname, color = whateveryouwant))
   
-ggplot(data = spending_noall, aes(x = age_group_name, y = mean_all)) +
+ggplot(data = spending_noall, aes(x = age_group_name, y = lmean_all)) +
   geom_bar(position = "dodge", stat = "identity") +
   theme(axis.text.x = element_text(angle = 45,hjust = 1)) +
   scale_y_continuous(labels = scales::comma) +
   labs(
     x = "Age Group",
-    y = "Mean Spending of All Payers",
+    y = "Mean Spending of All Payers (log scale)",
     title = "Emergency Department General Expenditures"
        )
 
@@ -225,7 +233,7 @@ ggplot(data = spending_noall, aes(x = age_group_name, y = mean_all)) +
 
 ```{r age-pub-barplot, fig.height = 2.5, fig.width = 6, echo = FALSE, warning = FALSE}
 
-ggplot(data = spending_noall, aes(x = age_group_name, y = mean_pub)) +
+ggplot(data = spending_noall, aes(x = age_group_name, y = lmean_pub)) +
   geom_bar(position = "dodge", stat = "identity") +
   theme(axis.text.x = element_text(angle = 45,hjust = 1)) +
   scale_y_continuous(labels = scales::comma) +
@@ -239,7 +247,7 @@ ggplot(data = spending_noall, aes(x = age_group_name, y = mean_pub)) +
 
 ```{r age-pri-barplot, fig.height = 2.5, fig.width = 6, echo = FALSE, warning = FALSE}
 
-ggplot(data = spending_noall, aes(x = age_group_name, y = mean_pri)) +
+ggplot(data = spending_noall, aes(x = age_group_name, y = lmean_pri)) +
   geom_bar(position = "dodge", stat = "identity") +
   theme(axis.text.x = element_text(angle = 45,hjust = 1)) +
   scale_y_continuous(labels = scales::comma) +
@@ -253,7 +261,7 @@ ggplot(data = spending_noall, aes(x = age_group_name, y = mean_pri)) +
 
 ```{r age-oop-barplot, fig.height = 2.5, fig.width = 6, echo = FALSE, warning = FALSE}
 
-ggplot(data = spending_noall, aes(x = age_group_name, y = mean_oop)) +
+ggplot(data = spending_noall, aes(x = age_group_name, y = lmean_oop)) +
   geom_bar(position = "dodge", stat = "identity") +
   theme(axis.text.x = element_text(angle = 45,hjust = 1)) +
   scale_color_manual(values = c("#de9681")) +
