@@ -1,5 +1,5 @@
 ---
-title: "An Investigation of Factors Influencing Emergency Healthcare Expenditures"
+title: "An Investigation of Social Factors Influencing Emergency Healthcare Expenditure"
 author: "Maggie Lundberg, Riya Mohan, Izzy Kjaerulff"
 output: pdf_document
 fontsize: 10pt
@@ -23,40 +23,62 @@ library(tidymodels)
 
 ## Abstract
 
+This paper provides insight into an open investigation of personal healthcare spending in the United States, with focus on the emergency department (ED). We used data from the Disease Expenditure Project (DEX) at IHME, giving estimates for ED spending split into three major groups: public insurance, private insurance, and out of pocket. The data compiled is used to investigate the existence of a relationship between demographic (sex and age), disease, and expenditure. In the following report, we hypothesize demographic, disease, and type of expenditure from our three included groups are not independent of one another. For example, we expect that results will suggest that public healthcare spending will be higher in older populations when compared to younger populations, whereas private spending will be higher in those younger populations. From the analysis devised in this report, we gather that the data is consistent with the following conclusions: [INSERT CONCLUSIONS HERE]
 
-## Nature of the Data
-The data includes summary of both male and female spending as "both", so in order to perform an analysis on this data, we decided to exclude the both data points to avoid double counting? It is important to acknowledge that this data only included those who identified as either male or female, so this is not a complete representationof the population. 
-```{r filter-for-gender, echo= FALSE, warning = FALSE, message = FALSE}
+The data given includes summaries of identified gender and ages as "Both" and "All Ages" observations, respectively. In order to gauge accurate analysis of this data, we chose to exclude the aforementioned observations to avoid double counting.
+
+It is important to acknowledge that this data set did not specify whether gender observations are based on individual reporting or otherwise observed identification and are limited to male and female. Therefore, the data may not encompass a complete representation of the population.
+
+```{r filter-for-gender, echo = FALSE, warning = FALSE, message = FALSE}
+
 spending_malefemale <- spending %>%
    filter(sex %in% c("Female", "Male"))
+
 ```
 
-```{r distribution_pub, echo= FALSE, warning = FALSE, fig.height = 3, fig.width = 3, message = FALSE}
+## Normal Distribution of Payer Groups
+
+```{r distribution_pub, echo= FALSE, warning = FALSE, fig.height = 2, fig.width = 2, message = FALSE}
 spending_malefemale %>%
   ggplot(aes(x = mean_pub)) +
     geom_histogram(fill = "#28739F") +
-    labs(title = "Normal Distribution of Mean Public Spending",
+  theme(
+    axis.text.x = element_text(color = "grey20", size = 5, face = "italic"),
+    axis.text.y = element_text(color = "grey20", size = 5, face = "italic"),  
+    axis.title.x = element_text(color = "grey20", size = 8, face = "bold"),
+        ) +
+  labs(title = NULL,
          x = "Mean Public Spending", 
          y = NULL)
 
 ```
 
-```{r distribution_pri, echo= FALSE, warning = FALSE, fig.height = 3, fig.width = 3, message = FALSE}
+```{r distribution_pri, echo= FALSE, warning = FALSE, fig.height = 2, fig.width = 2, message = FALSE}
 spending_malefemale %>%
   ggplot(aes(x = mean_pri)) +
     geom_histogram(fill = "#28739F") +
-    labs(title = "Normal Distribution of Mean Private Spending",
+  theme(
+    axis.text.x = element_text(color = "grey20", size = 5, face = "italic"),
+    axis.text.y = element_text(color = "grey20", size = 5, face = "italic"),  
+    axis.title.x = element_text(color = "grey20", size = 8, face = "bold"),
+        ) +
+  labs(title = NULL,
          x = "Mean Private Spending", 
          y = NULL)
 
 ```
 
-```{r distribution_oop, echo= FALSE, warning = FALSE, fig.height = 3, fig.width = 3, message = FALSE}
+```{r distribution_oop, echo= FALSE, warning = FALSE, fig.height = 2, fig.width = 2, message = FALSE}
 spending_malefemale %>%
   ggplot(aes(x = mean_oop)) +
     geom_histogram(fill = "#28739F") +
-    labs(title = "Normal Distribution of Mean Out-of-Pocket Spending",
-         x = "Mean Out-of-Pocket Spending", 
+  theme(
+    axis.text.x = element_text(color = "grey20", size = 5, face = "italic"),
+    axis.text.y = element_text(color = "grey20", size = 5, face = "italic"),  
+    axis.title.x = element_text(color = "grey20", size = 8, face = "bold"),
+        ) +
+  labs(title = NULL,
+         x = "Mean Out of Pocket Spending", 
          y = NULL)
 
 ```
