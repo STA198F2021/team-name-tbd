@@ -518,7 +518,8 @@ agedisinteroop_fit <- linear_reg() %>%
 glance(agedisinteroop_fit)$adj.r.squared
 
 agedisinteroop_fit_print <- agedisinteroop_fit %>%
-  tidy()
+  tidy()%>%
+  select(term, estimate, p.value)
 
 knitr::kable(agedisinteroop_fit_print, caption = "Temp")
 ```
