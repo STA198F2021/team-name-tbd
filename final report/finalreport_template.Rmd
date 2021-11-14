@@ -193,7 +193,7 @@ meanalldiseasecatfit <- linear_reg() %>%
 
 ```
 ```{r}
-glance(meanalldiseasecatfit)$r.squared
+glance(meanalldiseasecatfit)$adj.r.squared
 ```
 
 ```{r spending_time_graph, echo = FALSE, warning = FALSE, message = FALSE}
