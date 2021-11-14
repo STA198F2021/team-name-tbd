@@ -1,15 +1,14 @@
 ---
-title: "An Investigation of Social Factors Influencing Emergency Healthcare Expenditure"
-author: "Maggie Lundberg, Riya Mohan, Izzy Kjaerulff"
+title: "**An Investigation of Social Factors Influencing <br> Emergency Healthcare Expenditure**"
+author: "*Maggie Lundberg, Riya Mohan, Izzy Kjaerulff*"
 output:
   pdf_document:
     fig_caption: yes
     fig_crop: no
     highlight: pygments
-    keep_tex: yes
-    number_sections: yes
+    keep_tex: no
     toc: yes
-    toc_depth: 2
+    toc_depth: 3
 fontsize: 10pt
 header-includes:
   \usepackage{float}
@@ -29,9 +28,7 @@ library(tidyverse)
 library(tidymodels)
 
 library(knitr)
-  opts_chunk$set(fig.path='figure/graphics-',
-                 cache.path='cache/graphics-',
-                 fig.align='center',
+  opts_chunk$set(fig.align='center',
                  external=TRUE,
                  echo=TRUE,
                  warning=FALSE,
@@ -39,9 +36,22 @@ library(knitr)
                 )
 ``` 
 
+
 ## Abstract
 
 This paper provides insight into an open investigation of personal healthcare spending in the United States, with focus on the emergency department (ED). We used data from the Disease Expenditure Project (DEX) at IHME, giving estimates for ED spending split into three major groups: public insurance, private insurance, and out of pocket. The data compiled is used to investigate the existence of a relationship between demographic (sex and age), disease, and expenditure. In the following report, we hypothesize demographic, disease, and type of expenditure from our three included groups are not independent of one another. For example, we expect that results will suggest that public healthcare spending will be higher in older populations when compared to younger populations, whereas private spending will be higher in those younger populations. From the analysis devised in this report, we gather that the data is consistent with the following conclusions: [INSERT CONCLUSIONS HERE]
+
+\newpage
+
+## Background & Significance
+
+Emergency services ensure that individuals can receive timely care for unexpected ailments and injuries, making them a vital component of the healthcare industry. In recent years, however, emergency service spending has seen a significant increase (Scott and Liu 2021), which begs the question of equal accessibility. Expenditure is one of many ways by which to investigate interactions between demographic and healthcare access. [ELABORATE] As a preliminary piece of evaluation of the question of healthcare equity and accessibility by disease and demographic, we have prepared an analysis report of spending habits divided into the payer categories of public insurance, private insurance, and out of pocket. We hope to dive deeper into the relationship between spending habits and demographic through the lens of factors influencing payment models for the emergency department.
+
+## Methods
+
+### Data Collection
+
+Our data is provided by the Institute of Health Metrics and Evaluation as part of the Disease Expenditure Project (DEX). These Emergency Department (ED) health spending data include estimates for U.S. spending on health care divided into three types of payers: public insurance (including Medicare, Medicaid, and other government programs), private insurance, and out-of-pocket payments. This dataset contains ED spending estimates by aggregate health category, age group, sex, and payer for 2006 through 2016, released in October 2021. Data were gathered from “government budgets, insurance claims, facility records, household surveys, and official US records” (IHME 2021). The data collection and agglomeration is funded by the National Institute on Aging (NIA) and the National Institutes of Health (NIH), and estimates were generated from an underlying data set—the National Emergency Department Sample (NEDS).
 
 The data given includes summaries of identified gender and ages as "Both" and "All Ages" observations, respectively. In order to gauge accurate analysis of this data, we chose to exclude the aforementioned observations to avoid double counting.
 
@@ -50,11 +60,12 @@ It is important to acknowledge that this data set did not specify whether gender
 ```{r filter-for-gender, echo = FALSE, warning = FALSE, message = FALSE}
 
 spending_malefemale <- spending %>%
-   filter(sex %in% c("Female", "Male"))
+  filter(sex %in% c("Female", "Male")) %>%
+  filter(age_group_name != "All Ages")
 
 ```
 
-## Normal Distribution of Payer Groups
+*Normal Distribution of Payer Groups*
 
 ```{r distribution_pub, echo= FALSE, warning = FALSE, fig.height = 2, fig.width = 2, message = FALSE, fig.show="hold"}
 spending_malefemale %>%
@@ -96,26 +107,43 @@ spending_malefemale %>%
 ```
 The normal distribution for public spending, private spending, and out-of-pocket pending all show a severe right skew in the data. Therefore, all three variables do not meet the normal distribution assumption needed for many tests, such as ANOVA; however, this can easily be resolved by applying a log transformation to the data to give a fairly normal distribution of the data.
 
-```{r log_pub, echo= FALSE, warning = FALSE, fig.height = 3, fig.width = 3, message = FALSE, fig.show="hold"}
+*Normal Distribution of Payer Groups, Ln Applied*
+
+```{r log_pub, echo= FALSE, warning = FALSE, fig.height = 2, fig.width = 2, message = FALSE, fig.show = "hold"}
 spending_malefemale %>%
   ggplot(aes(x = log(mean_pub))) +
     geom_histogram(fill = "#28739F") +
-    labs(title = "Log Normal Distribution of Mean Public Spending",
-         x = "Log Mean Public Spending", 
+  theme(
+    axis.text.x = element_text(color = "grey20", size = 5, face = "italic"),
+    axis.text.y = element_text(color = "grey20", size = 5, face = "italic"),  
+    axis.title.x = element_text(color = "grey20", size = 8, face = "bold"),
+        ) +
+    labs(title = NULL,
+         x = "Mean Public Spending (ln)", 
          y = NULL)
 
 spending_malefemale %>%
   ggplot(aes(x = log(mean_pri))) +
     geom_histogram(fill = "#28739F") +
-    labs(title = "Log Normal Distribution of Mean Private Spending",
-         x = "Log Mean Private Spending", 
+  theme(
+    axis.text.x = element_text(color = "grey20", size = 5, face = "italic"),
+    axis.text.y = element_text(color = "grey20", size = 5, face = "italic"),  
+    axis.title.x = element_text(color = "grey20", size = 8, face = "bold"),
+        ) +
+    labs(title = NULL,
+         x = "Mean Private Spending (ln)", 
          y = NULL)
 
 spending_malefemale %>%
   ggplot(aes(x = log(mean_oop))) +
     geom_histogram(fill = "#28739F") +
-    labs(title = "Log Normal Distribution of Mean Out-of-Pocket Spending",
-         x = "Log Mean Out-of-Pocket Spending", 
+  theme(
+    axis.text.x = element_text(color = "grey20", size = 5, face = "italic"),
+    axis.text.y = element_text(color = "grey20", size = 5, face = "italic"),  
+    axis.title.x = element_text(color = "grey20", size = 8, face = "bold"),
+        ) +
+    labs(title = NULL,
+         x = "Mean Out-of-Pocket Spending (ln)", 
          y = NULL)
 
 ```
@@ -134,8 +162,11 @@ spending_malefemale <- spending_malefemale %>%
   
 ```
 
+### Exploratory Data Analysis
 
-## Gender
+#### Gender
+
+
 Our first question in this analysis is if males and females spend a different amount of money on emergency services.
 
 First this t-test looks at overall differences in log mean emergency department spending between males and females
@@ -164,7 +195,8 @@ The t-test on emergency services spending for people who pay out of pocket indic
 
 The t-tests for each type of insurance indicate that there is not enough evidence to reject the null hypothesis that emergency department spending is the same for males and females who have public insurance, private insurance, or pay out of pocket, leading us to the conclusion that gender does not influence emergency spending in the forms of payment studied here. 
 
-## Disease category and Emergency Spending
+#### Disease
+
 
 In order to determine emergency department spending based on disease type, an ANOVA test is performed due to the data for spending on the log scale being normally distributed, relatively similar variance, and independent. 
 
@@ -223,7 +255,8 @@ glance(spendingovertime_fit)$adj.r.squared
 ```
 
 
-## Age
+#### Age
+
 
 !! had to take out the observations with "All Ages" because I think it will just mess up the pairs but let me know what you think or whether you think there's anything we can do with that group
 
@@ -272,14 +305,15 @@ agefit <- linear_reg() %>%
 
 
 ```{r age-expenditure-barplot, echo = FALSE, warning = FALSE, message = FALSE}
-
-  # select the variables want, including the mean for the groups, age_group_name
-  # pivot_longer -> cols, names_to = "whateveryouwant", values_to = "customname %>%
-  # ggplot(aes(x = age_group_name, y = customname, color = whateveryouwant))
   
 ggplot(data = spending_noall, aes(x = age_group_name, y = lmean_all)) +
-  geom_bar(position = "dodge", stat = "identity") +
-  theme(axis.text.x = element_text(angle = 45,hjust = 1)) +
+  geom_bar(position = "dodge", stat = "identity", fill = "#4e6e58") +
+  theme(
+    axis.text.x = element_text(color = "grey20", size = 5, 
+                               face = "italic", angle = 45,hjust = 1),
+    axis.text.y = element_text(color = "grey20", size = 5, face = "italic"),  
+    axis.title.x = element_text(color = "grey20", size = 8, face = "bold"),
+        ) +
   scale_y_continuous(labels = scales::comma) +
   labs(
     x = "Age Group",
@@ -292,8 +326,14 @@ ggplot(data = spending_noall, aes(x = age_group_name, y = lmean_all)) +
 ```{r age-pub-barplot, fig.height = 2.5, fig.width = 6, echo = FALSE, warning = FALSE, message = FALSE}
 
 ggplot(data = spending_noall, aes(x = age_group_name, y = lmean_pub)) +
-  geom_bar(position = "dodge", stat = "identity") +
-  theme(axis.text.x = element_text(angle = 45,hjust = 1)) +
+  geom_bar(position = "dodge", stat = "identity", fill = "#4e676e") +
+  theme(
+    axis.text.x = element_blank(),
+    axis.text.y = element_text(color = "grey20", size = 5, face = "italic"),  
+    axis.title.x = element_text(color = "grey20", size = 8, face = "bold"),
+    plot.title = element_text(face="bold"),
+    axis.ticks.x = element_blank()
+        ) +
   scale_y_continuous(labels = scales::comma) +
   labs(
     x = NULL,
@@ -306,8 +346,14 @@ ggplot(data = spending_noall, aes(x = age_group_name, y = lmean_pub)) +
 ```{r age-pri-barplot, fig.height = 2.5, fig.width = 6, echo = FALSE, warning = FALSE, message = FALSE}
 
 ggplot(data = spending_noall, aes(x = age_group_name, y = lmean_pri)) +
-  geom_bar(position = "dodge", stat = "identity") +
-  theme(axis.text.x = element_text(angle = 45,hjust = 1)) +
+  geom_bar(position = "dodge", stat = "identity", fill = "#6a6e4e") +
+  theme(
+    axis.text.x = element_blank(),
+    axis.text.y = element_text(color = "grey20", size = 5, face = "italic"),  
+    axis.title.x = element_text(color = "grey20", size = 8, face = "bold"),
+    plot.title = element_text(face="bold"),
+    axis.ticks.x = element_blank()
+        ) +
   scale_y_continuous(labels = scales::comma) +
   labs(
     x = NULL,
@@ -320,20 +366,26 @@ ggplot(data = spending_noall, aes(x = age_group_name, y = lmean_pri)) +
 ```{r age-oop-barplot, fig.height = 2.5, fig.width = 6, echo = FALSE, warning = FALSE, message = FALSE}
 
 ggplot(data = spending_noall, aes(x = age_group_name, y = lmean_oop)) +
-  geom_bar(position = "dodge", stat = "identity") +
-  theme(axis.text.x = element_text(angle = 45,hjust = 1)) +
-  scale_color_manual(values = c("#de9681")) +
+  geom_bar(position = "dodge", stat = "identity", fill = "#6e4e4e") +
+  theme(
+    axis.text.x = element_blank(),
+    axis.text.y = element_text(color = "grey20", size = 5, face = "italic"),  
+    axis.title.x = element_text(color = "grey20", size = 8, face = "bold"),
+    plot.title = element_text(face="bold"),
+    axis.ticks.x = element_blank()
+        ) +
   scale_y_continuous(labels = scales::comma) +
   labs(
     x = NULL,
     y = NULL,
-    title = "Out of Pocket Expenditures"
+    title = "Out-of-Pocket Expenditures"
        )
 
 ```
 
 
-## Gender and Age Interaction
+#### Gender and Age Interaction
+
 
 ``` {r maineffects_pub, echo = FALSE, warning = FALSE, message = FALSE}
 mainefpub_fit <- linear_reg() %>%
@@ -396,7 +448,9 @@ In order to test the possibility that there is a joint interaction of gender and
 
 
 
-## Age and Disease Type Interaction
+#### Age and Disease Interaction
+
+
 ```{r rsquared_table, echo = FALSE, warning = FALSE}
 Payer <- c("Public Spending", "Private Spending", "Out-of-Pocket Spending")
 Main_Effects <- c(0.506887, 0.5054947, 0.5161683)
@@ -464,7 +518,11 @@ tidy(agedisinteroop_fit)
 glance(agedisinteroop_fit)$adj.r.squared
 ```
 
+\newpage
 
+## References
 
+Institute for Health Metrics and Evaluation (IHME). United States Healthcare Spending in Emergency Departments by Health Condition 2006-2016. Seattle, United States of America: Institute for Health Metrics and Evaluation (IHME), 2021.
 
+Woody Scott K, Liu A, Chen C, Kaldjian AS, Sabbatini AK, Duber, HC, Dieleman JL. Healthcare Spending in U.S. Emergency Departments by Health Condition, 2006-2016. PLOS One. 27 October 2021.
 
