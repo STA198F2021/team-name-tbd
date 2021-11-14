@@ -168,6 +168,32 @@ meanalldiseasecatfit <- linear_reg() %>%
 glance(meanalldiseasecatfit)$r.squared
 ```
 
+```{r spending_time_graph, echo = FALSE, warning = FALSE, message = FALSE}
+spending_malefemale %>%
+  ggplot(aes(x = year_id,
+             y = lmean_all,
+             fill = agg_cause)) +
+  geom_bar(stat = "identity") +
+  facet_wrap(~agg_cause) +
+  theme(axis.text.x = element_text(angle = 45,hjust = 1), legend.position = "none") +
+  labs(x = "Disease Category",
+       y = "Mean Spending (log$)")
+```
+
+
+```{r spending_time_fit, echo = FALSE, warning = FALSE, message = FALSE}
+spending_malefemale_year <- spending_malefemale %>%
+  filter(year_id %in% c("2006", "2016"))
+spendingovertime_fit <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(lmean_all ~ as.factor(year_id) * agg_cause, data = spending_malefemale_year)
+tidy(spendingovertime_fit)
+
+```
+```{r}
+glance(spendingovertime_fit)$adj.r.squared
+```
+
 
 ## Age
 
@@ -400,29 +426,7 @@ tidy(agedisinteroop_fit)
 glance(agedisinteroop_fit)$adj.r.squared
 ```
 
-##Spending Over Time
 
-!! I kinda like this but idk if it adds anything but it is fun, need to make the words smaller so you can read it
-```{r spending_time_graph, echo = FALSE, warning = FALSE, message = FALSE}
-spending_malefemale %>%
-  ggplot(aes(x = year_id,
-             y = lmean_all,
-             fill = agg_cause)) +
-  geom_bar(stat = "identity") +
-  facet_wrap(~agg_cause) +
-  theme(axis.text.x = element_text(angle = 45,hjust = 1), legend.position = "none") +
-  labs(x = "Disease Category",
-       y = "Mean Spending (log$)")
-```
-
-!! can we divide this to have a predictor for each year?
-```{r spending_time_fit, echo = FALSE, warning = FALSE, message = FALSE}
-spendingovertime_fit <- linear_reg() %>%
-  set_engine("lm") %>%
-  fit(lmean_all ~ year_id, data = spending_malefemale)
-tidy(spendingovertime_fit)
-
-```
 
 
 
