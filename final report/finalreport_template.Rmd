@@ -33,7 +33,8 @@ library(knitr)
                  warning = FALSE
                 )
 library(kableExtra)
-library(pander)
+library(gridExtra)
+library(ggplot2)
 ``` 
 
 \vspace*{\fill}
@@ -48,13 +49,11 @@ This paper provides insight into an open investigation of personal healthcare sp
 
 Emergency services ensure that individuals can receive timely care for unexpected ailments and injuries, making them a vital component of the healthcare industry. In recent years, however, emergency service spending has seen a significant increase (Scott and Liu 2021), which begs the question of equal accessibility. Expenditure is one of many ways by which to investigate interactions between demographic and healthcare access. [ELABORATE] As a preliminary piece of evaluation of the question of healthcare equity and accessibility by disease and demographic, we have prepared an analysis report of spending habits divided into the payer categories of public insurance, private insurance, and out of pocket. We hope to dive deeper into the relationship between spending habits and demographic through the lens of factors influencing payment models for the emergency department.
 
-## Methods
-
-### Data Collection
+## Data Collection
 
 Our data is provided by the Institute of Health Metrics and Evaluation as part of the Disease Expenditure Project (DEX). These Emergency Department (ED) health spending data include estimates for U.S. spending on health care divided into three types of payers: public insurance (including Medicare, Medicaid, and other government programs), private insurance, and out-of-pocket payments. This dataset contains ED spending estimates by aggregate health category, age group, sex, and payer for 2006 through 2016, released in October 2021. Data were gathered from “government budgets, insurance claims, facility records, household surveys, and official US records” (IHME 2021). The data collection and agglomeration is funded by the National Institute on Aging (NIA) and the National Institutes of Health (NIH), and estimates were generated from an underlying data set—the National Emergency Department Sample (NEDS).
 
-The data given includes summaries of identified gender and ages as 'r "Both"' and 'r "All Ages"' observations, respectively. In order to gauge accurate analysis of this data, we chose to exclude the aforementioned observations to avoid double counting.
+The data given includes summaries of identified gender and ages as "Both" and "All Ages" observations, respectively. In order to gauge accurate analysis of this data, we chose to exclude the aforementioned observations to avoid double counting.
 
 It is important to acknowledge that this data set did not specify whether gender observations are based on individual reporting or otherwise observed identification and are limited to male and female. Therefore, the data may not encompass a complete representation of the population.
 
@@ -66,52 +65,11 @@ spending_malefemale <- spending %>%
 
 ```
 
-### Exploratory Data Analysis
+## Research Question Analysis
 
-#### ANOVA Assumption Violation
+### ANOVA Assumption Violation
 
-To confirm that our data could be evaluated under ANOVA assumptions, we visualized the distributions of payer groups. The distributions for all three groups showed severe right skews in the data, thus not meeting the normal distribution assumption needed for ANOVA testing. We resolved this by applying a log transformation to the data (excluding any spending data with observation 0) to evaluate using a more normal distribution, shown below.
-
-*Distribution of Payer Groups*
-
-```{r distribution_pub, echo= FALSE, warning = FALSE, fig.height = 2, fig.width = 2, message = FALSE, fig.show="hold"}
-spending_malefemale %>%
-  ggplot(aes(x = mean_pub)) +
-    geom_histogram(fill = "#a3b3a1") +
-  theme(
-    axis.text.x = element_text(color = "grey20", size = 5, face = "italic"),
-    axis.text.y = element_text(color = "grey20", size = 5, face = "italic"),  
-    axis.title.x = element_text(color = "grey20", size = 8, face = "bold"),
-        ) +
-  labs(title = NULL,
-         x = "Mean Public Spending", 
-         y = NULL)
-
-spending_malefemale %>%
-  ggplot(aes(x = mean_pri)) +
-    geom_histogram(fill = "#a3b3a1") +
-  theme(
-    axis.text.x = element_text(color = "grey20", size = 5, face = "italic"),
-    axis.text.y = element_text(color = "grey20", size = 5, face = "italic"),  
-    axis.title.x = element_text(color = "grey20", size = 8, face = "bold"),
-        ) +
-  labs(title = NULL,
-         x = "Mean Private Spending", 
-         y = NULL)
-
-spending_malefemale %>%
-  ggplot(aes(x = mean_oop)) +
-    geom_histogram(fill = "#a3b3a1") +
-  theme(
-    axis.text.x = element_text(color = "grey20", size = 5, face = "italic"),
-    axis.text.y = element_text(color = "grey20", size = 5, face = "italic"),  
-    axis.title.x = element_text(color = "grey20", size = 8, face = "bold"),
-        ) +
-  labs(title = NULL,
-         x = "Mean Out of Pocket Spending", 
-         y = NULL)
-
-```
+To confirm that our data could be evaluated under ANOVA assumptions, we visualized the distributions of payer groups. The distributions for all three groups showed severe right skews in the data, thus not meeting the normal distribution assumption needed for ANOVA testing. We resolved this by applying a log transformation to the data (excluding any spending data with observation 0) to evaluate using a more normal distribution (Figures 1 & 2).
 
 ```{r logscaleconversion, echo= FALSE, warning = FALSE, message = FALSE}
 
@@ -127,51 +85,9 @@ spending_malefemale <- spending_malefemale %>%
   
 ```
 
-*Distribution of Payer Groups, Log Scale*
+### Gender
 
-```{r log_pub, echo= FALSE, warning = FALSE, fig.height = 2, fig.width = 2, message = FALSE, fig.show = "hold"}
-
-spending_malefemale %>%
-  ggplot(aes(x = log(mean_pub))) +
-    geom_histogram(fill = "#a3b3a1") +
-  theme(
-    axis.text.x = element_text(color = "grey20", size = 5, face = "italic"),
-    axis.text.y = element_text(color = "grey20", size = 5, face = "italic"),  
-    axis.title.x = element_text(color = "grey20", size = 8, face = "bold"),
-        ) +
-    labs(title = NULL,
-         x = "Mean Public Spending (ln)", 
-         y = NULL)
-
-spending_malefemale %>%
-  ggplot(aes(x = log(mean_pri))) +
-    geom_histogram(fill = "#a3b3a1") +
-  theme(
-    axis.text.x = element_text(color = "grey20", size = 5, face = "italic"),
-    axis.text.y = element_text(color = "grey20", size = 5, face = "italic"),  
-    axis.title.x = element_text(color = "grey20", size = 8, face = "bold"),
-        ) +
-    labs(title = NULL,
-         x = "Mean Private Spending (ln)", 
-         y = NULL)
-
-spending_malefemale %>%
-  ggplot(aes(x = log(mean_oop))) +
-    geom_histogram(fill = "#a3b3a1") +
-  theme(
-    axis.text.x = element_text(color = "grey20", size = 5, face = "italic"),
-    axis.text.y = element_text(color = "grey20", size = 5, face = "italic"),  
-    axis.title.x = element_text(color = "grey20", size = 8, face = "bold"),
-        ) +
-    labs(title = NULL,
-         x = "Mean Out-of-Pocket Spending (ln)", 
-         y = NULL)
-
-```
-
-#### Gender
-
-Our first step in investigating demographic factor influences on ED expenditure was through the lens of gender. We first performed an overall t-test looking at significant differences between log mean ED expenditure for males and females. As a follow-up to this result, we constructed further step-down tests to evaluate for data consistent with statistical significance for a difference in mean expenditure between the two genders outlined in the data frame.
+Our first step in investigating demographic factor influences on ED expenditure was through the lens of gender. Our initial research question is as follows: *Is gender a factor in influencing emergency department spending?* We first performed an overall t-test looking at significant differences between mean ED expenditure for males and females on the log scale. Our overall two-sample t-test did not have a statistically significant p-value for alpha < 0.05 (Table 4, Test 1), but we wanted to evaluate differences between types of expenditure individually. 
 
 ```{r gender-t-test, echo = FALSE, warning = FALSE, message = FALSE, eval = FALSE}
 
@@ -182,11 +98,11 @@ t.test(spending_malefemale$lmean_oop~spending_malefemale$sex)
 
 ```
 
-Our overall two-sample t-test did not have a statistically significant p-value for alpha < 0.05 (Table 6, Test 1). Thereafter, the t-tests of gender differences for each type of payer expenditure (Table 6, Tests 2-4) indicate that the given data are not evidence for rejection of the null hypothesis evaluating gender influence on ED expenditure for our three outlined payers. Therefore, our data are not consistent with a relationship between gender and ED spending.
+Therefore, we constructed further step-down tests to evaluate for data consistent with statistical significance for a difference in mean expenditure between the two genders outlined in the data frame. The resulting t-tests for each type of payer expenditure indicated that the given data are not evidence for rejection of the null hypothesis evaluating gender influence on ED expenditure for our three outlined payers (Table 4, Tests 2–4). Therefore, our data are not consistent with a relationship between gender and ED spending. Overall, gender does not seem to be a factor in influencing emergency department spending, both overall and by payer type.
 
-#### Age
+### Age
 
-A secondary demographic factor that we were able to evaluate from this DEX data is age, through the lens of its relationship with ED healthcare expenditure. The 'r age_group_name' variable is split into 19 groups that generally increase by 5-year increments. We first used an overall test with ANOVA on the log scale to evaluate the null hypothesis that all of the means for age groups across the years are equal, as opposed to the alternative that at least one mean is different. In our F-test (ndf = 18, ddf = 6031), a significant difference among age groups was identified. Therefore, we rejected our null hypothesis and designed step-down tests with a Holm correction to minimize Type I errors. The pairwise t-tests evaluated 99/171 differing combinations, which was consistent with our hypothesis that (a majority of) age group pairs differ in terms of mean expenditures.
+A secondary demographic factor that we were able to evaluate from this DEX data was age. Our second research question is as follows: *Is age a factor in influencing emergency department spending?* The age variable is split into 19 groups that generally increase by 5-year increments. We first used an overall test with ANOVA on the log scale to evaluate the null hypothesis that all of the means for age groups across the years are equal, as opposed to the alternative that at least one mean is different. In our F-test (ndf = 18, ddf = 6031), a significant difference among age groups was identified. Therefore, we rejected our null hypothesis and designed step-down t-tests with a Holm correction to minimize Type I errors. The pairwise t-tests evaluated 99/171 differing combinations, which was consistent with our hypothesis that (a majority of) age group pairs differ in terms of mean expenditures.
 
 ```{r age-anova, echo= FALSE, warning = FALSE, message = FALSE, eval= FALSE}
 
@@ -208,7 +124,7 @@ nrow(sigagepairs)
 
 ```
 
-```{r agefit, message = FALSE}
+```{r agefit, message = FALSE, echo = FALSE, warning = FALSE, eval = FALSE}
 agefit <- linear_reg() %>%
   set_engine("lm") %>%
   fit(lmean_all ~ age_group_name, data = spending_malefemale)
@@ -216,93 +132,12 @@ agefit <- linear_reg() %>%
 
 ```
 
-\newpage
+[INSERT BAR PLOT ANALYSIS, NOT EDITED IN DOC YET]
 
-```{r age-expenditure-barplot, echo = FALSE, warning = FALSE, message = FALSE, fig.height = 2.5, fig.width = 6}
-  
-ggplot(data = spending_malefemale, aes(x = age_group_name, y = lmean_all)) +
-  geom_bar(position = "dodge", stat = "identity", fill = "#a3b3a1") +
-  theme(
-    axis.text.x = element_text(color = "grey20", size = 5, 
-                               face = "italic", angle = 45,hjust = 1),
-    axis.text.y = element_text(color = "grey20", size = 5, face = "italic"),
-    axis.title.y = element_text(color = "grey20", size = 8, face = "bold"),
-    axis.title.x = element_text(color = "grey20", size = 8, face = "bold"),
-    plot.title = element_text(color = "grey20", face = "bold")
-        ) +
-  scale_y_continuous(labels = scales::comma) +
-  labs(
-    x = "Age Group",
-    y = "Mean Spending, All Payers (ln)",
-    title = "Emergency Department General Expenditures"
-       )
+### Health Category
 
-```
+Along with demographic factors that may influence expenditure,  the DEX data set allows for evaluation of the relationship between aggregate cause of spending in the emergency department (health category) and the resulting expenditure. Our third research question is as follows: *Does health category have an impact on emergency department expenditures?*
 
-```{r age-pub-barplot, fig.height = 2, fig.width = 6, echo = FALSE, warning = FALSE, message = FALSE}
-
-ggplot(data = spending_malefemale, aes(x = age_group_name, y = lmean_pub)) +
-  geom_bar(position = "dodge", stat = "identity", fill = "#a1b1b3") +
-  theme(
-    axis.text.x = element_blank(),
-    axis.text.y = element_text(color = "grey20", size = 5, face = "italic"),  
-    axis.title.x = element_text(color = "grey20", size = 8, face = "bold"),
-    plot.title = element_text(color = "grey20", face = "bold"),
-    axis.ticks.x = element_blank()
-        ) +
-  scale_y_continuous(labels = scales::comma) +
-  labs(
-    x = NULL,
-    y = NULL,
-    title = "Public Insurance Expenditures"
-       )
-
-```
-
-```{r age-pri-barplot, fig.height = 2, fig.width = 6, echo = FALSE, warning = FALSE, message = FALSE}
-
-ggplot(data = spending_malefemale, aes(x = age_group_name, y = lmean_pri)) +
-  geom_bar(position = "dodge", stat = "identity", fill = "#aea1b3") +
-  theme(
-    axis.text.x = element_blank(),
-    axis.text.y = element_text(color = "grey20", size = 5, face = "italic"),  
-    axis.title.x = element_text(color = "grey20", size = 8, face = "bold"),
-    plot.title = element_text(color = "grey20", face = "bold"),
-    axis.ticks.x = element_blank()
-        ) +
-  scale_y_continuous(labels = scales::comma) +
-  labs(
-    x = NULL,
-    y = NULL,
-    title = "Private Insurance Expenditures"
-       )
-
-```
-
-```{r age-oop-barplot, fig.height = 2, fig.width = 6, echo = FALSE, warning = FALSE, message = FALSE}
-
-ggplot(data = spending_malefemale, aes(x = age_group_name, y = lmean_oop)) +
-  geom_bar(position = "dodge", stat = "identity", fill = "#b3a2a1") +
-  theme(
-    axis.text.x = element_blank(),
-    axis.text.y = element_text(color = "grey20", size = 5, face = "italic"),  
-    axis.title.x = element_text(color = "grey20", size = 8, face = "bold"),
-    plot.title = element_text(color = "grey20", face = "bold"),
-    axis.ticks.x = element_blank()
-        ) +
-  scale_y_continuous(labels = scales::comma) +
-  labs(
-    x = NULL,
-    y = NULL,
-    title = "Out-of-Pocket Expenditures"
-       )
-
-```
-\newpage
-
-#### Aggregate Cause
-
-Along with demographic factors that may influence expenditure, the data set given allows for evaluation of the relationship between aggregate cause of spending in the emergency department and the resulting expenditure.
 
 ```{r ANOVAtest, echo= FALSE, warning = FALSE, message = FALSE, eval = FALSE}
 
@@ -322,84 +157,9 @@ nrow(sigpairs)
 
 ```
 
-A one-way ANOVA (ndf = 14, ddf = 6035) was performed to compare the effect of aggregate cause of spending (log scale) on mean ED expenditure (Table 6, Test 6), revealing that there was a statistically significant difference in mean ED expenditure between at least two groups (F = 639.5). Based on our significance testing, we reject the overall null hypothesis of no effect. Thereafter, we performed step-down tests using a Holm correction for multiple comparisons, which indicated that 92/105 cause category pairs differ in mean expenditure. There is significant variation in almost all of the category pairs, consistent with the conclusion that there is a relationship between aggregate cause of spending and the expenditure result.
+A one-way ANOVA (ndf = 14, ddf = 6035) was performed to compare the effect of aggregate cause of spending (log scale) on mean ED expenditure (Table 4, Test 6), revealing that there was a statistically significant difference in mean ED expenditure between at least two groups (F = 639.5). Based on our significance testing, we rejected the overall null hypothesis of no effect. Thereafter, we performed step-down tests using a Holm correction for multiple comparisons, which indicated that 92/105 category pairs differ in mean expenditure. There is significant variation in almost all of the category pairs, consistent with the hypothesis that there is a relationship between cause of expenditure and the expenditure result.
 
-```{r disease_fit, echo= FALSE, warning = FALSE, message = FALSE, fig.width = 5}
-
-spending_malefemale$disease_renamed <- factor(spending_malefemale$agg_cause, 
-            labels = c("Behavioral/Substance Use", "Cancers", "Cardiovascular", "Chronic Respiratory", "Communicable/Nutrition", "Diabetes/Kidney", "Digestive", "Endrocrine", "Injury", "Maternal/Neonatal", "Musculoskeletal", "Neurological", "Other Non-Communicable", "Prevention/Coordination", "Skin/Sense Organs"))
-
-
-meanalldiseasecatfit <- linear_reg() %>%
-  set_engine("lm") %>%
-  fit(lmean_all ~ disease_renamed, data = spending_malefemale)
-
-diseasefit_new <- lm(lmean_all ~ disease_renamed, data = spending_malefemale)
-
-diseasefit_new %>%
-  tidy() %>%
-  mutate(
-    p.value = scales::pvalue(p.value),
-    term = c("Intercept (Behavioral/Substance Use)", "Cancers", "Cardiovascular", "Chronic Respiratory", "Communicable/Nutrition", "Diabetes/Kidney", "Digestive", "Endrocrine", "Injury", "Maternal/Neonatal", "Musculoskeletal", "Neurological", "Other Non-Communicable", "Prevention/Coordination", "Skin/Sense Organs")
-  ) %>%
-  kable(
-    caption = "Coefficient-Level Estimates for a Model Fitted to Estimate Variation in Mean Expenditure by Aggregate Cause Categories",
-    col.names = c("Predictor", "B", "SE", "t", "p"),
-    digits = c(0, 2, 3, 2, 3),
-    align = c("l", "r", "r", "r", "r")
-  ) %>%
-  footnote(
-    general = "Variables were log-transformed using the natural logarithm.",
-    general_title = "Note.",
-    footnote_as_chunk = TRUE
-    )
-
-```
-
-```{r disease-rsq, echo = FALSE, message = FALSE, warning = FALSE, fig.width= 6}
-
-Measure <- c("R$^2$", "Adjusted R$^2$")
-Result <- c(0.5973, 0.5964)
-
-disease_rsq <- data.frame(Measure, Result, stringsAsFactors = FALSE)
-
-kable(disease_rsq, caption="Fit Values for Disease Type Analysis") 
-
-```
-
-```{r spending_time_graph, echo = FALSE, warning = FALSE, message = FALSE}
-
-spending_malefemale %>%
-  ggplot(aes(x = year_id,
-             y = lmean_all,
-             fill = disease_renamed)) +
-  geom_bar(stat = "identity") +
-  scale_fill_manual(values = c(
-    "#b3a2a1", "#b3a8a1", "#b3aea1", "#b3b1a1", "#a3b3a1", "#a1b3a9", 
-    "#a1b3b1", "#a1b1b3", "#a1a3b3", "#a9a1b3", "#aea1b3", "#b1a1b3",
-    "#b3a1ac", "#b3a1a6", "#b3a1a6"
-    )) +
-  facet_wrap(~disease_renamed) +
-  theme(axis.text.x = element_text(
-    color = "grey20", size = 5, face = "italic",
-    angle = 45, hjust = 1),
-    legend.position = "none",
-    axis.text.y = element_text(color = "grey20", size = 5, face = "italic"),  
-    axis.title.x = element_text(color = "grey20", size = 8, face = "bold"),
-    axis.title.y = element_text(color = "grey20", size = 8, face = "bold"),
-    plot.title = element_text(color = "grey20", face = "bold"),
-    strip.background = element_rect(color = "grey20", fill = "white"),
-    strip.text.x = element_text(size = 7)
-        ) +
-  labs(
-    title = "Log Mean Spending by Disease",
-    x = "Disease Category",
-    y = "Mean Spending (ln$)")
-  
-```
-
-
-```{r spending_time_fit, echo = FALSE, warning = FALSE, message = FALSE}
+```{r spending_time_fit, echo = FALSE, warning = FALSE, message = FALSE, eval = FALSE}
 
 spending_malefemale_year <- spending_malefemale %>%
   filter(year_id %in% c("2006", "2016"))
@@ -409,21 +169,21 @@ spendingovertime_fit <- linear_reg() %>%
   fit(lmean_all ~ as.factor(year_id) * agg_cause, 
       data = spending_malefemale_year)
 
-spendingovertimefit_print <- spendingovertime_fit %>%
-  tidy() %>%
-  select(term, estimate, p.value)
-knitr::kable(spendingovertimefit_print, caption = "Temp")
+tidy(spendingovertime_fit)
 
 ```
 
-```{r spending-adj-rsqu , echo = FALSE, warning = FALSE, message = FALSE}
+```{r spending-adj-rsqu , echo = FALSE, warning = FALSE, message = FALSE, eval = FALSE}
 
 glance(spendingovertime_fit)$adj.r.squared
 
 ```
 
-#### Gender and Age Interaction
+Because our ANOVA testing showed significant variance, we performed a linear regression with the referent group mean spending (log scale) for those with behavioral health and substance use disorders (Table 1). For each health category, all else held constant, the predicted average log spending either increases or decreases based on the amount shown in the table compared to the referent group. All predictors were found to be significant (alpha < 0.05) in predicting mean spending except for the diabetes and kidney diseases predictor. The r-squared value indicated that this linear regression model is an acceptable predictor considering human study standards (Table 5).
 
+Our final health category analysis involves ED spending variation over time by cause of expenditure. In order to visualize the all mean spending differences (log scale), we visualized the data in a barplot (Figure 4). [INSERT BAR PLOT ANALYSIS, NOT EDITED IN DOC YET]
+
+### Gender and Age Interaction
 
 ``` {r maineffects_pub, echo = FALSE, warning = FALSE, message = FALSE, eval = FALSE}
 mainefpub_fit <- linear_reg() %>%
@@ -480,7 +240,326 @@ tidy(interoop_fit)
 glance(interoop_fit)$adj.r.squared
 ```
 
-In order to test the possibility that there is a joint interaction of gender and age, a main effects and interaction effects linear regression model has been fit to the data. As a whole, it shows that the interaction of gender and age slightly increases the accuracy of the regression for public and private spending as seen by the increased adjusted R^2 value. However, for out-of-pocket spending, it decreases the adjusted R^2 value. Nevertheless, overall, the adjusted R^2 values for all three types of spending are incredibly low, which further point to our conclusion that age may not affect the level of spending from different sources.
+In order to test the possibility that there is a joint interaction of gender and age, a main effects and interaction effects linear regression model has been fit to the data. As a whole, it shows that the interaction of gender and age slightly increases the accuracy of the regression for public and private spending as seen by the increased adjusted R^2 value. However, for out-of-pocket spending, it decreases the adjusted R^2 value. Nevertheless, overall, the adjusted R^2 values for all three types of spending are incredibly low, which further point to our conclusion that age may not affect the level of spending from different sources. [EDIT ON DOC]
+
+### Age and Health Category Interaction
+
+``` {r agedismain_pub, echo = FALSE, warning = FALSE, message = FALSE, eval = FALSE}
+agedismainpub_fit <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(lmean_pub ~ agg_cause + age_group_id, data = spending_malefemale)
+
+tidy(agedismainpub_fit)
+
+glance(agedismainpub_fit)$adj.r.squared
+```
+
+``` {r agedisinter_pub, echo = FALSE, warning = FALSE, message = FALSE, eval = FALSE}
+agedisinterpub_fit <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(lmean_pub ~ agg_cause + age_group_id + agg_cause*age_group_id, data = spending_malefemale)
+
+tidy(agedisinterpub_fit)
+
+glance(agedisinterpub_fit$adj.r.squared)
+```
+
+
+``` {r agedismain_pri, echo = FALSE, warning = FALSE, message = FALSE, eval = FALSE}
+agedismainpri_fit <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(lmean_pri ~ agg_cause + age_group_id, data = spending_malefemale)
+tidy(agedismainpri_fit)
+
+glance(agedismainpri_fit)$adj.r.squared
+```
+
+``` {r agedisinter_pri, echo = FALSE, warning = FALSE, message = FALSE, eval = FALSE}
+agedisinterpri_fit <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(lmean_pri ~ agg_cause + age_group_id + agg_cause*age_group_id, data = spending_malefemale)
+tidy(agedisinterpri_fit)
+
+glance(agedisinterpri_fit)$adj.r.squared
+```
+
+``` {r agedismain_oop, echo = FALSE, warning = FALSE, message = FALSE, eval = FALSE}
+agedismainoop_fit <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(lmean_oop ~ agg_cause + age_group_id, data = spending_malefemale)
+tidy(agedismainoop_fit)
+
+glance(agedismainoop_fit)$adj.r.squared
+```
+
+``` {r agedisinter_oop, echo = FALSE, warning = FALSE, message = FALSE, eval = FALSE}
+agedisinteroop_fit <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(lmean_oop ~ agg_cause + age_group_id + agg_cause*age_group_id, data = spending_malefemale)
+
+tidy(agedisinteroop_fit)
+
+glance(agedisinteroop_fit)$adj.r.squared
+
+```
+
+[INSERT INTERPRETATION/ANALYSIS, NOT EDITED ON DOC YET]
+
+\newpage
+
+## Appendix
+
+*Figure 1: Distribution of Payer Groups*
+
+```{r distribution_pub, echo= FALSE, warning = FALSE, fig.height = 2, fig.width = 2, message = FALSE, fig.show = "hold"}
+spending_malefemale %>%
+  ggplot(aes(x = mean_pub)) +
+    geom_histogram(fill = "#a3b3a1") +
+  theme(
+    axis.text.x = element_text(color = "grey20", size = 5, face = "italic"),
+    axis.text.y = element_text(color = "grey20", size = 5, face = "italic"),  
+    axis.title.x = element_text(color = "grey20", size = 8, face = "bold"),
+        ) +
+  labs(title = NULL,
+         x = "Mean Public Spending", 
+         y = NULL)
+
+spending_malefemale %>%
+  ggplot(aes(x = mean_pri)) +
+    geom_histogram(fill = "#a3b3a1") +
+  theme(
+    axis.text.x = element_text(color = "grey20", size = 5, face = "italic"),
+    axis.text.y = element_text(color = "grey20", size = 5, face = "italic"),  
+    axis.title.x = element_text(color = "grey20", size = 8, face = "bold"),
+        ) +
+  labs(title = NULL,
+         x = "Mean Private Spending", 
+         y = NULL)
+
+spending_malefemale %>%
+  ggplot(aes(x = mean_oop)) +
+    geom_histogram(fill = "#a3b3a1") +
+  theme(
+    axis.text.x = element_text(color = "grey20", size = 5, face = "italic"),
+    axis.text.y = element_text(color = "grey20", size = 5, face = "italic"),  
+    axis.title.x = element_text(color = "grey20", size = 8, face = "bold"),
+        ) +
+  labs(title = NULL,
+         x = "Mean Out of Pocket Spending", 
+         y = NULL)
+
+```
+
+*Figure 2: Distribution of Payer Groups, Log Scale*
+
+```{r log_pub, echo= FALSE, warning = FALSE, fig.height = 2, fig.width = 2, message = FALSE, fig.show = "hold"}
+
+spending_malefemale %>%
+  ggplot(aes(x = log(mean_pub))) +
+    geom_histogram(fill = "#a3b3a1") +
+  theme(
+    axis.text.x = element_text(color = "grey20", size = 5, face = "italic"),
+    axis.text.y = element_text(color = "grey20", size = 5, face = "italic"),  
+    axis.title.x = element_text(color = "grey20", size = 8, face = "bold"),
+        ) +
+    labs(title = NULL,
+         x = "Mean Public Spending (ln)", 
+         y = NULL)
+
+spending_malefemale %>%
+  ggplot(aes(x = log(mean_pri))) +
+    geom_histogram(fill = "#a3b3a1") +
+  theme(
+    axis.text.x = element_text(color = "grey20", size = 5, face = "italic"),
+    axis.text.y = element_text(color = "grey20", size = 5, face = "italic"),  
+    axis.title.x = element_text(color = "grey20", size = 8, face = "bold"),
+        ) +
+    labs(title = NULL,
+         x = "Mean Private Spending (ln)", 
+         y = NULL)
+
+spending_malefemale %>%
+  ggplot(aes(x = log(mean_oop))) +
+    geom_histogram(fill = "#a3b3a1") +
+  theme(
+    axis.text.x = element_text(color = "grey20", size = 5, face = "italic"),
+    axis.text.y = element_text(color = "grey20", size = 5, face = "italic"),  
+    axis.title.x = element_text(color = "grey20", size = 8, face = "bold"),
+        ) +
+    labs(title = NULL,
+         x = "Mean Out-of-Pocket Spending (ln)", 
+         y = NULL)
+
+```
+
+*Figure 3: Age Group Expenditure by Payer*
+
+```{r age-expenditure-barplot, echo = FALSE, warning = FALSE, message = FALSE, fig.height = 2.5, fig.width = 6}
+  
+ggplot(data = spending_malefemale, aes(x = age_group_name, y = lmean_all)) +
+  geom_bar(position = "dodge", stat = "identity", fill = "#a3b3a1") +
+  theme(
+    axis.text.x = element_text(color = "grey20", size = 5, 
+                               face = "italic", angle = 45,hjust = 1),
+    axis.text.y = element_text(color = "grey20", size = 5, face = "italic"),
+    axis.title.y = element_text(color = "grey20", size = 8, face = "bold"),
+    axis.title.x = element_text(color = "grey20", size = 8, face = "bold"),
+    plot.title = element_text(color = "grey20", face = "bold")
+        ) +
+  scale_y_continuous(labels = scales::comma) +
+  labs(
+    x = "Age Group",
+    y = "Mean Spending, All Payers (ln)",
+    title = "Emergency Department General Expenditures"
+       )
+
+```
+
+```{r age-pub-barplot, fig.height = 2, fig.width = 6, echo = FALSE, warning = FALSE, message = FALSE}
+
+p2 <- ggplot(data = spending_malefemale, aes(x = age_group_name, y = lmean_pub)) +
+  geom_bar(position = "dodge", stat = "identity", fill = "#a1b1b3") +
+  theme(
+    axis.text.x = element_blank(),
+    axis.text.y = element_text(color = "grey20", size = 5, face = "italic"),  
+    axis.title.x = element_text(color = "grey20", size = 6, face = "bold"),
+    plot.title = element_text(color = "grey20", face = "bold", size = 8),
+    axis.ticks.x = element_blank()
+        ) +
+  scale_y_continuous(labels = scales::comma) +
+  labs(
+    x = NULL,
+    y = NULL,
+    title = "Public Insurance Expenditures"
+       )
+
+```
+
+```{r age-pri-barplot, fig.height = 2, fig.width = 6, echo = FALSE, warning = FALSE, message = FALSE}
+
+p3 <- ggplot(data = spending_malefemale, aes(x = age_group_name, y = lmean_pri)) +
+  geom_bar(position = "dodge", stat = "identity", fill = "#aea1b3") +
+  theme(
+    axis.text.x = element_blank(),
+    axis.text.y = element_text(color = "grey20", size = 5, face = "italic"),  
+    axis.title.x = element_text(color = "grey20", size = 6, face = "bold"),
+    plot.title = element_text(color = "grey20", face = "bold", size = 8),
+    axis.ticks.x = element_blank()
+        ) + 
+  scale_y_continuous(labels = scales::comma) +
+  labs(
+    x = NULL,
+    y = NULL,
+    title = "Private Insurance Expenditures"
+       ) 
+  
+```
+
+```{r age-oop-barplot, fig.height = 2, fig.width = 6, echo = FALSE, warning = FALSE, message = FALSE}
+
+p4 <- ggplot(data = spending_malefemale, aes(x = age_group_name, y = lmean_oop)) +
+  geom_bar(position = "dodge", stat = "identity", fill = "#b3a2a1") +
+  theme(
+    axis.text.x = element_text(color = "grey20", size = 5, face = "italic", angle = 45, hjust = 1), 
+    axis.text.y = element_text(color = "grey20", size = 5, face = "italic"),
+    axis.title.x = element_text(color = "grey20", size = 6, face = "bold"),
+    plot.title = element_text(color = "grey20", face = "bold", size = 8),
+    axis.ticks.x = element_blank()
+        ) +
+  scale_y_continuous(labels = scales::comma) +
+  labs(
+    x = NULL,
+    y = NULL,
+    title = "Out-of-Pocket Expenditures"
+       )
+
+```
+
+```{r gridarray, echo = FALSE, message = FALSE, warning = FALSE}
+
+grid.arrange(p2, p3, p4, nrow = 3)
+
+```
+
+&nbsp;
+
+```{r disease_fit, echo= FALSE, warning = FALSE, message = FALSE, fig.width = 5}
+
+spending_malefemale$disease_renamed <- factor(spending_malefemale$agg_cause, 
+            labels = c("Behavioral/Substance Use", "Cancers", "Cardiovascular", "Chronic Respiratory", "Communicable/Nutrition", "Diabetes/Kidney", "Digestive", "Endrocrine", "Injury", "Maternal/Neonatal", "Musculoskeletal", "Neurological", "Other Non-Communicable", "Prevention/Coordination", "Skin/Sense Organs"))
+
+
+meanalldiseasecatfit <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(lmean_all ~ disease_renamed, data = spending_malefemale)
+
+diseasefit_new <- lm(lmean_all ~ disease_renamed, data = spending_malefemale)
+
+diseasefit_new %>%
+  tidy() %>%
+  mutate(
+    p.value = scales::pvalue(p.value),
+    term = c("Intercept (Behavioral/Substance Use)", "Cancers", "Cardiovascular", "Chronic Respiratory", "Communicable/Nutrition", "Diabetes/Kidney", "Digestive", "Endrocrine", "Injury", "Maternal/Neonatal", "Musculoskeletal", "Neurological", "Other Non-Communicable", "Prevention/Coordination", "Skin/Sense Organs")
+  ) %>%
+  kable(
+    caption = "Coefficient-Level Estimates for a Model Fitted to Estimate Variation in Mean Expenditure by Aggregate Cause Categories",
+    col.names = c("Predictor", "B", "SE", "t", "p"),
+    digits = c(0, 2, 3, 2, 3),
+    align = c("l", "r", "r", "r", "r")
+  ) %>%
+  footnote(
+    general = "Variables were log-transformed using the natural logarithm.",
+    general_title = "Note.",
+    footnote_as_chunk = TRUE
+    )
+
+```
+
+*Figure 4: Expenditures by Health Category Over Time*
+
+```{r spending_time_graph, echo = FALSE, warning = FALSE, message = FALSE}
+
+spending_malefemale %>%
+  ggplot(aes(x = year_id,
+             y = lmean_all,
+             fill = disease_renamed)) +
+  geom_bar(stat = "identity") +
+  scale_fill_manual(values = c(
+    "#b3a2a1", "#b3a8a1", "#b3aea1", "#b3b1a1", "#a3b3a1", "#a1b3a9", 
+    "#a1b3b1", "#a1b1b3", "#a1a3b3", "#a9a1b3", "#aea1b3", "#b1a1b3",
+    "#b3a1ac", "#b3a1a6", "#b3a1a6"
+    )) +
+  facet_wrap(~disease_renamed) +
+  theme(axis.text.x = element_text(
+    color = "grey20", size = 5, face = "italic",
+    angle = 45, hjust = 1),
+    legend.position = "none",
+    axis.text.y = element_text(color = "grey20", size = 5, face = "italic"),  
+    axis.title.x = element_text(color = "grey20", size = 8, face = "bold"),
+    axis.title.y = element_text(color = "grey20", size = 8, face = "bold"),
+    plot.title = element_text(color = "grey20", face = "bold"),
+    strip.background = element_rect(color = "grey20", fill = "white"),
+    strip.text.x = element_text(size = 7)
+        ) +
+  labs(
+    title = "Log Mean Spending by Disease",
+    x = "Disease Category",
+    y = "Mean Spending (ln$)")
+  
+```
+
+\newpage
+
+```{r disease-rsq, echo = FALSE, message = FALSE, warning = FALSE, fig.width= 6}
+
+Measure <- c("R$^2$", "Adjusted R$^2$")
+Result <- c(0.5973, 0.5964)
+
+disease_rsq <- data.frame(Measure, Result, stringsAsFactors = FALSE)
+
+kable(disease_rsq, caption="Fit Values for Disease Type Analysis") 
+
+```
 
 ```{r rsquared-age-gender, echo = FALSE, warning = FALSE, message = FALSE}
 Payer2 <- c("Public Spending", "Private Spending", "Out-of-Pocket Spending")
@@ -493,87 +572,7 @@ kable(age_gender_rsq, caption="R$^2$ Values for the Main Effects and Interaction
 
 ``` 
 
-#### Age and Disease Interaction
-
-```{r rsquared_table, echo = FALSE, warning = FALSE}
-Payer <- c("Public Spending", "Private Spending", "Out-of-Pocket Spending")
-Main_Effects <- c(0.506887, 0.5054947, 0.5161683)
-Interaction <- c(0.529351, 0.5149051, 0.5261024)
-
-models.data <- data.frame(Payer, Main_Effects, Interaction, stringsAsFactors=FALSE)
-
-kable(models.data, caption="R$^2$ Values for the Main Effects and Interaction Models Analyzing Disease Type and Age") 
-
-``` 
-
-``` {r agedismain_pub, echo = FALSE, warning = FALSE, message = FALSE}
-agedismainpub_fit <- linear_reg() %>%
-  set_engine("lm") %>%
-  fit(lmean_pub ~ agg_cause + age_group_id, data = spending_malefemale)
-tidy(agedismainpub_fit)
-
-glance(agedismainpub_fit)$adj.r.squared
-```
-
-``` {r agedisinter_pub, echo = FALSE, warning = FALSE, message = FALSE}
-agedisinterpub_fit <- linear_reg() %>%
-  set_engine("lm") %>%
-  fit(lmean_pub ~ agg_cause + age_group_id + agg_cause*age_group_id, data = spending_malefemale)
-
-tidy(agedisinterpub_fit)
-
-glance(agedisinterpub_fit$adj.r.squared)
-```
-
-
-``` {r agedismain_pri, echo = FALSE, warning = FALSE, message = FALSE}
-agedismainpri_fit <- linear_reg() %>%
-  set_engine("lm") %>%
-  fit(lmean_pri ~ agg_cause + age_group_id, data = spending_malefemale)
-tidy(agedismainpri_fit)
-
-glance(agedismainpri_fit)$adj.r.squared
-```
-
-``` {r agedisinter_pri, echo = FALSE, warning = FALSE, message = FALSE}
-agedisinterpri_fit <- linear_reg() %>%
-  set_engine("lm") %>%
-  fit(lmean_pri ~ agg_cause + age_group_id + agg_cause*age_group_id, data = spending_malefemale)
-tidy(agedisinterpri_fit)
-
-glance(agedisinterpri_fit)$adj.r.squared
-```
-
-
-
-``` {r agedismain_oop, echo = FALSE, warning = FALSE, message = FALSE}
-agedismainoop_fit <- linear_reg() %>%
-  set_engine("lm") %>%
-  fit(lmean_oop ~ agg_cause + age_group_id, data = spending_malefemale)
-tidy(agedismainoop_fit)
-
-glance(agedismainoop_fit)$adj.r.squared
-```
-
-``` {r agedisinter_oop, echo = FALSE, warning = FALSE, message = FALSE}
-agedisinteroop_fit <- linear_reg() %>%
-  set_engine("lm") %>%
-  fit(lmean_oop ~ agg_cause + age_group_id + agg_cause*age_group_id, data = spending_malefemale)
-
-glance(agedisinteroop_fit)$adj.r.squared
-
-agedisinteroop_fit_print <- agedisinteroop_fit %>%
-  tidy()%>%
-  select(term, estimate, p.value)
-
-knitr::kable(agedisinteroop_fit_print, caption = "Temp")
-```
-
-\newpage
-
-## Appendix
-
-```{r appendix-table, echo = FALSE, message = FALSE, warning = FALSE}
+```{r appendix-table6, echo = FALSE, message = FALSE, warning = FALSE}
 
 TestNumber <- c("1", "2", "3", "4", "5", "6")
 TestType <- c("Two-sample t-test", "Two-sample t-test", "Two-sample t-test", "Two-sample t-test", "ANOVA", "ANOVA")
@@ -585,6 +584,20 @@ Decision <- c("Fail to reject null hypothesis", "Fail to reject null hypothesis"
 appendix_table <- data.frame(TestNumber, TestType, Analysis, PValue, CI, Decision, stringsAsFactors = FALSE)
 
 kable(appendix_table, caption = "Hypothesis Testing for Significance") 
+
+```
+
+```{r appendix-table7, echo = FALSE, message = FALSE, warning = FALSE, fig.width = 7}
+
+ModelNumber <- c("1", "2", "3", "4", "5", "6", "7", "8")
+ModelType <- c("Age Regression", "Year/Health Category Interaction", "Age/Health Category Public Regression", "Age/Health Category Public Interaction", "Age/Health Category Private Regression", "Age/Health Category Private Interaction", "Age/Health Category OoP Regression", "Age/Health Category Oop Interaction")
+PValuesSignificant <- c('19/19', "14/30", '15/16', "29/30", "15/16", "29/30", "16/16", "30/30")
+Evaluation <- c("All predictors significant", "Diabetes/Kidney, 2016, & all interaction terms not significant predictors", "Diabetes/Kidney not significant predictor", "Prevention/Coordination-Age not significant predictor", "Diabetes/Kidney not significant predictor", "Digestive-Age not significant predictor", "All predictors significant", "All predictors significant")
+RSqu <- c("", 0.59600, 0.50689, 0.52935, 0.50549, 0.51491, 0.51617, 0.52610)
+
+appendix_table7 <- data.frame(ModelNumber, ModelType, PValuesSignificant, Evaluation, stringsAsFactors = FALSE)
+
+kable(appendix_table7, caption = "Linear Regression Model Significance") 
 
 ```
 
