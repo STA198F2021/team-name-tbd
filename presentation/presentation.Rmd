@@ -1,7 +1,6 @@
 ---
-title: "Presentation title"
-subtitle: "Presentation subtitle (if any)"
-author: "Team name <br> Names of team members"
+title: "An Investigation of Social Factors Influencing <br> Emergency Healthcare Expenditure"
+author: "Maggie Lundberg, Riya Mohan, Izzy Kjaerulff"
 institute: "Duke University"
 date: "`r Sys.Date()`"
 output:
@@ -48,43 +47,51 @@ style_xaringan(
 
 class: inverse, middle, center
 
-# Using xaringan
+# Background Information and Significance
+
+Emergency services ensure that individuals can receive timely care for unexpected ailments and injuries, making them a vital component of the healthcare industry. However, in recent years, emergency service spending has seen a significant increase (Scott and Liu 2021), which begs the question of whether access to these service remain equitable to all. Expenditure is one of many ways to investigate healthcare access, which is why we look to understand how various social factors, such as gender and age, affect spending for the US healthcare system's different payers.
+
 
 ---
 
-## xaringan
+## Introducing the Data Set
 
-- The presentation is created using the `xaringan` package
+- Our data is provided by the Institute of Health Metrics and Evaluation as part of the Disease Expenditure Project (DEX).
 
-- Use `---` to separate slides and `--` for incremental builds
+- The health spending data include estimates for U.S. spending on health care divided into three types of payers: public insurance (including Medicare, Medicaid, and other government programs), private insurance, and out-of-pocket payments
 
---
+- A few of the important variables that will be used in the analysis include: age, gender, disease type, total mean spending.
 
-- Like this
+
+
+---
+class: inverse, middle, center
+
+# Data Analysis
 
 ---
 
-## Layouts
-
-You can use plain text
-
-- or bullet points
-
-.pull-left[
-or text in two columns $^*$
-]
-.pull-right[
-- like
-- this
-]
-
-.footnote[
-[*] And add footnotes
-]
+## Gender
 
 ---
 
-## Code
+## Age
+
+---
+
+## Health Category
+
+---
+
+## Health Category and Gender
+
+---
+
+## Health Category and Age
+
+---
+
+## Conclusion and Discussion
 
 ```{r boring-regression}
 # a boring regression
@@ -95,107 +102,12 @@ glance(model)
 
 ---
 
-## Plots
-
-```{r recode-species, echo = FALSE}
-# In this chunk I'm doing a bunch of analysis that I don't want to present 
-# in my slides. But I need the resulting data frame for a plot I want to present.
-penguins_modified <- penguins %>%
-  mutate(species = fct_other(species, keep = "Adelie"))
-```
-
-```{r plot-penguins, echo = FALSE, warning = FALSE, fig.alt = "Body mass vs. flipper lenght of Palmer Penguins for species Adelie and all the others combined together. There is a relatively strong, positive relationship between the two variables. The Adelie penguins are clustered together but they don't exhibit a different trend than the rest of the penguins."}
-# Code hidden with echo = FALSE
-# Uses modified penguins dataset from previous chunk
-# Play around with height and width until you're happy with the look
-ggplot(penguins_modified, aes(x = flipper_length_mm, y = body_mass_g, color = species)) +
-  geom_point() + 
-  theme_minimal()
-```
+## Acknowledgements
 
 ---
 
-## Plot and text
+## References
 
-.pull-left[
-- Some text
-- goes here
-]
-.pull-right[
-```{r warning=FALSE, out.width="100%", fig.width=4, echo=FALSE}
-# see how I changed out.width and fig.width from defaults
-# to make the figure bigger
-ggplot(penguins, aes(x = bill_length_mm, y = species, color = species)) +
-  geom_boxplot() +
-  theme_minimal()
-```
-]
+Institute for Health Metrics and Evaluation (IHME). United States Healthcare Spending in Emergency Departments byHealth Condition 2006-2016. Seattle, United States of America: Institute for Health Metrics and Evaluation (IHME),2021.
 
----
-
-class: inverse, middle, center
-
-# A new section...
-
----
-
-## Tables
-
-If you want to generate a table, make sure it is in the HTML format (instead of Markdown or other formats), e.g.,
-
-```{r penguins-table, echo = FALSE}
-kable(head(penguins), format = "html")
-```
-
----
-
-## Images
-
-```{r castle, echo = FALSE, out.width = "40%", fig.align = "center", fig.cap = "Image credit: Danielle Navarro, Percolate."}
-include_graphics("img/watercolour_sys02_img32_percolate.jpg")
-```
-
-Or you can also include a full page image. See next slide.
-
----
-
-background-image: url(img/watercolour_sys02_img32_percolate.jpg)
-
----
-
-## Math Expressions
-
-You can write LaTeX math expressions inside a pair of dollar signs, e.g. &#36;\alpha+\beta$ renders $\alpha+\beta$. You can use the display style with double dollar signs:
-
-```
-$$\bar{X}=\frac{1}{n}\sum_{i=1}^nX_i$$
-```
-
-$$\bar{X}=\frac{1}{n}\sum_{i=1}^nX_i$$
-
-Limitations:
-
-1. The source code of a LaTeX math expression must be in one line, unless it is inside a pair of double dollar signs, in which case the starting `$$` must appear in the very beginning of a line, followed immediately by a non-space character, and the ending `$$` must be at the end of a line, led by a non-space character;
-
-1. There should not be spaces after the opening `$` or before the closing `$`.
-
-1. Math does not work on the title slide (see [#61](https://github.com/yihui/xaringan/issues/61) for a workaround).
-
----
-
-class: inverse, middle, center
-
-# Wrap up
-
----
-
-## Feeling adventurous?
-
-- Want to find out more about `xaringan`? See https://slides.yihui.name/xaringan/#1.
-
-- You are welcomed to use the default styling of the slides. In fact, that's what I expect the majority of you will do. You will differentiate yourself with the content of your presentation.
-
-- But some of you might want to play around with slide styling. The 
-`xaringanthemer` provides some solutions for this that: https://pkg.garrickadenbuie.com/xaringanthemer.
-
-- And if you want more bells and whistles, there is also `xaringanExtra`: https://pkg.garrickadenbuie.com/xaringanExtra.
+Woody Scott K, Liu A, Chen C, Kaldjian AS, Sabbatini AK, Duber, HC, Dieleman JL. Healthcare Spending in U.S.Emergency Departments by Health Condition, 2006-2016. PLOS One. 27 October 2021.

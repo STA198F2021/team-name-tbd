@@ -574,6 +574,21 @@ kable(age_gender_rsq, caption="\\textbf{R$^2$ Values for the Main Effects and In
 
 ``` 
 
+```{r rsquared-age-disease, echo = FALSE, warning = FALSE, message = FALSE, fig.width=6}
+
+Payer <- c("Public Spending", "Private Spending", "Out-of-Pocket Spending")
+Main_Effects <- c(0.506887, 0.5054947, 0.5161683)
+Interaction <- c(0.529351, 0.5149051, 0.5261024)
+
+models.data <- data.frame(Payer, Main_Effects, Interaction, stringsAsFactors=FALSE)
+
+knitr::kable(models.data, caption="\\textbf{R$^2$ Values for the Main Effects and Interaction Models Analyzing Disease Type and Age}", format = "latex") %>%
+  kable_styling(latex_options = c("striped", "hold_position"))
+
+
+```
+
+
 ```{r appendix-table6, echo = FALSE, message = FALSE, warning = FALSE, fig.width=6}
 
 TestNumber <- c("1", "2", "3", "4", "5", "6")
