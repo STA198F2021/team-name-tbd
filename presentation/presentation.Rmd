@@ -80,7 +80,94 @@ Emergency services ensure that individuals can receive timely care for unexpecte
 
 - A few of the important variables that will be used in the analysis include: age, gender, disease type, total mean spending.
 
+---
 
+## Introducing the Data Set
+
+!! I feel like it would be good to show the log scale vs non log scale graphs but idk how to fit them on the page
+
+```{r distribution_pub, echo= FALSE, warning = FALSE, fig.height = 2, fig.width = 2, message = FALSE, fig.show = "hold"}
+spending_malefemale %>%
+  ggplot(aes(x = mean_pub)) +
+    geom_histogram(fill = "#a3b3a1") +
+  theme(
+    axis.text.x = element_text(color = "grey20", size = 5, face = "italic"),
+    axis.text.y = element_text(color = "grey20", size = 5, face = "italic"),  
+    axis.title.x = element_text(color = "grey20", size = 8, face = "bold"),
+        ) +
+  labs(title = NULL,
+         x = "Mean Public Spending", 
+         y = NULL)
+
+spending_malefemale %>%
+  ggplot(aes(x = mean_pri)) +
+    geom_histogram(fill = "#a3b3a1") +
+  theme(
+    axis.text.x = element_text(color = "grey20", size = 5, face = "italic"),
+    axis.text.y = element_text(color = "grey20", size = 5, face = "italic"),  
+    axis.title.x = element_text(color = "grey20", size = 8, face = "bold"),
+        ) +
+  labs(title = NULL,
+         x = "Mean Private Spending", 
+         y = NULL)
+
+spending_malefemale %>%
+  ggplot(aes(x = mean_oop)) +
+    geom_histogram(fill = "#a3b3a1") +
+  theme(
+    axis.text.x = element_text(color = "grey20", size = 5, face = "italic"),
+    axis.text.y = element_text(color = "grey20", size = 5, face = "italic"),  
+    axis.title.x = element_text(color = "grey20", size = 8, face = "bold"),
+        ) +
+  labs(title = NULL,
+         x = "Mean Out of Pocket Spending", 
+         y = NULL)
+
+```
+
+---
+
+## Introducing the Data Set
+
+```{r log_pub, echo= FALSE, warning = FALSE, fig.height = 2, fig.width = 2, message = FALSE, fig.show = "hold"}
+
+spending_malefemale %>%
+  ggplot(aes(x = log(mean_pub))) +
+    geom_histogram(fill = "#a3b3a1") +
+  theme(
+    axis.text.x = element_text(color = "grey20", size = 5, face = "italic"),
+    axis.text.y = element_text(color = "grey20", size = 5, face = "italic"),  
+    axis.title.x = element_text(color = "grey20", size = 8, face = "bold"),
+        ) +
+    labs(title = NULL,
+         x = "Mean Public Spending (ln)", 
+         y = NULL)
+
+spending_malefemale %>%
+  ggplot(aes(x = log(mean_pri))) +
+    geom_histogram(fill = "#a3b3a1") +
+  theme(
+    axis.text.x = element_text(color = "grey20", size = 5, face = "italic"),
+    axis.text.y = element_text(color = "grey20", size = 5, face = "italic"),  
+    axis.title.x = element_text(color = "grey20", size = 8, face = "bold"),
+        ) +
+    labs(title = NULL,
+         x = "Mean Private Spending (ln)", 
+         y = NULL)
+
+spending_malefemale %>%
+  ggplot(aes(x = log(mean_oop))) +
+    geom_histogram(fill = "#a3b3a1") +
+  theme(
+    axis.text.x = element_text(color = "grey20", size = 5, face = "italic"),
+    axis.text.y = element_text(color = "grey20", size = 5, face = "italic"),  
+    axis.title.x = element_text(color = "grey20", size = 8, face = "bold"),
+        ) +
+    labs(title = NULL,
+         x = "Mean Out-of-Pocket Spending (ln)", 
+         y = NULL)
+
+```
 
 ---
 class: inverse, middle, center
@@ -92,6 +179,10 @@ background-color: #217718
 ---
 
 ## Gender
+--
+
+- Is gender a factor in influencing emergency department spending?
+
 --
 
 - We performed a t-test looking at the overall differences in log mean emergency department spending between males and females. This t-test showed that for mean spending of all emergency services payment types, the p value of 0.1543 (95% CI -0.0315862, 0.1996079), indicating there is not a significant difference between male and female spending for mean emergency spending.
@@ -107,6 +198,10 @@ background-color: #217718
 ---
 
 ## Age
+--
+
+- Is age a factor in influencing emergency department spending?
+
 --
 
 - The age variable is split into 19 groups that generally increase by 5-year increments. 
@@ -149,13 +244,106 @@ ggplot(data = spending_malefemale, aes(x = age_group_name, y = lmean_all)) +
 
 ## Health Category
 
+--
+
+- Does health category have an impact on emergency department expenditures?
+
+--
+
+- We performed a one-way ANOVA (ndf = 14, ddf = 6035) to compare the effect of aggregate cause of spending (log scale) on mean ED expenditure with the null hypothesis that the means of spending for all health categories are equal.
+
+--
+
+- We rejected the overall null hypothesis of no effect. We performed step-down tests using a Holm correction for multiple comparisons, which indicated that 92/105 category pairs differ in mean expenditure.
+
+--
+
+- We performed a linear regression. All predictors were found to be significant (alpha < 0.05) in predicting mean spending except for the diabetes and kidney diseases predictor.
+
+---
+
+## Health Category
+
+--
+
+- To see if health category spending changed over time, we visualized our data on a barplot. 
+
+```{r spending_time_graph, echo = FALSE, warning = FALSE, message = FALSE}
+spending_malefemale$disease_renamed <- factor(spending_malefemale$agg_cause, 
+            labels = c("Behavioral/Substance Use", "Cancers", "Cardiovascular", "Chronic Respiratory", "Communicable/Nutrition", "Diabetes/Kidney", "Digestive", "Endrocrine", "Injury", "Maternal/Neonatal", "Musculoskeletal", "Neurological", "Other Non-Communicable", "Prevention/Coordination", "Skin/Sense Organs"))
+
+spending_malefemale %>%
+  ggplot(aes(x = year_id,
+             y = lmean_all,
+             fill = disease_renamed)) +
+  geom_bar(stat = "identity") +
+  scale_fill_manual(values = c(
+    "#b3a2a1", "#b3a8a1", "#b3aea1", "#b3b1a1", "#a3b3a1", "#a1b3a9", 
+    "#a1b3b1", "#a1b1b3", "#a1a3b3", "#a9a1b3", "#aea1b3", "#b1a1b3",
+    "#b3a1ac", "#b3a1a6", "#b3a1a6"
+    )) +
+  facet_wrap(~disease_renamed) +
+  theme(axis.text.x = element_text(
+    color = "grey20", size = 5, face = "italic",
+    angle = 45, hjust = 1),
+    legend.position = "none",
+    axis.text.y = element_text(color = "grey20", size = 5, face = "italic"),  
+    axis.title.x = element_text(color = "grey20", size = 8, face = "bold"),
+    axis.title.y = element_text(color = "grey20", size = 8, face = "bold"),
+    plot.title = element_text(color = "grey20", face = "bold"),
+    strip.background = element_rect(color = "grey20", fill = "white"),
+    strip.text.x = element_text(size = 7)
+        ) +
+  labs(
+    title = "Log Mean Spending by Disease",
+    x = "Disease Category",
+    y = "Aggregate Log Spending Values")
+  
+```
+
+--
+
+---
+
+## Health Category
+
+- Because we saw that spending varied over time based on disease category, we performed a linear regression predicting log of all mean spending based on disease category and year with a disease category year interaction term.
+
+--
+
+-  The linear model showed all year disease interaction terms are not significant with p values greater than 0.05, and p values for the 2016 predictor (p = 0.133) and diabetes and kidney disease predictor (p = 0.788) also not significant predictors in the model. 
+
 ---
 
 ## Health Category and Gender
 
+--
+
+- Is there a relationship between health category and gender in influencing emergency department spending?
+
+--
+
+-  A main effects and interaction effects model were fitted to the data. 
+
+--
+
+-  The interaction of gender and age slightly increases the accuracy of the regression for public and private spending, but for out-of-pocket spending, it decreases the adjusted R squared value.
+
 ---
 
 ## Health Category and Age
+
+--
+
+- Is there a relationship between health category and age in influencing emergency department spending?
+
+--
+
+- We performed multiple regressions using main effects and interaction models for each of the three spending models 
+
+--
+
+- For public spending, private spending, and out of pocket spending, the adjusted R squared values increased with the inclusion of an interaction term, leading us to the conclusion that the interaction model better fits the data for all three types of payers. 
 
 ---
 

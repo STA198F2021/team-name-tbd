@@ -394,7 +394,7 @@ spending_malefemale %>%
 *Figure 3: Age Group Expenditure by Payer*
 
 ```{r age-expenditure-boxplot, echo = FALSE, warning = FALSE, message = FALSE, fig.height = 2.5, fig.width = 6}
-  
+
 ggplot(data = spending_malefemale, aes(x = age_group_name, y = lmean_all)) +
   geom_boxplot() +
   theme(
@@ -563,11 +563,11 @@ kable(disease_rsq, caption="\\textbf{Fit Values for Disease Type Analysis}", for
 ```
 
 ```{r rsquared-age-gender, echo = FALSE, warning = FALSE, message = FALSE, fig.width=6}
-Payer2 <- c("Public Spending", "Private Spending", "Out-of-Pocket Spending")
-Main_Effects2 <- c(0.00251, 0.02899, 0.02361)
-Interaction2 <- c(0.00241, 0.02904, 0.02363)
+Payer <- c("Public Spending", "Private Spending", "Out-of-Pocket Spending")
+Main_Effects <- c(0.00251, 0.02899, 0.02361)
+Interaction <- c(0.00241, 0.02904, 0.02363)
 
-age_gender_rsq <- data.frame(Payer2, Main_Effects2, Interaction2, stringsAsFactors = FALSE)
+age_gender_rsq <- data.frame(Payer, Main_Effects, Interaction, stringsAsFactors = FALSE)
 
 kable(age_gender_rsq, caption="\\textbf{R$^2$ Values for the Main Effects and Interaction Models Analyzing Gender and Age}", format = "latex") %>%
   kable_styling(latex_options = c("striped", "hold_position"))

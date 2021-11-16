@@ -4,7 +4,7 @@
     <title>An Investigation of Social Factors Influencing   Emergency Healthcare Expenditure</title>
     <meta charset="utf-8" />
     <meta name="author" content="Maggie Lundberg, Riya Mohan, Izzy Kjaerulff" />
-    <meta name="date" content="2021-11-15" />
+    <meta name="date" content="2021-11-16" />
     <script src="libs/header-attrs-2.11/header-attrs.js"></script>
     <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
   </head>
@@ -15,7 +15,7 @@ class: center, middle, inverse, title-slide
 # An Investigation of Social Factors Influencing <br> Emergency Healthcare Expenditure
 ### Maggie Lundberg, Riya Mohan, Izzy Kjaerulff
 ### Duke University
-### 2021-11-15
+### 2021-11-16
 
 ---
 
@@ -47,7 +47,19 @@ Emergency services ensure that individuals can receive timely care for unexpecte
 
 - A few of the important variables that will be used in the analysis include: age, gender, disease type, total mean spending.
 
+---
 
+## Introducing the Data Set
+
+!! I feel like it would be good to show the log scale vs non log scale graphs but idk how to fit them on the page
+
+&lt;img src="presentation_files/figure-html/distribution_pub-1.png" width="70%" /&gt;&lt;img src="presentation_files/figure-html/distribution_pub-2.png" width="70%" /&gt;&lt;img src="presentation_files/figure-html/distribution_pub-3.png" width="70%" /&gt;
+
+---
+
+## Introducing the Data Set
+
+&lt;img src="presentation_files/figure-html/log_pub-1.png" width="70%" /&gt;&lt;img src="presentation_files/figure-html/log_pub-2.png" width="70%" /&gt;&lt;img src="presentation_files/figure-html/log_pub-3.png" width="70%" /&gt;
 
 ---
 class: inverse, middle, center
@@ -59,6 +71,10 @@ background-color: #217718
 ---
 
 ## Gender
+--
+
+- Is gender a factor in influencing emergency department spending?
+
 --
 
 - We performed a t-test looking at the overall differences in log mean emergency department spending between males and females. This t-test showed that for mean spending of all emergency services payment types, the p value of 0.1543 (95% CI -0.0315862, 0.1996079), indicating there is not a significant difference between male and female spending for mean emergency spending.
@@ -74,6 +90,10 @@ background-color: #217718
 ---
 
 ## Age
+--
+
+- Is age a factor in influencing emergency department spending?
+
 --
 
 - The age variable is split into 19 groups that generally increase by 5-year increments. 
@@ -98,13 +118,75 @@ background-color: #217718
 
 ## Health Category
 
+--
+
+- Does health category have an impact on emergency department expenditures?
+
+--
+
+- We performed a one-way ANOVA (ndf = 14, ddf = 6035) to compare the effect of aggregate cause of spending (log scale) on mean ED expenditure with the null hypothesis that the means of spending for all health categories are equal.
+
+--
+
+- We rejected the overall null hypothesis of no effect. We performed step-down tests using a Holm correction for multiple comparisons, which indicated that 92/105 category pairs differ in mean expenditure.
+
+--
+
+- We performed a linear regression. All predictors were found to be significant (alpha &lt; 0.05) in predicting mean spending except for the diabetes and kidney diseases predictor.
+
+---
+
+## Health Category
+
+--
+
+- To see if health category spending changed over time, we visualized our data on a barplot. 
+
+&lt;img src="presentation_files/figure-html/spending_time_graph-1.png" width="70%" /&gt;
+
+--
+
+---
+
+## Health Category
+
+- Because we saw that spending varied over time based on disease category, we performed a linear regression predicting log of all mean spending based on disease category and year with a disease category year interaction term.
+
+--
+
+-  The linear model showed all year disease interaction terms are not significant with p values greater than 0.05, and p values for the 2016 predictor (p = 0.133) and diabetes and kidney disease predictor (p = 0.788) also not significant predictors in the model. 
+
 ---
 
 ## Health Category and Gender
 
+--
+
+- Is there a relationship between health category and gender in influencing emergency department spending?
+
+--
+
+-  A main effects and interaction effects model were fitted to the data. 
+
+--
+
+-  The interaction of gender and age slightly increases the accuracy of the regression for public and private spending, but for out-of-pocket spending, it decreases the adjusted R squared value.
+
 ---
 
 ## Health Category and Age
+
+--
+
+- Is there a relationship between health category and age in influencing emergency department spending?
+
+--
+
+- We performed multiple regressions using main effects and interaction models for each of the three spending models 
+
+--
+
+- For public spending, private spending, and out of pocket spending, the adjusted R squared values increased with the inclusion of an interaction term, leading us to the conclusion that the interaction model better fits the data for all three types of payers. 
 
 ---
 
