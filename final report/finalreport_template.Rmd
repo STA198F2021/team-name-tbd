@@ -588,7 +588,6 @@ knitr::kable(models.data, caption="\\textbf{R$^2$ Values for the Main Effects an
 
 ```
 
-
 ```{r appendix-table6, echo = FALSE, message = FALSE, warning = FALSE, fig.width=6}
 
 TestNumber <- c("1", "2", "3", "4", "5", "6")

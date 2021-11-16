@@ -36,16 +36,34 @@ knitr::opts_chunk$set(
 ```
 
 ```{r load-data, include=FALSE}
-# Load your data here
+unzip("../data/IHME_DEX_ED_SPENDING_2006_2016_DATA.zip", exdir =  "../data/spending_data_unzip")
+
+spending <- read.csv("../data/spending_data_unzip/IHME_DEX_ED_SPENDING_2006_2016_DATA_Y2021M09D23.CSV")
+
+spending_malefemale <- spending %>%
+  filter(sex %in% c("Female", "Male")) %>%
+  filter(age_group_name != "All Ages")
+
+spending_malefemale <- spending_malefemale %>%
+  filter(mean_all != 0) %>%
+  filter(mean_pub != 0) %>%
+  filter(mean_pri != 0) %>%
+  filter(mean_oop != 0) %>%
+  mutate(lmean_all = log(mean_all)) %>%
+  mutate(lmean_pub = log(mean_pub)) %>%
+  mutate(lmean_pri = log(mean_pri)) %>%
+  mutate(lmean_oop = log(mean_oop))
 ```
 
 ```{r style-slides, echo = FALSE}
 style_xaringan(
-  title_slide_background_image = "img/watercolour_sys02_img34_teacup-ocean.jpg"
+  title_slide_background_image = "img/markus-spiske-iar-afB0QQw-unsplash.jpg"
 )
 ```
 
 class: inverse, middle, center
+
+background-color: #217718
 
 # Background Information and Significance
 
@@ -67,15 +85,65 @@ Emergency services ensure that individuals can receive timely care for unexpecte
 ---
 class: inverse, middle, center
 
+background-color: #217718
+
 # Data Analysis
 
 ---
 
 ## Gender
+--
+
+- We performed a t-test looking at the overall differences in log mean emergency department spending between males and females. This t-test showed that for mean spending of all emergency services payment types, the p value of 0.1543 (95% CI -0.0315862, 0.1996079), indicating there is not a significant difference between male and female spending for mean emergency spending.
+
+--
+
+- This t-test showed that for mean spending of all emergency services payment types, the p value is 0.1543 (95% CI -0.0315862, 0.1996079).
+
+--
+
+- Therefore, there is not a significant difference between male and female spending for mean emergency services.
 
 ---
 
 ## Age
+--
+
+- The age variable is split into 19 groups that generally increase by 5-year increments. 
+--
+
+-We first used an overall test with ANOVA on the log scale to evaluate the null hypothesis that all of the means for age groups across the years are equal. 
+--
+
+- In our F-test (ndf = 18, ddf = 6031), a significant difference among age groups was identified. 
+
+---
+
+## Age
+--
+
+- The pairwise t-tests evaluated 99/171 differing combinations, which was consistent with our hypothesis that (a majority of) age group pairs differ in terms of mean expenditures.
+--
+```{r age-expenditure-boxplot, echo = FALSE, warning = FALSE, message = FALSE, fig.height = 2.5, fig.width = 6}
+  
+ggplot(data = spending_malefemale, aes(x = age_group_name, y = lmean_all)) +
+  geom_boxplot() +
+  theme(
+    axis.text.x = element_text(color = "grey20", size = 5, 
+                               face = "italic", angle = 45,hjust = 1),
+    axis.text.y = element_text(color = "grey20", size = 5, face = "italic"),
+    axis.title.y = element_text(color = "grey20", size = 8, face = "bold"),
+    axis.title.x = element_text(color = "grey20", size = 8, face = "bold"),
+    plot.title = element_text(color = "grey20", face = "bold")
+        ) +
+  scale_y_continuous(labels = scales::comma) +
+  labs(
+    x = "Age Group",
+    y = "Mean Spending, All Payers (ln)",
+    title = "Emergency Department General Expenditures"
+       )
+```
+
 
 ---
 

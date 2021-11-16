@@ -30,6 +30,8 @@ class: center, middle, inverse, title-slide
 
 class: inverse, middle, center
 
+background-color: #217718
+
 # Background Information and Significance
 
 Emergency services ensure that individuals can receive timely care for unexpected ailments and injuries, making them a vital component of the healthcare industry. However, in recent years, emergency service spending has seen a significant increase (Scott and Liu 2021), which begs the question of whether access to these service remain equitable to all. Expenditure is one of many ways to investigate healthcare access, which is why we look to understand how various social factors, such as gender and age, affect spending for the US healthcare system's different payers.
@@ -50,15 +52,47 @@ Emergency services ensure that individuals can receive timely care for unexpecte
 ---
 class: inverse, middle, center
 
+background-color: #217718
+
 # Data Analysis
 
 ---
 
 ## Gender
+--
+
+- We performed a t-test looking at the overall differences in log mean emergency department spending between males and females. This t-test showed that for mean spending of all emergency services payment types, the p value of 0.1543 (95% CI -0.0315862, 0.1996079), indicating there is not a significant difference between male and female spending for mean emergency spending.
+
+--
+
+- This t-test showed that for mean spending of all emergency services payment types, the p value is 0.1543 (95% CI -0.0315862, 0.1996079).
+
+--
+
+- Therefore, there is not a significant difference between male and female spending for mean emergency services.
 
 ---
 
 ## Age
+--
+
+- The age variable is split into 19 groups that generally increase by 5-year increments. 
+--
+
+-We first used an overall test with ANOVA on the log scale to evaluate the null hypothesis that all of the means for age groups across the years are equal. 
+--
+
+- In our F-test (ndf = 18, ddf = 6031), a significant difference among age groups was identified. 
+
+---
+
+## Age
+--
+
+- The pairwise t-tests evaluated 99/171 differing combinations, which was consistent with our hypothesis that (a majority of) age group pairs differ in terms of mean expenditures.
+--
+&lt;img src="presentation_files/figure-html/age-expenditure-boxplot-1.png" width="70%" /&gt;
+
 
 ---
 
