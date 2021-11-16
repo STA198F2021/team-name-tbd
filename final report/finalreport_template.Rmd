@@ -63,6 +63,8 @@ spending_malefemale <- spending %>%
   filter(sex %in% c("Female", "Male")) %>%
   filter(age_group_name != "All Ages")
 
+spending_malefemale$age_group_name <- factor(spending_malefemale$age_group_name, levels = c("<1 year", "1 to 4", "5 to 9", "10 to 14", "15 to 19", "20 to 24", "25 to 29", "30 to 34", "35 to 39", "40 to 44", "45 to 49", "50 to 54", "55 to 59", "60 to 64", "65 to 69", "70 to 74", "75 to 79", "80 to 84", "85 plus"))
+
 ```
 
 ## Research Question Analysis
@@ -129,6 +131,8 @@ agefit <- linear_reg() %>%
   set_engine("lm") %>%
   fit(lmean_all ~ age_group_name, data = spending_malefemale)
   tidy(agefit)
+  
+glance(agefit)$r.squared
 
 ```
 
@@ -362,7 +366,7 @@ spending_malefemale %>%
     axis.title.x = element_text(color = "grey20", size = 8, face = "bold"),
         ) +
     labs(title = NULL,
-         x = "Mean Public Spending (ln)", 
+         x = "Mean Public Spending (log$)", 
          y = NULL)
 
 spending_malefemale %>%
@@ -374,7 +378,7 @@ spending_malefemale %>%
     axis.title.x = element_text(color = "grey20", size = 8, face = "bold"),
         ) +
     labs(title = NULL,
-         x = "Mean Private Spending (ln)", 
+         x = "Mean Private Spending (log$)", 
          y = NULL)
 
 spending_malefemale %>%
@@ -386,7 +390,7 @@ spending_malefemale %>%
     axis.title.x = element_text(color = "grey20", size = 8, face = "bold"),
         ) +
     labs(title = NULL,
-         x = "Mean Out-of-Pocket Spending (ln)", 
+         x = "Mean Out-of-Pocket Spending (log$)", 
          y = NULL)
 
 ```
@@ -396,7 +400,7 @@ spending_malefemale %>%
 ```{r age-expenditure-boxplot, echo = FALSE, warning = FALSE, message = FALSE, fig.height = 2.5, fig.width = 6}
 
 ggplot(data = spending_malefemale, aes(x = age_group_name, y = lmean_all)) +
-  geom_boxplot() +
+  geom_boxplot(color = "#a3b3a1", fill="#a3b3a1", alpha=0.3) +
   theme(
     axis.text.x = element_text(color = "grey20", size = 5, 
                                face = "italic", angle = 45,hjust = 1),
@@ -408,7 +412,7 @@ ggplot(data = spending_malefemale, aes(x = age_group_name, y = lmean_all)) +
   scale_y_continuous(labels = scales::comma) +
   labs(
     x = "Age Group",
-    y = "Mean Spending, All Payers (ln)",
+    y = "Mean Spending, All Payers (log$)",
     title = "Emergency Department General Expenditures"
        )
 ```
@@ -416,7 +420,7 @@ ggplot(data = spending_malefemale, aes(x = age_group_name, y = lmean_all)) +
 ```{r age-pub-boxplot, fig.height = 2, fig.width = 6, echo = FALSE, warning = FALSE, message = FALSE}
 
 p2 <- ggplot(data = spending_malefemale, aes(x = age_group_name, y = lmean_pub)) +
-  geom_boxplot() +
+  geom_boxplot(color = "#b3a2a1", fill="#b3a2a1", alpha=0.3) +
   theme(
     axis.text.x = element_blank(),
     axis.text.y = element_text(color = "grey20", size = 5, face = "italic"),  
@@ -436,7 +440,7 @@ p2 <- ggplot(data = spending_malefemale, aes(x = age_group_name, y = lmean_pub))
 ```{r age-pri-boxplot, fig.height = 2, fig.width = 6, echo = FALSE, warning = FALSE, message = FALSE}
 
 p3 <- ggplot(data = spending_malefemale, aes(x = age_group_name, y = lmean_pri)) +
-  geom_boxplot() +
+  geom_boxplot(color = "#9bb6bd", fill="#9bb6bd", alpha=0.3) +
   theme(
     axis.text.x = element_blank(),
     axis.text.y = element_text(color = "grey20", size = 5, face = "italic"),  
@@ -456,7 +460,7 @@ p3 <- ggplot(data = spending_malefemale, aes(x = age_group_name, y = lmean_pri))
 ```{r age-oop-boxplot, fig.height = 2, fig.width = 6, echo = FALSE, warning = FALSE, message = FALSE}
 
 p4 <- ggplot(data = spending_malefemale, aes(x = age_group_name, y = lmean_oop)) +
-  geom_boxplot() +
+  geom_boxplot(color = "#b1a1b3", fill="#b1a1b3", alpha=0.3) +
   theme(
     axis.text.x = element_text(color = "grey20", size = 5, face = "italic", angle = 45, hjust = 1), 
     axis.text.y = element_text(color = "grey20", size = 5, face = "italic"),
@@ -479,44 +483,12 @@ grid.arrange(p2, p3, p4, nrow = 3)
 
 ```
 
-&nbsp;
-
-```{r disease_fit, echo= FALSE, warning = FALSE, message = FALSE, fig.width = 5}
-
-spending_malefemale$disease_renamed <- factor(spending_malefemale$agg_cause, 
-            labels = c("Behavioral/Substance Use", "Cancers", "Cardiovascular", "Chronic Respiratory", "Communicable/Nutrition", "Diabetes/Kidney", "Digestive", "Endrocrine", "Injury", "Maternal/Neonatal", "Musculoskeletal", "Neurological", "Other Non-Communicable", "Prevention/Coordination", "Skin/Sense Organs"))
-
-
-meanalldiseasecatfit <- linear_reg() %>%
-  set_engine("lm") %>%
-  fit(lmean_all ~ disease_renamed, data = spending_malefemale)
-
-diseasefit_new <- lm(lmean_all ~ disease_renamed, data = spending_malefemale)
-
-diseasefit_new %>%
-  tidy() %>%
-  mutate(
-    p.value = scales::pvalue(p.value),
-    term = c("Intercept (Behavioral/Substance Use)", "Cancers", "Cardiovascular", "Chronic Respiratory", "Communicable/Nutrition", "Diabetes/Kidney", "Digestive", "Endrocrine", "Injury", "Maternal/Neonatal", "Musculoskeletal", "Neurological", "Other Non-Communicable", "Prevention/Coordination", "Skin/Sense Organs")
-  ) %>%
-  kable(
-    caption = "Coefficient-Level Estimates for a Model Fitted to Estimate Variation in Mean Expenditure by Aggregate Cause Categories",
-    col.names = c("Predictor", "B", "SE", "t", "p"),
-    digits = c(0, 2, 3, 2, 3),
-    align = c("l", "r", "r", "r", "r")
-  ) %>%
-  footnote(
-    general = "Variables were log-transformed using the natural logarithm.",
-    general_title = "Note.",
-    footnote_as_chunk = TRUE
-    ) %>%
-  kable_styling(latex_options = c("striped", "hold_position"))
-
-```
-
 *Figure 4: Expenditures by Health Category Over Time*
 
 ```{r spending_time_graph, echo = FALSE, warning = FALSE, message = FALSE}
+
+spending_malefemale$disease_renamed <- factor(spending_malefemale$agg_cause, 
+            labels = c("Behavioral/Substance Use", "Cancers", "Cardiovascular", "Chronic Respiratory", "Communicable/Nutrition", "Diabetes/Kidney", "Digestive", "Endrocrine", "Injury", "Maternal/Neonatal", "Musculoskeletal", "Neurological", "Other Non-Communicable", "Prevention/Coordination", "Skin/Sense Organs"))
 
 spending_malefemale %>%
   ggplot(aes(x = year_id,
@@ -550,9 +522,39 @@ spending_malefemale %>%
 
 \newpage
 
-```{r disease-rsq, echo = FALSE, message = FALSE, warning = FALSE, fig.width= 6}
+```{r appendix-table1, echo= FALSE, warning = FALSE, message = FALSE, fig.width = 5}
 
-Measure <- c("R$^2$", "Adjusted R$^2$")
+
+meanalldiseasecatfit <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(lmean_all ~ disease_renamed, data = spending_malefemale)
+
+diseasefit_new <- lm(lmean_all ~ disease_renamed, data = spending_malefemale)
+
+diseasefit_new %>%
+  tidy() %>%
+  mutate(
+    p.value = scales::pvalue(p.value),
+    term = c("Intercept (Behavioral/Substance Use)", "Cancers", "Cardiovascular", "Chronic Respiratory", "Communicable/Nutrition", "Diabetes/Kidney", "Digestive", "Endrocrine", "Injury", "Maternal/Neonatal", "Musculoskeletal", "Neurological", "Other Non-Communicable", "Prevention/Coordination", "Skin/Sense Organs")
+  ) %>%
+  kable(
+    caption = "Coefficient-Level Estimates for a Model Fitted to Estimate Variation in Mean Expenditure by Aggregate Cause Categories",
+    col.names = c("Predictor", "B", "SE", "t", "p"),
+    digits = c(0, 2, 3, 2, 3),
+    align = c("l", "r", "r", "r", "r")
+  ) %>%
+  footnote(
+    general = "Variables were log-transformed using the natural logarithm.",
+    general_title = "Note.",
+    footnote_as_chunk = TRUE
+    ) %>%
+  kable_styling(latex_options = c("striped", "hold_position"))
+
+```
+
+```{r appendix-table2, echo = FALSE, message = FALSE, warning = FALSE, fig.width= 6}
+
+Measure <- c("R^2", "Adjusted R^2")
 Result <- c(0.5973, 0.5964)
 
 disease_rsq <- data.frame(Measure, Result, stringsAsFactors = FALSE)
@@ -562,7 +564,7 @@ kable(disease_rsq, caption="\\textbf{Fit Values for Disease Type Analysis}", for
 
 ```
 
-```{r rsquared-age-gender, echo = FALSE, warning = FALSE, message = FALSE, fig.width=6}
+```{r appendix-table3, echo = FALSE, warning = FALSE, message = FALSE, fig.width=6}
 Payer <- c("Public Spending", "Private Spending", "Out-of-Pocket Spending")
 Main_Effects <- c(0.00251, 0.02899, 0.02361)
 Interaction <- c(0.00241, 0.02904, 0.02363)
@@ -574,7 +576,7 @@ kable(age_gender_rsq, caption="\\textbf{R$^2$ Values for the Main Effects and In
 
 ``` 
 
-```{r rsquared-age-disease, echo = FALSE, warning = FALSE, message = FALSE, fig.width=6}
+```{r appendix-table4, echo = FALSE, warning = FALSE, message = FALSE, fig.width=6}
 
 Payer <- c("Public Spending", "Private Spending", "Out-of-Pocket Spending")
 Main_Effects <- c(0.506887, 0.5054947, 0.5161683)
@@ -588,7 +590,7 @@ knitr::kable(models.data, caption="\\textbf{R$^2$ Values for the Main Effects an
 
 ```
 
-```{r appendix-table6, echo = FALSE, message = FALSE, warning = FALSE, fig.width=6}
+```{r appendix-table5, echo = FALSE, message = FALSE, warning = FALSE, fig.width=6}
 
 TestNumber <- c("1", "2", "3", "4", "5", "6")
 TestType <- c("Two-sample t-test", "Two-sample t-test", "Two-sample t-test", "Two-sample t-test", "ANOVA", "ANOVA")
@@ -597,28 +599,39 @@ PValue <- c(0.2494, 0.128, 0.6329, 0.4598, '<2e-16', '<2e-16')
 CI <- c("(-0.0316, 0.1996)", "(-0.0083, 0.2153)", "(-0.0828, 0.1760)", "(-0.0616, 0.1847)", " ", " ")
 Decision <- c("Fail to reject null hypothesis", "Fail to reject null hypothesis", "Fail to reject null hypothesis", "Fail to reject null hypothesis", "Reject null hypothesis", "Reject null hypothesis")
 
-appendix_table <- data.frame(TestNumber, TestType, Analysis, PValue, CI, Decision, stringsAsFactors = FALSE)
+appendix_table5 <- data.frame(TestNumber, TestType, Analysis, PValue, CI, Decision, stringsAsFactors = FALSE)
 
-kable(appendix_table, caption = "\\textbf{Hypothesis Testing for Significance}", format = "latex") %>%
-  kable_styling(latex_options = c("striped", "scale_down", "hold_position")) %>%
-  kable_styling(latex_options = c("striped", "hold_position"))
+kable(appendix_table5, caption = "\\textbf{Hypothesis Testing for Significance}", format = "latex") %>%
+  kable_styling(latex_options = c("striped", "scale_down", "hold_position"))
 
 ```
 
-```{r appendix-table7, echo = FALSE, message = FALSE, warning = FALSE, out.width="10%"}
+```{r appendix-table6, echo = FALSE, message = FALSE, warning = FALSE, out.width="10%"}
 
 ModelNumber <- c("1", "2", "3", "4", "5", "6", "7", "8")
 ModelType <- c("Age Regression", "Year/Health Category Interaction", "Age/Health Category Public Regression", "Age/Health Category Public Interaction", "Age/Health Category Private Regression", "Age/Health Category Private Interaction", "Age/Health Category OoP Regression", "Age/Health Category Oop Interaction")
 PValuesSignificant <- c('19/19', "14/30", '15/16', "29/30", "15/16", "29/30", "16/16", "30/30")
 Evaluation <- c("All predictors significant", "Diabetes/Kidney, 2016, & all interaction terms not significant predictors", "Diabetes/Kidney not significant predictor", "Prevention/Coordination-Age not significant predictor", "Diabetes/Kidney not significant predictor", "Digestive-Age not significant predictor", "All predictors significant", "All predictors significant")
-RSqu <- c("", 0.59600, 0.50689, 0.52935, 0.50549, 0.51491, 0.51617, 0.52610)
 
-appendix_table7 <- data.frame(ModelNumber, ModelType, PValuesSignificant, Evaluation, stringsAsFactors = FALSE)
+appendix_table6 <- data.frame(ModelNumber, ModelType, PValuesSignificant, Evaluation, stringsAsFactors = FALSE)
 
-kable(appendix_table7, caption = "\\textbf{Linear Regression Model Significance}", format = "latex") %>%
+kable(appendix_table6, caption = "\\textbf{Linear Regression Model Significance}", format = "latex") %>%
   kable_styling(latex_options = c("striped", "scale_down", "hold_position"))
 
 ```
+
+```{r appendix-table8, echo = FALSE, message = FALSE, warning = FALSE, out.width="10%", fig.width = 6}
+
+RSqu <- c(0.13472, 0.59600, 0.50689, 0.52935, 0.50549, 0.51491, 0.51617, 0.52610)
+
+appendix_table7 <- data.frame(ModelNumber, RSqu, stringsAsFactors = FALSE)
+
+kable(appendix_table7, caption = "\\textbf{Linear Regression Model R$^2$ Values}", format = "latex") %>%
+  kable_styling(latex_options = c("striped", "hold_position"))
+
+```
+
+\newpage
 
 ## References
 
