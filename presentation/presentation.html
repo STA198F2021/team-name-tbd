@@ -41,9 +41,15 @@ Emergency services ensure that individuals can receive timely care for unexpecte
 
 ## Introducing the Data Set
 
+--
+
 - Our data is provided by the Institute of Health Metrics and Evaluation as part of the Disease Expenditure Project (DEX).
 
-- The health spending data include estimates for U.S. spending on health care divided into three types of payers: public insurance (including Medicare, Medicaid, and other government programs), private insurance, and out-of-pocket payments
+--
+
+- The health spending data include estimates for U.S. emergency spending on health care divided into three types of payers: public insurance (including Medicare, Medicaid, and other government programs), private insurance, and out-of-pocket payments
+
+--
 
 - A few of the important variables that will be used in the analysis include: age, gender, disease type, total mean spending.
 
@@ -51,15 +57,25 @@ Emergency services ensure that individuals can receive timely care for unexpecte
 
 ## Introducing the Data Set
 
-!! I feel like it would be good to show the log scale vs non log scale graphs but idk how to fit them on the page
+--
 
-&lt;img src="presentation_files/figure-html/distribution_pub-1.png" width="70%" /&gt;&lt;img src="presentation_files/figure-html/distribution_pub-2.png" width="70%" /&gt;&lt;img src="presentation_files/figure-html/distribution_pub-3.png" width="70%" /&gt;
+- The nature of the original dataset is not normally distributed.
+
+--
+
+&lt;img src="img/Capture 1.JPG" width="100%" style="display: block; margin: auto;" /&gt;
 
 ---
 
 ## Introducing the Data Set
 
-&lt;img src="presentation_files/figure-html/log_pub-1.png" width="70%" /&gt;&lt;img src="presentation_files/figure-html/log_pub-2.png" width="70%" /&gt;&lt;img src="presentation_files/figure-html/log_pub-3.png" width="70%" /&gt;
+--
+
+- A log transformation of the data solves this issue.
+
+--
+
+&lt;img src="img/Capture 2.JPG" width="100%" style="display: block; margin: auto;" /&gt;
 
 ---
 class: inverse, middle, center
@@ -67,6 +83,8 @@ class: inverse, middle, center
 background-color: #217718
 
 # Data Analysis
+
+The general approach we took was to analyze various social factors to understand their impact on spending for emergency services. This was followed by studies of interactions between multiple social factors on the spending of the three payers we delineated earlier.
 
 ---
 
@@ -77,7 +95,7 @@ background-color: #217718
 
 --
 
-- We performed a t-test looking at the overall differences in log mean emergency department spending between males and females. This t-test showed that for mean spending of all emergency services payment types, the p value of 0.1543 (95% CI -0.0315862, 0.1996079), indicating there is not a significant difference between male and female spending for mean emergency spending.
+- We performed a t-test looking at the overall differences in log mean emergency department spending between males and females.
 
 --
 
@@ -96,10 +114,11 @@ background-color: #217718
 
 --
 
-- The age variable is split into 19 groups that generally increase by 5-year increments. 
+- The age variable is split into 19 groups and generally increases by 5-year increments. 
 --
 
--We first used an overall test with ANOVA on the log scale to evaluate the null hypothesis that all of the means for age groups across the years are equal. 
+- We first used an overall test with ANOVA on the log scale to evaluate the null hypothesis that all of the means for age groups across the years are equal. 
+
 --
 
 - In our F-test (ndf = 18, ddf = 6031), a significant difference among age groups was identified. 
@@ -109,10 +128,15 @@ background-color: #217718
 ## Age
 --
 
-- The pairwise t-tests evaluated 99/171 differing combinations, which was consistent with our hypothesis that (a majority of) age group pairs differ in terms of mean expenditures.
---
-&lt;img src="presentation_files/figure-html/age-expenditure-boxplot-1.png" width="70%" /&gt;
+- We followed the ANOVA analysis with step-down tests.
 
+--
+
+- The pairwise t-tests evaluated 99/171 differing combinations, which was consistent with our hypothesis that (a majority of) age group pairs differ in terms of mean expenditures.
+
+--
+
+&lt;img src="presentation_files/figure-html/age-expenditure-boxplot-1.png" width="70%" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -124,11 +148,11 @@ background-color: #217718
 
 --
 
-- We performed a one-way ANOVA (ndf = 14, ddf = 6035) to compare the effect of aggregate cause of spending (log scale) on mean ED expenditure with the null hypothesis that the means of spending for all health categories are equal.
+- We performed a one-way ANOVA (ndf = 14, ddf = 6035) to compare the way the health issue an individual entered the emergency room would affect log mean ED expenditures. The null hypothesis used was that the means of spending for all health categories are equal.
 
 --
 
-- We rejected the overall null hypothesis of no effect. We performed step-down tests using a Holm correction for multiple comparisons, which indicated that 92/105 category pairs differ in mean expenditure.
+- We rejected the overall null hypothesis of no effect. We, then, performed step-down tests using a Holm correction for multiple comparisons, which indicated that 92/105 category pairs differ in mean expenditure.
 
 --
 
@@ -140,11 +164,22 @@ background-color: #217718
 
 --
 
-- To see if health category spending changed over time, we visualized our data on a barplot. 
+- Significant regression values:
 
-&lt;img src="presentation_files/figure-html/spending_time_graph-1.png" width="70%" /&gt;
+&lt;img src="img/Capture 3.JPG" width="90%" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+## Health Category
 
 --
+
+- To see if health category spending changed over time, we also visualized our data on a barplot. 
+
+--
+
+&lt;img src="presentation_files/figure-html/spending_time_graph-1.png" width="70%" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -154,7 +189,7 @@ background-color: #217718
 
 --
 
--  The linear model showed all year disease interaction terms are not significant with p values greater than 0.05, and p values for the 2016 predictor (p = 0.133) and diabetes and kidney disease predictor (p = 0.788) also not significant predictors in the model. 
+- The linear model showed all year disease interaction terms are not significant with p values greater than 0.05, and p values for the 2016 predictor (p = 0.133) and diabetes and kidney disease predictor (p = 0.788) also not significant predictors in the model. 
 
 ---
 
@@ -166,11 +201,15 @@ background-color: #217718
 
 --
 
--  A main effects and interaction effects model were fitted to the data. 
+- A main effects and interaction effects model were fitted to the data. 
 
 --
 
--  The interaction of gender and age slightly increases the accuracy of the regression for public and private spending, but for out-of-pocket spending, it decreases the adjusted R squared value.
+- The interaction of gender and age slightly increases the accuracy of the regression for public and private spending, but for out-of-pocket spending, it decreases the adjusted R squared value.
+
+--
+
+&lt;img src="img/Capture 4.JPG" width="90%" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -188,40 +227,17 @@ background-color: #217718
 
 - For public spending, private spending, and out of pocket spending, the adjusted R squared values increased with the inclusion of an interaction term, leading us to the conclusion that the interaction model better fits the data for all three types of payers. 
 
+--
+
+&lt;img src="img/Capture 5.JPG" width="90%" style="display: block; margin: auto;" /&gt;
+
 ---
+
+class: inverse, middle, center
+
+background-color: #217718
 
 ## Conclusion and Discussion
-
-
-```r
-# a boring regression
-model &lt;- lm(dist ~ speed, data = cars)
-tidy(model)
-```
-
-```
-## # A tibble: 2 × 5
-##   term        estimate std.error statistic  p.value
-##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
-## 1 (Intercept)   -17.6      6.76      -2.60 1.23e- 2
-## 2 speed           3.93     0.416      9.46 1.49e-12
-```
-
-```r
-glance(model)
-```
-
-```
-## # A tibble: 1 × 12
-##   r.squared adj.r.squared sigma statistic  p.value    df logLik   AIC   BIC
-##       &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-## 1     0.651         0.644  15.4      89.6 1.49e-12     1  -207.  419.  425.
-## # … with 3 more variables: deviance &lt;dbl&gt;, df.residual &lt;int&gt;, nobs &lt;int&gt;
-```
-
----
-
-## Acknowledgements
 
 ---
 

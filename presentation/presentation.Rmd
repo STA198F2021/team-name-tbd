@@ -22,6 +22,7 @@ library(tidymodels)
 library(palmerpenguins)
 library(knitr)
 library(xaringanthemer)
+library(kableExtra)
 ```
 
 ```{r setup, include=FALSE}
@@ -74,9 +75,15 @@ Emergency services ensure that individuals can receive timely care for unexpecte
 
 ## Introducing the Data Set
 
+--
+
 - Our data is provided by the Institute of Health Metrics and Evaluation as part of the Disease Expenditure Project (DEX).
 
-- The health spending data include estimates for U.S. spending on health care divided into three types of payers: public insurance (including Medicare, Medicaid, and other government programs), private insurance, and out-of-pocket payments
+--
+
+- The health spending data include estimates for U.S. emergency spending on health care divided into three types of payers: public insurance (including Medicare, Medicaid, and other government programs), private insurance, and out-of-pocket payments
+
+--
 
 - A few of the important variables that will be used in the analysis include: age, gender, disease type, total mean spending.
 
@@ -84,44 +91,15 @@ Emergency services ensure that individuals can receive timely care for unexpecte
 
 ## Introducing the Data Set
 
-!! I feel like it would be good to show the log scale vs non log scale graphs but idk how to fit them on the page
+--
 
-```{r distribution_pub, echo= FALSE, warning = FALSE, fig.height = 2, fig.width = 2, message = FALSE, fig.show = "hold"}
-spending_malefemale %>%
-  ggplot(aes(x = mean_pub)) +
-    geom_histogram(fill = "#a3b3a1") +
-  theme(
-    axis.text.x = element_text(color = "grey20", size = 5, face = "italic"),
-    axis.text.y = element_text(color = "grey20", size = 5, face = "italic"),  
-    axis.title.x = element_text(color = "grey20", size = 8, face = "bold"),
-        ) +
-  labs(title = NULL,
-         x = "Mean Public Spending", 
-         y = NULL)
+- The nature of the original dataset is not normally distributed.
 
-spending_malefemale %>%
-  ggplot(aes(x = mean_pri)) +
-    geom_histogram(fill = "#a3b3a1") +
-  theme(
-    axis.text.x = element_text(color = "grey20", size = 5, face = "italic"),
-    axis.text.y = element_text(color = "grey20", size = 5, face = "italic"),  
-    axis.title.x = element_text(color = "grey20", size = 8, face = "bold"),
-        ) +
-  labs(title = NULL,
-         x = "Mean Private Spending", 
-         y = NULL)
+--
 
-spending_malefemale %>%
-  ggplot(aes(x = mean_oop)) +
-    geom_histogram(fill = "#a3b3a1") +
-  theme(
-    axis.text.x = element_text(color = "grey20", size = 5, face = "italic"),
-    axis.text.y = element_text(color = "grey20", size = 5, face = "italic"),  
-    axis.title.x = element_text(color = "grey20", size = 8, face = "bold"),
-        ) +
-  labs(title = NULL,
-         x = "Mean Out of Pocket Spending", 
-         y = NULL)
+```{r photo_1, echo = FALSE, out.width = "100%", fig.align = "center"}
+
+include_graphics("img/Capture 1.JPG")
 
 ```
 
@@ -129,43 +107,15 @@ spending_malefemale %>%
 
 ## Introducing the Data Set
 
-```{r log_pub, echo= FALSE, warning = FALSE, fig.height = 2, fig.width = 2, message = FALSE, fig.show = "hold"}
+--
 
-spending_malefemale %>%
-  ggplot(aes(x = log(mean_pub))) +
-    geom_histogram(fill = "#a3b3a1") +
-  theme(
-    axis.text.x = element_text(color = "grey20", size = 5, face = "italic"),
-    axis.text.y = element_text(color = "grey20", size = 5, face = "italic"),  
-    axis.title.x = element_text(color = "grey20", size = 8, face = "bold"),
-        ) +
-    labs(title = NULL,
-         x = "Mean Public Spending (ln)", 
-         y = NULL)
+- A log transformation of the data solves this issue.
 
-spending_malefemale %>%
-  ggplot(aes(x = log(mean_pri))) +
-    geom_histogram(fill = "#a3b3a1") +
-  theme(
-    axis.text.x = element_text(color = "grey20", size = 5, face = "italic"),
-    axis.text.y = element_text(color = "grey20", size = 5, face = "italic"),  
-    axis.title.x = element_text(color = "grey20", size = 8, face = "bold"),
-        ) +
-    labs(title = NULL,
-         x = "Mean Private Spending (ln)", 
-         y = NULL)
+--
 
-spending_malefemale %>%
-  ggplot(aes(x = log(mean_oop))) +
-    geom_histogram(fill = "#a3b3a1") +
-  theme(
-    axis.text.x = element_text(color = "grey20", size = 5, face = "italic"),
-    axis.text.y = element_text(color = "grey20", size = 5, face = "italic"),  
-    axis.title.x = element_text(color = "grey20", size = 8, face = "bold"),
-        ) +
-    labs(title = NULL,
-         x = "Mean Out-of-Pocket Spending (ln)", 
-         y = NULL)
+```{r photo_2, echo = FALSE, out.width = "100%", fig.align = "center"}
+
+include_graphics("img/Capture 2.JPG")
 
 ```
 
@@ -176,6 +126,8 @@ background-color: #217718
 
 # Data Analysis
 
+The general approach we took was to analyze various social factors to understand their impact on spending for emergency services. This was followed by studies of interactions between multiple social factors on the spending of the three payers we delineated earlier.
+
 ---
 
 ## Gender
@@ -185,7 +137,7 @@ background-color: #217718
 
 --
 
-- We performed a t-test looking at the overall differences in log mean emergency department spending between males and females. This t-test showed that for mean spending of all emergency services payment types, the p value of 0.1543 (95% CI -0.0315862, 0.1996079), indicating there is not a significant difference between male and female spending for mean emergency spending.
+- We performed a t-test looking at the overall differences in log mean emergency department spending between males and females.
 
 --
 
@@ -204,10 +156,11 @@ background-color: #217718
 
 --
 
-- The age variable is split into 19 groups that generally increase by 5-year increments. 
+- The age variable is split into 19 groups and generally increases by 5-year increments. 
 --
 
--We first used an overall test with ANOVA on the log scale to evaluate the null hypothesis that all of the means for age groups across the years are equal. 
+- We first used an overall test with ANOVA on the log scale to evaluate the null hypothesis that all of the means for age groups across the years are equal. 
+
 --
 
 - In our F-test (ndf = 18, ddf = 6031), a significant difference among age groups was identified. 
@@ -217,9 +170,15 @@ background-color: #217718
 ## Age
 --
 
-- The pairwise t-tests evaluated 99/171 differing combinations, which was consistent with our hypothesis that (a majority of) age group pairs differ in terms of mean expenditures.
+- We followed the ANOVA analysis with step-down tests.
+
 --
-```{r age-expenditure-boxplot, echo = FALSE, warning = FALSE, message = FALSE, fig.height = 2.5, fig.width = 6}
+
+- The pairwise t-tests evaluated 99/171 differing combinations, which was consistent with our hypothesis that (a majority of) age group pairs differ in terms of mean expenditures.
+
+--
+
+```{r age-expenditure-boxplot, echo = FALSE, warning = FALSE, message = FALSE, fig.height = 2.5, fig.width = 6, fig.align = "center"}
   
 ggplot(data = spending_malefemale, aes(x = age_group_name, y = lmean_all)) +
   geom_boxplot() +
@@ -239,7 +198,6 @@ ggplot(data = spending_malefemale, aes(x = age_group_name, y = lmean_all)) +
        )
 ```
 
-
 ---
 
 ## Health Category
@@ -250,11 +208,11 @@ ggplot(data = spending_malefemale, aes(x = age_group_name, y = lmean_all)) +
 
 --
 
-- We performed a one-way ANOVA (ndf = 14, ddf = 6035) to compare the effect of aggregate cause of spending (log scale) on mean ED expenditure with the null hypothesis that the means of spending for all health categories are equal.
+- We performed a one-way ANOVA (ndf = 14, ddf = 6035) to compare the way the health issue an individual entered the emergency room would affect log mean ED expenditures. The null hypothesis used was that the means of spending for all health categories are equal.
 
 --
 
-- We rejected the overall null hypothesis of no effect. We performed step-down tests using a Holm correction for multiple comparisons, which indicated that 92/105 category pairs differ in mean expenditure.
+- We rejected the overall null hypothesis of no effect. We, then, performed step-down tests using a Holm correction for multiple comparisons, which indicated that 92/105 category pairs differ in mean expenditure.
 
 --
 
@@ -266,9 +224,26 @@ ggplot(data = spending_malefemale, aes(x = age_group_name, y = lmean_all)) +
 
 --
 
-- To see if health category spending changed over time, we visualized our data on a barplot. 
+- Significant regression values:
 
-```{r spending_time_graph, echo = FALSE, warning = FALSE, message = FALSE}
+```{r photo_3, echo = FALSE, out.width = "90%", fig.align = "center"}
+
+include_graphics("img/Capture 3.JPG")
+
+```
+
+
+---
+
+## Health Category
+
+--
+
+- To see if health category spending changed over time, we also visualized our data on a barplot. 
+
+--
+
+```{r spending_time_graph, echo = FALSE, warning = FALSE, message = FALSE, fig.align = "center"}
 spending_malefemale$disease_renamed <- factor(spending_malefemale$agg_cause, 
             labels = c("Behavioral/Substance Use", "Cancers", "Cardiovascular", "Chronic Respiratory", "Communicable/Nutrition", "Diabetes/Kidney", "Digestive", "Endrocrine", "Injury", "Maternal/Neonatal", "Musculoskeletal", "Neurological", "Other Non-Communicable", "Prevention/Coordination", "Skin/Sense Organs"))
 
@@ -301,8 +276,6 @@ spending_malefemale %>%
   
 ```
 
---
-
 ---
 
 ## Health Category
@@ -311,7 +284,7 @@ spending_malefemale %>%
 
 --
 
--  The linear model showed all year disease interaction terms are not significant with p values greater than 0.05, and p values for the 2016 predictor (p = 0.133) and diabetes and kidney disease predictor (p = 0.788) also not significant predictors in the model. 
+- The linear model showed all year disease interaction terms are not significant with p values greater than 0.05, and p values for the 2016 predictor (p = 0.133) and diabetes and kidney disease predictor (p = 0.788) also not significant predictors in the model. 
 
 ---
 
@@ -323,11 +296,19 @@ spending_malefemale %>%
 
 --
 
--  A main effects and interaction effects model were fitted to the data. 
+- A main effects and interaction effects model were fitted to the data. 
 
 --
 
--  The interaction of gender and age slightly increases the accuracy of the regression for public and private spending, but for out-of-pocket spending, it decreases the adjusted R squared value.
+- The interaction of gender and age slightly increases the accuracy of the regression for public and private spending, but for out-of-pocket spending, it decreases the adjusted R squared value.
+
+--
+
+```{r photo_4, echo = FALSE, out.width = "90%", fig.align = "center"}
+
+include_graphics("img/Capture 4.JPG")
+
+```
 
 ---
 
@@ -345,20 +326,21 @@ spending_malefemale %>%
 
 - For public spending, private spending, and out of pocket spending, the adjusted R squared values increased with the inclusion of an interaction term, leading us to the conclusion that the interaction model better fits the data for all three types of payers. 
 
----
+--
 
-## Conclusion and Discussion
+```{r photo_5, echo = FALSE, out.width = "90%", fig.align = "center"}
 
-```{r boring-regression}
-# a boring regression
-model <- lm(dist ~ speed, data = cars)
-tidy(model)
-glance(model)
+include_graphics("img/Capture 5.JPG")
+
 ```
 
 ---
 
-## Acknowledgements
+class: inverse, middle, center
+
+background-color: #217718
+
+## Conclusion and Discussion
 
 ---
 
