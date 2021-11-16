@@ -240,7 +240,7 @@ tidy(interoop_fit)
 glance(interoop_fit)$adj.r.squared
 ```
 
-In order to test the possibility that there is a joint interaction of gender and age, a main effects and interaction effects linear regression model has been fit to the data. As a whole, it shows that the interaction of gender and age slightly increases the accuracy of the regression for public and private spending as seen by the increased adjusted R^2 value. However, for out-of-pocket spending, it decreases the adjusted R^2 value. Nevertheless, overall, the adjusted R^2 values for all three types of spending are incredibly low, which further point to our conclusion that age may not affect the level of spending from different sources. [EDIT ON DOC]
+[INSERT INTERPRETATION/ANALYSIS, NOT EDITED ON DOC YET]
 
 ### Age and Health Category Interaction
 
@@ -263,7 +263,6 @@ tidy(agedisinterpub_fit)
 
 glance(agedisinterpub_fit$adj.r.squared)
 ```
-
 
 ``` {r agedismain_pri, echo = FALSE, warning = FALSE, message = FALSE, eval = FALSE}
 agedismainpri_fit <- linear_reg() %>%
@@ -394,10 +393,10 @@ spending_malefemale %>%
 
 *Figure 3: Age Group Expenditure by Payer*
 
-```{r age-expenditure-barplot, echo = FALSE, warning = FALSE, message = FALSE, fig.height = 2.5, fig.width = 6}
+```{r age-expenditure-boxplot, echo = FALSE, warning = FALSE, message = FALSE, fig.height = 2.5, fig.width = 6}
   
 ggplot(data = spending_malefemale, aes(x = age_group_name, y = lmean_all)) +
-  geom_bar(position = "dodge", stat = "identity", fill = "#a3b3a1") +
+  geom_boxplot() +
   theme(
     axis.text.x = element_text(color = "grey20", size = 5, 
                                face = "italic", angle = 45,hjust = 1),
@@ -412,13 +411,12 @@ ggplot(data = spending_malefemale, aes(x = age_group_name, y = lmean_all)) +
     y = "Mean Spending, All Payers (ln)",
     title = "Emergency Department General Expenditures"
        )
-
 ```
 
-```{r age-pub-barplot, fig.height = 2, fig.width = 6, echo = FALSE, warning = FALSE, message = FALSE}
+```{r age-pub-boxplot, fig.height = 2, fig.width = 6, echo = FALSE, warning = FALSE, message = FALSE}
 
 p2 <- ggplot(data = spending_malefemale, aes(x = age_group_name, y = lmean_pub)) +
-  geom_bar(position = "dodge", stat = "identity", fill = "#a1b1b3") +
+  geom_boxplot() +
   theme(
     axis.text.x = element_blank(),
     axis.text.y = element_text(color = "grey20", size = 5, face = "italic"),  
@@ -435,10 +433,10 @@ p2 <- ggplot(data = spending_malefemale, aes(x = age_group_name, y = lmean_pub))
 
 ```
 
-```{r age-pri-barplot, fig.height = 2, fig.width = 6, echo = FALSE, warning = FALSE, message = FALSE}
+```{r age-pri-boxplot, fig.height = 2, fig.width = 6, echo = FALSE, warning = FALSE, message = FALSE}
 
 p3 <- ggplot(data = spending_malefemale, aes(x = age_group_name, y = lmean_pri)) +
-  geom_bar(position = "dodge", stat = "identity", fill = "#aea1b3") +
+  geom_boxplot() +
   theme(
     axis.text.x = element_blank(),
     axis.text.y = element_text(color = "grey20", size = 5, face = "italic"),  
@@ -455,10 +453,10 @@ p3 <- ggplot(data = spending_malefemale, aes(x = age_group_name, y = lmean_pri))
   
 ```
 
-```{r age-oop-barplot, fig.height = 2, fig.width = 6, echo = FALSE, warning = FALSE, message = FALSE}
+```{r age-oop-boxplot, fig.height = 2, fig.width = 6, echo = FALSE, warning = FALSE, message = FALSE}
 
 p4 <- ggplot(data = spending_malefemale, aes(x = age_group_name, y = lmean_oop)) +
-  geom_bar(position = "dodge", stat = "identity", fill = "#b3a2a1") +
+  geom_boxplot() +
   theme(
     axis.text.x = element_text(color = "grey20", size = 5, face = "italic", angle = 45, hjust = 1), 
     axis.text.y = element_text(color = "grey20", size = 5, face = "italic"),
@@ -511,7 +509,8 @@ diseasefit_new %>%
     general = "Variables were log-transformed using the natural logarithm.",
     general_title = "Note.",
     footnote_as_chunk = TRUE
-    )
+    ) %>%
+  kable_styling(latex_options = c("striped", "hold_position"))
 
 ```
 
@@ -544,9 +543,10 @@ spending_malefemale %>%
   labs(
     title = "Log Mean Spending by Disease",
     x = "Disease Category",
-    y = "Mean Spending (ln$)")
+    y = "Aggregate Log Spending Values")
   
 ```
+
 
 \newpage
 
@@ -557,22 +557,24 @@ Result <- c(0.5973, 0.5964)
 
 disease_rsq <- data.frame(Measure, Result, stringsAsFactors = FALSE)
 
-kable(disease_rsq, caption="Fit Values for Disease Type Analysis") 
+kable(disease_rsq, caption="\\textbf{Fit Values for Disease Type Analysis}", format = "latex") %>%
+  kable_styling(latex_options = c("striped", "hold_position"))
 
 ```
 
-```{r rsquared-age-gender, echo = FALSE, warning = FALSE, message = FALSE}
+```{r rsquared-age-gender, echo = FALSE, warning = FALSE, message = FALSE, fig.width=6}
 Payer2 <- c("Public Spending", "Private Spending", "Out-of-Pocket Spending")
 Main_Effects2 <- c(0.00251, 0.02899, 0.02361)
 Interaction2 <- c(0.00241, 0.02904, 0.02363)
 
 age_gender_rsq <- data.frame(Payer2, Main_Effects2, Interaction2, stringsAsFactors = FALSE)
 
-kable(age_gender_rsq, caption="R$^2$ Values for the Main Effects and Interaction Models Analyzing Gender and Age") 
+kable(age_gender_rsq, caption="\\textbf{R$^2$ Values for the Main Effects and Interaction Models Analyzing Gender and Age}", format = "latex") %>%
+  kable_styling(latex_options = c("striped", "hold_position"))
 
 ``` 
 
-```{r appendix-table6, echo = FALSE, message = FALSE, warning = FALSE}
+```{r appendix-table6, echo = FALSE, message = FALSE, warning = FALSE, fig.width=6}
 
 TestNumber <- c("1", "2", "3", "4", "5", "6")
 TestType <- c("Two-sample t-test", "Two-sample t-test", "Two-sample t-test", "Two-sample t-test", "ANOVA", "ANOVA")
@@ -583,11 +585,13 @@ Decision <- c("Fail to reject null hypothesis", "Fail to reject null hypothesis"
 
 appendix_table <- data.frame(TestNumber, TestType, Analysis, PValue, CI, Decision, stringsAsFactors = FALSE)
 
-kable(appendix_table, caption = "Hypothesis Testing for Significance") 
+kable(appendix_table, caption = "\\textbf{Hypothesis Testing for Significance}", format = "latex") %>%
+  kable_styling(latex_options = c("striped", "scale_down", "hold_position")) %>%
+  kable_styling(latex_options = c("striped", "hold_position"))
 
 ```
 
-```{r appendix-table7, echo = FALSE, message = FALSE, warning = FALSE, fig.width = 7}
+```{r appendix-table7, echo = FALSE, message = FALSE, warning = FALSE, out.width="10%"}
 
 ModelNumber <- c("1", "2", "3", "4", "5", "6", "7", "8")
 ModelType <- c("Age Regression", "Year/Health Category Interaction", "Age/Health Category Public Regression", "Age/Health Category Public Interaction", "Age/Health Category Private Regression", "Age/Health Category Private Interaction", "Age/Health Category OoP Regression", "Age/Health Category Oop Interaction")
@@ -597,7 +601,8 @@ RSqu <- c("", 0.59600, 0.50689, 0.52935, 0.50549, 0.51491, 0.51617, 0.52610)
 
 appendix_table7 <- data.frame(ModelNumber, ModelType, PValuesSignificant, Evaluation, stringsAsFactors = FALSE)
 
-kable(appendix_table7, caption = "Linear Regression Model Significance") 
+kable(appendix_table7, caption = "\\textbf{Linear Regression Model Significance}", format = "latex") %>%
+  kable_styling(latex_options = c("striped", "scale_down", "hold_position"))
 
 ```
 
