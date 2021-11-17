@@ -328,7 +328,13 @@ The public spending linear regression model with category-age interaction result
 
 ## Discussion
 
-[INSERT DISCUSSION]
+Our five research questions investigated the following factors as influences in emergency department expenditure, both overall and by payer (public, private, out of pocket): age, gender, health category, gender-age interaction, and age-health category interaction. We hypothesized that the social factors studied would not be independent of one another and would have statistically significant influence in ED spending. Our conclusions supported parts of our hypothesis and subverted others. For example, age, health category, and age-health category interaction were all, in general trends, good predictors for mean expenditure. However, gender (and, further, gender-age interaction) did not have statistically significant predictive value in our models for the data set and therefore are not shown to have influence on expenditure.
+
+As a preliminary overview study, implications for these results include evaluation of general trends for expenditure among social demographics. Limits for this analysis include direct application toward the study of equity disparity, as more research is needed to make definitive claims.
+
+##Acknowledgments
+
+Special thank you to Dr. Amy Herring, Sara & Charles Ayres Professor of Statistical Science, Global Health, and Biostatistics & Bioinformatics, for your guidance throughout this project. Additionally, thank you to Jackie Du, Eli Feder, and Phuc Nguyen for your support.
 
 \newpage
 
