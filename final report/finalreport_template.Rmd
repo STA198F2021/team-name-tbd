@@ -41,21 +41,25 @@ library(ggplot2)
 
 ## Abstract
 
-This paper provides insight into an open investigation of personal healthcare spending in the United States, with focus on the emergency department (ED). We used data from the Disease Expenditure Project (DEX) at IHME, giving estimates for ED spending split into three major groups: public insurance, private insurance, and out of pocket. The data compiled is used to investigate the existence of a relationship between demographic (sex and age), disease, and expenditure. In the following report, we hypothesize demographic, disease, and type of expenditure from our three included groups are not independent of one another. For example, we expect that results will suggest that public healthcare spending will be higher in older populations when compared to younger populations, whereas private spending will be higher in those younger populations. From the analysis devised in this report, we gather that the data is consistent with the following conclusions: [INSERT CONCLUSIONS HERE]
+Healthcare expenditures provide a unique insight into the way health care is given, which is why we hope to use this as a tool to understand trends in the emergency department, one of the healthcare system’s most vital yet pressed branches. We conducted an open investigation of personal healthcare spending in the emergency departments of US hospitals, using data from the Disease Expenditure Project (DEX) at IHME, which provides spending means from 2006 to 2016 for the US healthcare system’s three key payers: public insurance, private insurance, and out-of-pocket spending. The data compiled is used to investigate the existence of a relationship between demographic markers (sex and age), disease type, and expenditure. In the following report, we hypothesize demographic, disease, and type of expenditure from our three included groups are not independent of one another. For example, we expect that results will suggest that public healthcare spending will be higher in older populations when compared to younger populations, whereas private spending will be higher in those younger populations. From the analysis included in this report, we conclude the following: 1) Gender does not play a statistically significant role in healthcare expenditures, 2) Age and health category affect healthcare expenditures for all three payers, and 3) Interaction of multiple social factors beyond only the factors themselves significantly affects spending.
 
 \newpage
 
 ## Background & Significance
 
-Emergency services ensure that individuals can receive timely care for unexpected ailments and injuries, making them a vital component of the healthcare industry. In recent years, however, emergency service spending has seen a significant increase (Scott and Liu 2021), which begs the question of equal accessibility. Expenditure is one of many ways by which to investigate interactions between demographic and healthcare access. [ELABORATE] As a preliminary piece of evaluation of the question of healthcare equity and accessibility by disease and demographic, we have prepared an analysis report of spending habits divided into the payer categories of public insurance, private insurance, and out of pocket. We hope to dive deeper into the relationship between spending habits and demographic through the lens of factors influencing payment models for the emergency department.
+Emergency services ensure that individuals can receive timely care for unexpected ailments and injuries, making them a vital component of the healthcare industry. In recent years, however, emergency department spending has seen a significant increase (Scott and Liu, 2021). Recent increased spending in specific demographic groups is linked to health behaviors (Dieleman et. al, 2020). Because these health behaviors affect general health, spending on any grounds will spill over into the emergency department, where various unanticipated results of risks can be treated on a day-to-day basis. This overall consensus of increased expenditure begs the question of whether emergency department treatment remains equitably accessible for all individuals within the U.S. healthcare system. Expenditure is one of many ways by which to investigate interactions between demographic factors and healthcare access, as it provides vital information regarding where money and resources are allocated. Furthermore, greater spending in certain demographic groups, such as the elderly, may provide information about greater trends in healthcare expenditure for the broader medical community as well as provide predictions for payers and medical administrators of communities that may be left out in terms of care or where greater preventative behaviors may be needed compared to other demographic groups according to status quo expenditures. As a preliminary piece of evaluation of the question of healthcare equity and accessibility by disease and demographic factors, we have prepared an analysis report of spending habits divided by the main payer categories in the US healthcare system between 2006 to 2016: public insurance, private insurance, and out of pocket. We hope to dive deeper into the relationship between spending habits and demographic factors through the lens of factors influencing payment models for the emergency department.
+
 
 ## Data Collection
 
-Our data is provided by the Institute of Health Metrics and Evaluation as part of the Disease Expenditure Project (DEX). These Emergency Department (ED) health spending data include estimates for U.S. spending on health care divided into three types of payers: public insurance (including Medicare, Medicaid, and other government programs), private insurance, and out-of-pocket payments. This dataset contains ED spending estimates by aggregate health category, age group, sex, and payer for 2006 through 2016, released in October 2021. Data were gathered from “government budgets, insurance claims, facility records, household surveys, and official US records” (IHME 2021). The data collection and agglomeration is funded by the National Institute on Aging (NIA) and the National Institutes of Health (NIH), and estimates were generated from an underlying data set—the National Emergency Department Sample (NEDS).
+Our data is provided by the Institute of Health Metrics and Evaluation as part of the Disease Expenditure Project (DEX). These Emergency Department (ED) health spending data include estimates for U.S. spending on health care divided into three types of payers: public insurance (including Medicare, Medicaid, and other government programs), private insurance, and out-of-pocket payments. This dataset contains ED spending estimates by aggregate health category and demographics for 2006 through 2016, released in October 2021. Data were gathered from “government budgets, insurance claims, facility records, household surveys, and official US records” (IHME 2021). The data collection and agglomeration is funded by the National Institute on Aging (NIA) and the National Institutes of Health (NIH), and estimates were generated from an underlying dataset—the National Emergency Department Sample (NEDS).
 
-The data given includes summaries of identified gender and ages as "Both" and "All Ages" observations, respectively. In order to gauge accurate analysis of this data, we chose to exclude the aforementioned observations to avoid double counting.
+Variables of interest in this analysis include the following: age group, gender, health category, year, mean overall ED expenditure (where expenditure is also referred to as spending), mean public insurance ED expenditure, mean private insurance ED expenditure, and mean out-of-pocket (OoP) ED expenditure. The age variable is split into 19 groups that generally increase by 5-year increments and is interpreted using the following general age designations: baby (0–2), child (3–12), adolescent (13–17), young adult (18–30), middle-aged adult (31–45), old adult (45–64), and elderly (65+).
+	
+It is important to acknowledge that this data only included those who identified as either male or female in the gender-based variable, so we are unable to provide nuances that completely represent the US population. Expenditure data as it were always refer to an average of a given age, gender, health category, and year. Health category refers to aggregate cause of emergency expenditure—in essence, the category of injury or ailment that is referenced as the reason for seeking emergency care. Every year from 2006 to 2016 is represented in the dataset.
 
-It is important to acknowledge that this data set did not specify whether gender observations are based on individual reporting or otherwise observed identification and are limited to male and female. Therefore, the data may not encompass a complete representation of the population.
+A couple of points to note: 1) The dataset includes a summary of both male and female spending as "both", so in order to perform an analysis on this data, we need to exclude the “both” data points to avoid double counting. 2) Statistical significance in this report is defined by alpha < 0.05.
+
 
 ```{r filter-for-gender, echo = FALSE, warning = FALSE, message = FALSE}
 
@@ -71,7 +75,7 @@ spending_malefemale$age_group_name <- factor(spending_malefemale$age_group_name,
 
 ### ANOVA Assumption Violation
 
-To confirm that our data could be evaluated under ANOVA assumptions, we visualized the distributions of payer groups. The distributions for all three groups showed severe right skews in the data, thus not meeting the normal distribution assumption needed for ANOVA testing. We resolved this by applying a log transformation to the data (excluding any spending data with observation 0) to evaluate using a more normal distribution (Figures 1 & 2).
+ANOVA functions under the assumption of normal distribution. To confirm that our data could be evaluated using ANOVA, we visualized the distributions of payer groups. The distributions for all three groups showed severe right skews in the data, thus not meeting the normal distribution assumption needed for ANOVA testing. We resolved this by applying a log transformation to the data (excluding any spending data with observation 0) to evaluate using a more normal distribution (Figures 1 & 2).
 
 ```{r logscaleconversion, echo= FALSE, warning = FALSE, message = FALSE}
 
@@ -89,7 +93,8 @@ spending_malefemale <- spending_malefemale %>%
 
 ### Gender
 
-Our first step in investigating demographic factor influences on ED expenditure was through the lens of gender. Our initial research question is as follows: *Is gender a factor in influencing emergency department spending?* We first performed an overall t-test looking at significant differences between mean ED expenditure for males and females on the log scale. Our overall two-sample t-test did not have a statistically significant p-value for alpha < 0.05 (Table 4, Test 1), but we wanted to evaluate differences between types of expenditure individually. 
+Our first step in investigating various demographic factors’ influences on ED expenditure was through the lens of gender. Our initial research question is as follows: *Is gender a factor in influencing emergency department spending?* We first performed an overall t-test looking at significant differences between mean ED expenditure for males and females on the log scale. Our overall two-sample t-test did not have a statistically significant p-value (Table 4, Test 1). Therefore, our data are not consistent with a relationship between gender and ED spending. Overall, we conclude that gender is not a statistically significant factor in influencing emergency department spending.
+
 
 ```{r gender-t-test, echo = FALSE, warning = FALSE, message = FALSE, eval = FALSE}
 
@@ -100,11 +105,10 @@ t.test(spending_malefemale$lmean_oop~spending_malefemale$sex)
 
 ```
 
-Therefore, we constructed further step-down tests to evaluate for data consistent with statistical significance for a difference in mean expenditure between the two genders outlined in the data frame. The resulting t-tests for each type of payer expenditure indicated that the given data are not evidence for rejection of the null hypothesis evaluating gender influence on ED expenditure for our three outlined payers (Table 4, Tests 2–4). Therefore, our data are not consistent with a relationship between gender and ED spending. Overall, gender does not seem to be a factor in influencing emergency department spending, both overall and by payer type.
-
 ### Age
 
-A secondary demographic factor that we were able to evaluate from this DEX data was age. Our second research question is as follows: *Is age a factor in influencing emergency department spending?* The age variable is split into 19 groups that generally increase by 5-year increments. We first used an overall test with ANOVA on the log scale to evaluate the null hypothesis that all of the means for age groups across the years are equal, as opposed to the alternative that at least one mean is different. In our F-test (ndf = 18, ddf = 6031), a significant difference among age groups was identified. Therefore, we rejected our null hypothesis and designed step-down t-tests with a Holm correction to minimize Type I errors. The pairwise t-tests evaluated 99/171 differing combinations, which was consistent with our hypothesis that (a majority of) age group pairs differ in terms of mean expenditures.
+A secondary demographic factor that we were able to evaluate from this DEX data was age. Our second research question is as follows: *Is age a factor in influencing emergency department spending?* We first used an overall test with ANOVA on the log scale to evaluate the null hypothesis that all of the means for age groups across the years are equal, as opposed to the alternative that at least one mean is different (Table 5, Test 2). In our F-test (ndf = 18, ddf = 6031), a significant difference among age groups was identified. Therefore, we rejected our null hypothesis and designed step-down t-tests with a Holm correction to minimize Type I errors. The pairwise t-tests evaluated 99 out of the 171 differing combinations as having a statistically significant difference in means, which was consistent with our prediction that (a majority of) age group pairs differ in terms of mean expenditures.
+
 
 ```{r age-anova, echo= FALSE, warning = FALSE, message = FALSE, eval= FALSE}
 
@@ -136,11 +140,17 @@ glance(agefit)$r.squared
 
 ```
 
-[INSERT BAR PLOT ANALYSIS, NOT EDITED IN DOC YET]
+Finally, we visualized our data in four bar plots, one for overall mean expenditure and then divided by payer type based on age group, all in log scale (Figure 3). For general expenditure regardless of payer, the least money spent was, on average, in the baby and child age groups, while the most money spent was in the young adult age group. In the plot visualizing public spending, the least money spent was on average in middle-aged and old adult age groups, and the most money spent, on average, was by elderly individuals 85 and up. The plot visualizing private spending indicated that the least money spent was, on average, in elderly age groups; the most money spent, on average, was in the young and middle age adult age groups. In the plot visualizing out-of-pocket spending, the least money spent on average was in an elderly age group, while the most money spent was in a young adult age group. 
+
+Generally speaking, consistent with our data analysis, young and middle-aged adults spend more money on emergency expenses through out-of-pocket means and/or private insurance, respectively. Those in the older demographic have a general tendency to pay for emergency expenses through public insurance. This data is consistent with the context of public government-funded insurance programs like Medicare, whose expenditure is increasing because of the proportionally greater elderly age group (Cubanski et. al, 2019).  Finally, we conclude that the youngest populations (baby through adolescent age groups), on average, have less expenditure on all fronts, while young adults have the most overall expenditure. 
+
+Overall, we conclude that age is a statistically significant factor in influencing emergency department spending, and that specific age demographics show specific tendencies for different expenditure payer types.
+
 
 ### Health Category
 
-Along with demographic factors that may influence expenditure,  the DEX data set allows for evaluation of the relationship between aggregate cause of spending in the emergency department (health category) and the resulting expenditure. Our third research question is as follows: *Does health category have an impact on emergency department expenditures?*
+Along with demographic factors that may influence expenditure, this DEX dataset allows for evaluation of the relationship between aggregate cause for care in the emergency department (health category) and the resulting expenditure. Our third research question is as follows: *Does health category have an impact on emergency department expenditures?*
+
 
 
 ```{r ANOVAtest, echo= FALSE, warning = FALSE, message = FALSE, eval = FALSE}
@@ -151,7 +161,7 @@ summary(aov(lmean_all~agg_cause, data = spending_malefemale))
 
 ```{r disease_pair, echo= FALSE, warning = FALSE, message = FALSE, eval = FALSE}
 
-diseasepair <- pairwise.t.test(spending_malefemale$lmean_all,    spending_malefemale$agg_cause, p.adj = "holm")
+diseasepair <- pairwise.t.test(spending_malefemale$lmean_all, spending_malefemale$agg_cause, p.adj = "holm")
 
 sigpairs <- broom::tidy(diseasepair) %>%
   filter(p.value<0.05) %>%
@@ -161,7 +171,7 @@ nrow(sigpairs)
 
 ```
 
-A one-way ANOVA (ndf = 14, ddf = 6035) was performed to compare the effect of aggregate cause of spending (log scale) on mean ED expenditure (Table 4, Test 6), revealing that there was a statistically significant difference in mean ED expenditure between at least two groups (F = 639.5). Based on our significance testing, we rejected the overall null hypothesis of no effect. Thereafter, we performed step-down tests using a Holm correction for multiple comparisons, which indicated that 92/105 category pairs differ in mean expenditure. There is significant variation in almost all of the category pairs, consistent with the hypothesis that there is a relationship between cause of expenditure and the expenditure result.
+A one-way ANOVA (ndf = 14, ddf = 6035) was performed to compare the effect of aggregate cause of spending (log scale) on mean ED expenditure (Table 5, Test 3), revealing that there was a statistically significant difference in mean ED expenditure between at least two groups (F = 639.5). Based on our significance testing, we rejected the overall null hypothesis of no effect. Thereafter, we performed step-down tests using a Holm correction for multiple comparisons, which indicated that 92 out of the 105 category pairs differ in mean expenditures. There is significant variation in almost all of the category pairs, consistent with the hypothesis that there is a relationship between cause of expenditure and the expenditure result.
 
 ```{r spending_time_fit, echo = FALSE, warning = FALSE, message = FALSE, eval = FALSE}
 
@@ -183,11 +193,17 @@ glance(spendingovertime_fit)$adj.r.squared
 
 ```
 
-Because our ANOVA testing showed significant variance, we performed a linear regression with the referent group mean spending (log scale) for those with behavioral health and substance use disorders (Table 1). For each health category, all else held constant, the predicted average log spending either increases or decreases based on the amount shown in the table compared to the referent group. All predictors were found to be significant (alpha < 0.05) in predicting mean spending except for the diabetes and kidney diseases predictor. The r-squared value indicated that this linear regression model is an acceptable predictor considering human study standards (Table 5).
+Because our ANOVA testing showed significant variance, we performed a linear regression with the referent group mean spending (log scale) for those with behavioral health and substance use disorders (Table 1). For each health category, all else held constant, the predicted average log spending either increases or decreases based on the amount shown in the table compared to the referent group. All predictors were found to be significant in predicting mean spending except for the diabetes and kidney diseases predictor. The r-squared value indicated that this linear regression model is an acceptable predictor considering human study standards (Table 5).
 
-Our final health category analysis involves ED spending variation over time by cause of expenditure. In order to visualize the all mean spending differences (log scale), we visualized the data in a barplot (Figure 4). [INSERT BAR PLOT ANALYSIS, NOT EDITED IN DOC YET]
+Our final health category analysis involved ED spending variation over time by cause of expenditure. In order to visualize the all mean spending differences (log scale), we visualized the data in a bar plot showing aggregate spending over time faceted by health category (Figure 4). 
+
+As a general trend, our plots showed a steady, slight spending increase from 2006 to 2016. By health category, maternal and neonatal conditions resulted in the least expenditure over time; cardiovascular diseases, communicable and nutrition disorders, digestive diseases, and injuries showed the highest overall expenditure over time, on average. To statistically confirm the trends shown in our plot, we performed a linear regression predicting log of all mean spending based on health category and year with a health category-year interaction term. This linear regression model has a referent group of the behavioral health and substance use disorder group in 2006. 
+
+Results (Table 4) showed that most health categories are statistically significant predictors for expenditure (with all else held constant) in comparison to the referent group. However, no category-year interaction terms were significant, and p-values for the 2016 predictor (p = 0.133) and diabetes and kidney disease predictor (p = 0.788) denied adequate predictability. The adjusted R-squared value associated with this model turned out smaller than the adjusted R-squared value for the linear regression model not including year (Tables 2 & 7). In an attempt to find the most parsimonious and accurate model, the model without year as an interaction is preferred.
 
 ### Gender and Age Interaction
+
+Our fourth research question is as follows: *Is there a relationship between health category and gender in influencing emergency department spending?* In order to test the possibility that there is a joint interaction between gender and age on the spending patterns of various payers, main effects and interaction effects models were fitted to the data. As a whole, inclusion of the interaction of gender and age slightly increased the predictive accuracy of the regression models for public and private spending as seen by the increased adjusted R-squared value for the interaction model when compared to the main effects model (Table 3). However, for out-of-pocket spending, interaction terms led to a decrease in the adjusted R-squared value. 
 
 ``` {r maineffects_pub, echo = FALSE, warning = FALSE, message = FALSE, eval = FALSE}
 mainefpub_fit <- linear_reg() %>%
@@ -244,9 +260,11 @@ tidy(interoop_fit)
 glance(interoop_fit)$adj.r.squared
 ```
 
-[INSERT INTERPRETATION/ANALYSIS, NOT EDITED ON DOC YET]
+Overall, we concluded these models do not provide statistically significant additional information. The adjusted R squared values shown in Table 3, regardless of presence of interaction, hover low around 0.01 for all three types of spending. Even when paired with interaction, further analysis shows that gender is not an adequate predictor for this dataset.
 
 ### Age and Health Category Interaction
+
+Along with our individual analysis of the effects of health category and age on various payer spending patterns, we evaluated how the relationship between various payers spending means and health category varied by age. Our fifth and final research question is as follows: *Is there a relationship between health category and age in influencing emergency department spending?* In order to define the relationship, we performed multiple regressions using main effects and interaction models for each of the three spending models (Table 6, Models 3–8). We determined model accuracy by comparing adjusted R-squared values (Table 7, Models 3–8). For public spending, private spending, and out-of-pocket spending, values increased with the inclusion of an interaction term, leading us to the conclusion that our interaction model better fits the data for all three types of payers. 
 
 ``` {r agedismain_pub, echo = FALSE, warning = FALSE, message = FALSE, eval = FALSE}
 agedismainpub_fit <- linear_reg() %>%
@@ -306,7 +324,11 @@ glance(agedisinteroop_fit)$adj.r.squared
 
 ```
 
-[INSERT INTERPRETATION/ANALYSIS, NOT EDITED ON DOC YET]
+The public spending linear regression model with category-age interaction resulted in statistically significant p-values for almost all health categories, (Table 6, Model 4). This result is consistent with our hypothesis that age affects the relationship between health category and public expenditure, either by means of increase or decrease. Similarly, most predictors in the private expenditure interaction model had significant p-values for estimate coefficients (Table 6, Model 6). Finally, almost all health categories showed predictive significance in the out-of-pocket expenditure interaction model (Table 6, Model 8). Therefore, we can conclude that there is a relationship between health category and age in influencing emergency department spending, and that that relationship is specific to the payer category.
+
+## Discussion
+
+[INSERT DISCUSSION]
 
 \newpage
 
@@ -485,7 +507,7 @@ grid.arrange(p2, p3, p4, nrow = 3)
 
 *Figure 4: Expenditures by Health Category Over Time*
 
-```{r spending_time_graph, echo = FALSE, warning = FALSE, message = FALSE}
+```{r spending_time_graph, echo = FALSE, warning = FALSE, message = FALSE, out.width = "80%"}
 
 spending_malefemale$disease_renamed <- factor(spending_malefemale$agg_cause, 
             labels = c("Behavioral/Substance Use", "Cancers", "Cardiovascular", "Chronic Respiratory", "Communicable/Nutrition", "Diabetes/Kidney", "Digestive", "Endrocrine", "Injury", "Maternal/Neonatal", "Musculoskeletal", "Neurological", "Other Non-Communicable", "Prevention/Coordination", "Skin/Sense Organs"))
@@ -635,9 +657,14 @@ kable(appendix_table7, caption = "\\textbf{Linear Regression Model Adjusted R$^2
 
 ## References
 
-Institute for Health Metrics and Evaluation (IHME). United States Healthcare Spending in Emergency Departments by Health Condition 2006-2016. Seattle, United States of America: Institute for Health Metrics and Evaluation (IHME), 2021.
+Dieleman, J., Chapin, A., Chen, C., Bulchis, A., Bui, A., Mokdad, A., & Lomsadze, L. *Health-care spending attributable to modifiable risk factors in the USA: An economic attribution analysis. Institute for Health Metrics and Evaluation.* 14 April 2021.
 
-Woody Scott K, Liu A, Chen C, Kaldjian AS, Sabbatini AK, Duber, HC, Dieleman JL. Healthcare Spending in U.S. Emergency Departments by Health Condition, 2006-2016. PLOS One. 27 October 2021.
+Institute for Health Metrics and Evaluation (IHME). *United States Healthcare Spending in Emergency Departments by Health Condition 2006-2016.* Seattle, United States of America: Institute for Health Metrics and Evaluation (IHME), 2021.
+
+Neuman, T., Freed, M., & Cubanski, J. *The Facts on Medicare Spending and Financing.* KFF. https://www.kff.org/medicare/issue-brief/
+the-facts-on-medicare-spending-and-financing/. 20 August 2019.
+
+Woody Scott K, Liu A, Chen C, Kaldjian AS, Sabbatini AK, Duber, HC, Dieleman JL. *Healthcare Spending in U.S. Emergency Departments by Health Condition, 2006-2016.* PLOS One. 27 October 2021.
 
 
 
@@ -646,6 +673,8 @@ Woody Scott K, Liu A, Chen C, Kaldjian AS, Sabbatini AK, Duber, HC, Dieleman JL.
 
 
 
+
+\vspace*{\fill}
 
 *Disclaimer: No values were changed from the original dataset without in-text preface or notice. This is an independent analysis and is not endorsed by the data provider.*
 
