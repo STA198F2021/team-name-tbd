@@ -178,24 +178,19 @@ The general approach we took was to analyze various social factors to understand
 
 --
 
-```{r age-expenditure-boxplot, echo = FALSE, warning = FALSE, message = FALSE, fig.height = 2.5, fig.width = 6, fig.align = "center"}
-  
-ggplot(data = spending_malefemale, aes(x = age_group_name, y = lmean_all)) +
-  geom_boxplot() +
-  theme(
-    axis.text.x = element_text(color = "grey20", size = 5, 
-                               face = "italic", angle = 45,hjust = 1),
-    axis.text.y = element_text(color = "grey20", size = 5, face = "italic"),
-    axis.title.y = element_text(color = "grey20", size = 8, face = "bold"),
-    axis.title.x = element_text(color = "grey20", size = 8, face = "bold"),
-    plot.title = element_text(color = "grey20", face = "bold")
-        ) +
-  scale_y_continuous(labels = scales::comma) +
-  labs(
-    x = "Age Group",
-    y = "Mean Spending, All Payers (ln)",
-    title = "Emergency Department General Expenditures"
-       )
+```{r photo_10, echo = FALSE, out.width = "70%", fig.align = "center"}
+
+include_graphics("img/Capture 10.JPG")
+
+```
+---
+
+## Age
+
+```{r photo_9, echo = FALSE, out.width = "70%", fig.align = "center"}
+
+include_graphics("img/Capture 9.JPG")
+
 ```
 
 ---
@@ -243,37 +238,10 @@ include_graphics("img/Capture 3.JPG")
 
 --
 
-```{r spending_time_graph, echo = FALSE, warning = FALSE, message = FALSE, fig.align = "center"}
-spending_malefemale$disease_renamed <- factor(spending_malefemale$agg_cause, 
-            labels = c("Behavioral/Substance Use", "Cancers", "Cardiovascular", "Chronic Respiratory", "Communicable/Nutrition", "Diabetes/Kidney", "Digestive", "Endrocrine", "Injury", "Maternal/Neonatal", "Musculoskeletal", "Neurological", "Other Non-Communicable", "Prevention/Coordination", "Skin/Sense Organs"))
+```{r photo_11, echo = FALSE, out.width = "70%", fig.align = "center"}
 
-spending_malefemale %>%
-  ggplot(aes(x = year_id,
-             y = lmean_all,
-             fill = disease_renamed)) +
-  geom_bar(stat = "identity") +
-  scale_fill_manual(values = c(
-    "#b3a2a1", "#b3a8a1", "#b3aea1", "#b3b1a1", "#a3b3a1", "#a1b3a9", 
-    "#a1b3b1", "#a1b1b3", "#a1a3b3", "#a9a1b3", "#aea1b3", "#b1a1b3",
-    "#b3a1ac", "#b3a1a6", "#b3a1a6"
-    )) +
-  facet_wrap(~disease_renamed) +
-  theme(axis.text.x = element_text(
-    color = "grey20", size = 5, face = "italic",
-    angle = 45, hjust = 1),
-    legend.position = "none",
-    axis.text.y = element_text(color = "grey20", size = 5, face = "italic"),  
-    axis.title.x = element_text(color = "grey20", size = 8, face = "bold"),
-    axis.title.y = element_text(color = "grey20", size = 8, face = "bold"),
-    plot.title = element_text(color = "grey20", face = "bold"),
-    strip.background = element_rect(color = "grey20", fill = "white"),
-    strip.text.x = element_text(size = 7)
-        ) +
-  labs(
-    title = "Log Mean Spending by Disease",
-    x = "Disease Category",
-    y = "Aggregate Log Spending Values")
-  
+include_graphics("img/Capture 11.JPG")
+
 ```
 
 ---
@@ -346,14 +314,28 @@ background-color: #217718
 
 ---
 
+## Acknowledgements
+
+Special thank you to Dr. Amy Herring, Sara & Charles Ayres Professor of Statistical Science, Global Health, and Biostatistics & Bioinformatics, for your guidance throughout this project. Additionally, thank you to Jackie Du, Eli Feder, and Phuc Nguyen for your support.
+
+---
+
 ## References
 
-Institute for Health Metrics and Evaluation (IHME). United States Healthcare Spending in Emergency Departments byHealth Condition 2006-2016. Seattle, United States of America: Institute for Health Metrics and Evaluation (IHME),2021.
+Dieleman, J., Chapin, A., Chen, C., Bulchis, A., Bui, A., Mokdad, A., & Lomsadze, L. *Health-care spending attributable to modifiable risk factors in the USA: An economic attribution analysis. Institute for Health Metrics and Evaluation.* 14 April 2021.
 
-Woody Scott K, Liu A, Chen C, Kaldjian AS, Sabbatini AK, Duber, HC, Dieleman JL. Healthcare Spending in U.S.Emergency Departments by Health Condition, 2006-2016. PLOS One. 27 October 2021.
+Institute for Health Metrics and Evaluation (IHME). *United States Healthcare Spending in Emergency Departments by Health Condition 2006-2016.* Seattle, United States of America: Institute for Health Metrics and Evaluation (IHME), 2021.
+
+Neuman, T., Freed, M., & Cubanski, J. *The Facts on Medicare Spending and Financing.* KFF. https://www.kff.org/medicare/issue-brief/
+the-facts-on-medicare-spending-and-financing/. 20 August 2019.
+
+Woody Scott K, Liu A, Chen C, Kaldjian AS, Sabbatini AK, Duber, HC, Dieleman JL. *Healthcare Spending in U.S. Emergency Departments by Health Condition, 2006-2016.* PLOS One. 27 October 2021.
 
 
 
+.footnote[
+[*] And add footnotes
 *Disclaimer: No values were changed from the original dataset without in-text preface or notice. This is an independent analysis and is not endorsed by the data provider.*
 
 *Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)*
+]
