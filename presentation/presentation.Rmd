@@ -79,11 +79,9 @@ Emergency services ensure that individuals can receive timely care for unexpecte
 
 - Our data is provided by the Institute of Health Metrics and Evaluation as part of the Disease Expenditure Project (DEX).
 
---
 
 - The health spending data include estimates for U.S. emergency spending on health care divided into three types of payers: public insurance (including Medicare, Medicaid, and other government programs), private insurance, and out-of-pocket payments
 
---
 
 - A few of the important variables that will be used in the analysis include the following: age, gender, health category, year, and mean expenditure overall/by payer group.
 
@@ -95,7 +93,6 @@ Emergency services ensure that individuals can receive timely care for unexpecte
 
 - Expenditure in the original dataset is not normally distributed.
 
---
 
 ```{r photo_1, echo = FALSE, out.width = "100%", fig.align = "center"}
 
@@ -111,7 +108,6 @@ include_graphics("img/Capture 1.JPG")
 
 - A log transformation of the data solves this issue.
 
---
 
 ```{r photo_2, echo = FALSE, out.width = "100%", fig.align = "center"}
 
@@ -135,15 +131,12 @@ The general approach we took was to analyze various social factors to understand
 
 - Is gender a factor in influencing emergency department spending?
 
---
 
 - We performed a t-test looking at the overall differences in log mean emergency department spending between males and females.
 
---
 
 - This t-test showed that for mean spending of all emergency services payment types, the p value is 0.1543 (95% CI -0.0315862, 0.1996079).
 
---
 
 - Therefore, there is not a significant difference between male and female spending for mean emergency services.
 
@@ -154,14 +147,11 @@ The general approach we took was to analyze various social factors to understand
 
 - Is age a factor in influencing emergency department spending?
 
---
 
 - The age variable is split into 19 groups and generally increases by 5-year increments. 
---
 
 - We first used an overall test with ANOVA on the log scale to evaluate the null hypothesis that all of the means for age groups across the years are equal. 
 
---
 
 - In our F-test (ndf = 18, ddf = 6031), a significant difference among age groups was identified. 
 
@@ -172,11 +162,9 @@ The general approach we took was to analyze various social factors to understand
 
 - We followed the ANOVA analysis with step-down tests.
 
---
 
 - The pairwise t-tests evaluated 99/171 differing combinations, which was consistent with our hypothesis that (a majority of) age group pairs differ in terms of mean expenditures.
 
---
 
 ```{r photo_10, echo = FALSE, out.width = "70%", fig.align = "center"}
 
@@ -201,15 +189,12 @@ include_graphics("img/Capture 9.JPG")
 
 - Does health category have an impact on emergency department expenditures?
 
---
 
-- We performed a one-way ANOVA (ndf = 14, ddf = 6035) to compare the way the health issue an individual entered the emergency room would affect log mean ED expenditures. The null hypothesis used was that the means of spending for all health categories are equal.
+- We performed an ANOVA (ndf = 14, ddf = 6035) to compare how the health issue an individual entered the emergency room with would affect log mean ED expenditures. The null hypothesis used was that the means of spending for all health categories are equal.
 
---
 
 - We rejected the overall null hypothesis of no effect. We, then, performed step-down tests using a Holm correction for multiple comparisons, which indicated that 92/105 category pairs differ in mean expenditure.
 
---
 
 - We performed a linear regression. All predictors were found to be significant (alpha < 0.05) in predicting mean spending except for the diabetes and kidney diseases predictor.
 
@@ -236,8 +221,6 @@ include_graphics("img/Capture 3.JPG")
 
 - To see if health category spending changed over time, we also visualized our data on a faceted barplot. 
 
---
-
 ```{r photo_11, echo = FALSE, out.width = "70%", fig.align = "center"}
 
 include_graphics("img/Capture 11.JPG")
@@ -250,7 +233,6 @@ include_graphics("img/Capture 11.JPG")
 
 - Because we saw that spending varied over time based on health category, we performed a linear regression predicting log of all mean spending based on disease category and year with a health category year interaction term.
 
---
 
 - The linear model showed all year-health category interaction terms are not significant with p values greater than 0.05, and p values for the 2016 predictor (p = 0.133) and diabetes and kidney disease predictor (p = 0.788) also not significant predictors in the model. 
 
@@ -262,11 +244,9 @@ include_graphics("img/Capture 11.JPG")
 
 - Is there a relationship between health category and gender in influencing emergency department spending?
 
---
 
 - Main effects and interaction effects models were fitted to the data. 
 
---
 
 - The interaction of gender and age slightly increases the accuracy of the regression for public and private spending, but for out-of-pocket spending, it decreases the adjusted R squared value.
 
@@ -286,11 +266,9 @@ include_graphics("img/Capture 4.JPG")
 
 - Is there a relationship between health category and age in influencing emergency department spending?
 
---
 
 - We performed multiple regressions using main effects and interaction models for each of the three spending models 
 
---
 
 - For public spending, private spending, and out of pocket spending, the adjusted R squared values increased with the inclusion of an interaction term, leading us to the conclusion that the interaction model better fits the data for all three types of payers. 
 
@@ -314,19 +292,15 @@ background-color: #217718
 
 - What are the statistically significant social and health factors that influence emergency department expenditure?
 
---
 
 - Age, health category, & age-health category interaction were all generally good predictors for ED expenditure!
 
---
 
 - Gender & gender-age interaction were not significant or accurate predictors for ED expenditure.
 
---
 
 - Limits: More research into different topics and models related to healthcare equity is needed to make more definitive conclusions.
 
---
 
 - Implications:  Evaluation of general trends for expenditure among social demographics.
 
