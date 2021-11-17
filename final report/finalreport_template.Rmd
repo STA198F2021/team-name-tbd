@@ -491,7 +491,7 @@ spending_malefemale$disease_renamed <- factor(spending_malefemale$agg_cause,
             labels = c("Behavioral/Substance Use", "Cancers", "Cardiovascular", "Chronic Respiratory", "Communicable/Nutrition", "Diabetes/Kidney", "Digestive", "Endrocrine", "Injury", "Maternal/Neonatal", "Musculoskeletal", "Neurological", "Other Non-Communicable", "Prevention/Coordination", "Skin/Sense Organs"))
 
 spending_malefemale %>%
-  ggplot(aes(x = year_id,
+  ggplot(aes(x = as.factor(year_id),
              y = lmean_all,
              fill = disease_renamed)) +
   geom_bar(stat = "identity") +
@@ -622,11 +622,11 @@ kable(appendix_table6, caption = "\\textbf{Linear Regression Model Significance}
 
 ```{r appendix-table8, echo = FALSE, message = FALSE, warning = FALSE, out.width="10%", fig.width = 6}
 
-RSqu <- c(0.13472, 0.59600, 0.50689, 0.52935, 0.50549, 0.51491, 0.51617, 0.52610)
+Adjusted_RSquared <- c(0.13472, 0.59600, 0.50689, 0.52935, 0.50549, 0.51491, 0.51617, 0.52610)
 
-appendix_table7 <- data.frame(ModelNumber, RSqu, stringsAsFactors = FALSE)
+appendix_table7 <- data.frame(ModelNumber, Adjusted_RSquared, stringsAsFactors = FALSE)
 
-kable(appendix_table7, caption = "\\textbf{Linear Regression Model R$^2$ Values}", format = "latex") %>%
+kable(appendix_table7, caption = "\\textbf{Linear Regression Model Adjusted R$^2$ Values}", format = "latex") %>%
   kable_styling(latex_options = c("striped", "hold_position"))
 
 ```
@@ -639,3 +639,14 @@ Institute for Health Metrics and Evaluation (IHME). United States Healthcare Spe
 
 Woody Scott K, Liu A, Chen C, Kaldjian AS, Sabbatini AK, Duber, HC, Dieleman JL. Healthcare Spending in U.S. Emergency Departments by Health Condition, 2006-2016. PLOS One. 27 October 2021.
 
+
+
+
+
+
+
+
+
+*Disclaimer: No values were changed from the original dataset without in-text preface or notice. This is an independent analysis and is not endorsed by the data provider.*
+
+*Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)*
