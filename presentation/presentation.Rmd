@@ -85,7 +85,7 @@ Emergency services ensure that individuals can receive timely care for unexpecte
 
 --
 
-- A few of the important variables that will be used in the analysis include: age, gender, disease type, total mean spending.
+- A few of the important variables that will be used in the analysis include the following: age, gender, health category, year, and mean expenditure overall/by payer group.
 
 ---
 
@@ -93,7 +93,7 @@ Emergency services ensure that individuals can receive timely care for unexpecte
 
 --
 
-- The nature of the original dataset is not normally distributed.
+- Expenditure in the original dataset is not normally distributed.
 
 --
 
@@ -234,7 +234,7 @@ include_graphics("img/Capture 3.JPG")
 
 --
 
-- To see if health category spending changed over time, we also visualized our data on a barplot. 
+- To see if health category spending changed over time, we also visualized our data on a faceted barplot. 
 
 --
 
@@ -248,11 +248,11 @@ include_graphics("img/Capture 11.JPG")
 
 ## Health Category
 
-- Because we saw that spending varied over time based on disease category, we performed a linear regression predicting log of all mean spending based on disease category and year with a disease category year interaction term.
+- Because we saw that spending varied over time based on health category, we performed a linear regression predicting log of all mean spending based on disease category and year with a health category year interaction term.
 
 --
 
-- The linear model showed all year disease interaction terms are not significant with p values greater than 0.05, and p values for the 2016 predictor (p = 0.133) and diabetes and kidney disease predictor (p = 0.788) also not significant predictors in the model. 
+- The linear model showed all year-health category interaction terms are not significant with p values greater than 0.05, and p values for the 2016 predictor (p = 0.133) and diabetes and kidney disease predictor (p = 0.788) also not significant predictors in the model. 
 
 ---
 
@@ -264,7 +264,7 @@ include_graphics("img/Capture 11.JPG")
 
 --
 
-- A main effects and interaction effects model were fitted to the data. 
+- Main effects and interaction effects models were fitted to the data. 
 
 --
 
@@ -310,7 +310,25 @@ background-color: #217718
 
 ## Conclusion and Discussion
 
+--
 
+- What are the statistically significant social and health factors that influence emergency department expenditure?
+
+--
+
+- Age, health category, & age-health category interaction were all generally good predictors for ED expenditure!
+
+--
+
+- Gender & gender-age interaction were not significant or accurate predictors for ED expenditure.
+
+--
+
+- Limits: More research into different topics and models related to healthcare equity is needed to make more definitive conclusions.
+
+--
+
+- Implications:  Evaluation of general trends for expenditure among social demographics.
 
 ---
 
@@ -334,7 +352,6 @@ Woody Scott K, Liu A, Chen C, Kaldjian AS, Sabbatini AK, Duber, HC, Dieleman JL.
 
 
 .footnote[
-[*] And add footnotes
 *Disclaimer: No values were changed from the original dataset without in-text preface or notice. This is an independent analysis and is not endorsed by the data provider.*
 
 *Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)*
