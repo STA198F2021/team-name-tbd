@@ -1,6 +1,6 @@
 ---
 title: "An Investigation of Social Factors Influencing <br> Emergency Healthcare Expenditure"
-author: "Maggie Lundberg, Riya Mohan, Izzy Kjaerulff"
+author: "Isabella Kjaerulff, Maggie Lundberg, Riya Mohan"
 institute: "Duke University"
 date: "`r Sys.Date()`"
 output:
