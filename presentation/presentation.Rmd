@@ -288,8 +288,7 @@ background-color: #217718
 
 ## Conclusion and Discussion
 
---
-
+.left[
 - What are the statistically significant social and health factors that influence emergency department expenditure?
 
 
@@ -303,6 +302,7 @@ background-color: #217718
 
 
 - Implications:  Evaluation of general trends for expenditure among social demographics.
+]
 
 ---
 
@@ -330,3 +330,11 @@ Woody Scott K, Liu A, Chen C, Kaldjian AS, Sabbatini AK, Duber, HC, Dieleman JL.
 
 *Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)*
 ]
+
+---
+
+class: inverse, middle, center
+
+background-color: #217718
+
+## Thank You!
