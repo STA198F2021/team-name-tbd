@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2021.10.16)  17 DEC 2021 18:03
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2021.10.16)  17 DEC 2021 18:45
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -626,79 +626,75 @@ LaTeX Font Info:    Trying to load font information for U+msb on input line 88.
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 ) (/usr/share/texlive/texmf-dist/tex/latex/microtype/mt-msb.cfg
 File: mt-msb.cfg 2005/06/01 v1.0 microtype config. file: AMS symbols (b) (RS)
-) (./finalreport_template.toc
+) [1
+
+{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] [2] [3] [4] [5]
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <10.95> on input line 1.
-)
-\tf@toc=\write3
-\openout3 = `finalreport_template.toc'.
-
-[1
-
-{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] [2] [3] [4] [5] [6]
-<finalreport_template_files/figure-latex/distribution_pub-1.pdf, id=73, 144.54p
+(Font)              <10.95> on input line 410.
+[6]
+<finalreport_template_files/figure-latex/distribution_pub-1.pdf, id=58, 144.54p
 t x 144.54pt>
 File: finalreport_template_files/figure-latex/distribution_pub-1.pdf Graphic fi
 le (type pdf)
 <use finalreport_template_files/figure-latex/distribution_pub-1.pdf>
 Package pdftex.def Info: finalreport_template_files/figure-latex/distribution_p
-ub-1.pdf  used on input line 445.
+ub-1.pdf  used on input line 424.
 (pdftex.def)             Requested size: 144.54623pt x 144.54623pt.
-<finalreport_template_files/figure-latex/distribution_pub-2.pdf, id=74, 144.54p
+<finalreport_template_files/figure-latex/distribution_pub-2.pdf, id=59, 144.54p
 t x 144.54pt>
 File: finalreport_template_files/figure-latex/distribution_pub-2.pdf Graphic fi
 le (type pdf)
 <use finalreport_template_files/figure-latex/distribution_pub-2.pdf>
 Package pdftex.def Info: finalreport_template_files/figure-latex/distribution_p
-ub-2.pdf  used on input line 445.
+ub-2.pdf  used on input line 424.
 (pdftex.def)             Requested size: 144.54623pt x 144.54623pt.
-<finalreport_template_files/figure-latex/distribution_pub-3.pdf, id=75, 144.54p
+<finalreport_template_files/figure-latex/distribution_pub-3.pdf, id=60, 144.54p
 t x 144.54pt>
 File: finalreport_template_files/figure-latex/distribution_pub-3.pdf Graphic fi
 le (type pdf)
 <use finalreport_template_files/figure-latex/distribution_pub-3.pdf>
 Package pdftex.def Info: finalreport_template_files/figure-latex/distribution_p
-ub-3.pdf  used on input line 445.
+ub-3.pdf  used on input line 424.
 (pdftex.def)             Requested size: 144.54623pt x 144.54623pt.
-<finalreport_template_files/figure-latex/log_pub-1.pdf, id=76, 144.54pt x 144.5
+<finalreport_template_files/figure-latex/log_pub-1.pdf, id=61, 144.54pt x 144.5
 4pt>
 File: finalreport_template_files/figure-latex/log_pub-1.pdf Graphic file (type 
 pdf)
 <use finalreport_template_files/figure-latex/log_pub-1.pdf>
 Package pdftex.def Info: finalreport_template_files/figure-latex/log_pub-1.pdf 
- used on input line 449.
+ used on input line 428.
 (pdftex.def)             Requested size: 144.54623pt x 144.54623pt.
-<finalreport_template_files/figure-latex/log_pub-2.pdf, id=77, 144.54pt x 144.5
+<finalreport_template_files/figure-latex/log_pub-2.pdf, id=62, 144.54pt x 144.5
 4pt>
 File: finalreport_template_files/figure-latex/log_pub-2.pdf Graphic file (type 
 pdf)
 <use finalreport_template_files/figure-latex/log_pub-2.pdf>
 Package pdftex.def Info: finalreport_template_files/figure-latex/log_pub-2.pdf 
- used on input line 449.
+ used on input line 428.
 (pdftex.def)             Requested size: 144.54623pt x 144.54623pt.
-<finalreport_template_files/figure-latex/log_pub-3.pdf, id=78, 144.54pt x 144.5
+<finalreport_template_files/figure-latex/log_pub-3.pdf, id=63, 144.54pt x 144.5
 4pt>
 File: finalreport_template_files/figure-latex/log_pub-3.pdf Graphic file (type 
 pdf)
 <use finalreport_template_files/figure-latex/log_pub-3.pdf>
 Package pdftex.def Info: finalreport_template_files/figure-latex/log_pub-3.pdf 
- used on input line 449.
+ used on input line 428.
 (pdftex.def)             Requested size: 144.54623pt x 144.54623pt.
-<finalreport_template_files/figure-latex/age-expenditure-boxplot-1.pdf, id=79, 
+<finalreport_template_files/figure-latex/age-expenditure-boxplot-1.pdf, id=64, 
 433.62pt x 180.675pt>
 File: finalreport_template_files/figure-latex/age-expenditure-boxplot-1.pdf Gra
 phic file (type pdf)
 <use finalreport_template_files/figure-latex/age-expenditure-boxplot-1.pdf>
 Package pdftex.def Info: finalreport_template_files/figure-latex/age-expenditur
-e-boxplot-1.pdf  used on input line 453.
+e-boxplot-1.pdf  used on input line 432.
 (pdftex.def)             Requested size: 433.61894pt x 180.67455pt.
-<finalreport_template_files/figure-latex/gridarray-1.pdf, id=80, 469.755pt x 32
+<finalreport_template_files/figure-latex/gridarray-1.pdf, id=65, 469.755pt x 32
 5.215pt>
 File: finalreport_template_files/figure-latex/gridarray-1.pdf Graphic file (typ
 e pdf)
 <use finalreport_template_files/figure-latex/gridarray-1.pdf>
 Package pdftex.def Info: finalreport_template_files/figure-latex/gridarray-1.pd
-f  used on input line 455.
+f  used on input line 434.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
 [7 <./finalreport_template_files/figure-latex/distribution_pub-1.pdf> <./finalr
 eport_template_files/figure-latex/distribution_pub-2.pdf> <./finalreport_templa
@@ -706,13 +702,13 @@ te_files/figure-latex/distribution_pub-3.pdf> <./finalreport_template_files/fig
 ure-latex/log_pub-1.pdf> <./finalreport_template_files/figure-latex/log_pub-2.p
 df> <./finalreport_template_files/figure-latex/log_pub-3.pdf> <./finalreport_te
 mplate_files/figure-latex/age-expenditure-boxplot-1.pdf>]
-<finalreport_template_files/figure-latex/spending_time_graph-1.pdf, id=134, 469
+<finalreport_template_files/figure-latex/spending_time_graph-1.pdf, id=119, 469
 .755pt x 325.215pt>
 File: finalreport_template_files/figure-latex/spending_time_graph-1.pdf Graphic
  file (type pdf)
 <use finalreport_template_files/figure-latex/spending_time_graph-1.pdf>
 Package pdftex.def Info: finalreport_template_files/figure-latex/spending_time_
-graph-1.pdf  used on input line 459.
+graph-1.pdf  used on input line 438.
 (pdftex.def)             Requested size: 375.80452pt x 260.17235pt.
 [8 <./finalreport_template_files/figure-latex/gridarray-1.pdf> <./finalreport_t
 emplate_files/figure-latex/spending_time_graph-1.pdf>]
@@ -725,61 +721,61 @@ LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 636.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 615.
 [9pdfTeX warning (ext4): destination with the same identifier (name{table.1}) h
 as been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.636 \end{document}
+l.615 \end{document}
                     pdfTeX warning (ext4): destination with the same identifier
  (name{table.2}) has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.636 \end{document}
+l.615 \end{document}
                     pdfTeX warning (ext4): destination with the same identifier
  (name{table.3}) has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.636 \end{document}
+l.615 \end{document}
                     pdfTeX warning (ext4): destination with the same identifier
  (name{table.4}) has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.636 \end{document}
+l.615 \end{document}
                     ] [10pdfTeX warning (ext4): destination with the same ident
 ifier (name{table.5}) has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.636 \end{document}
+l.615 \end{document}
                     pdfTeX warning (ext4): destination with the same identifier
  (name{table.6}) has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.636 \end{document}
+l.615 \end{document}
                     pdfTeX warning (ext4): destination with the same identifier
  (name{table.7}) has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.636 \end{document}
+l.615 \end{document}
                     ]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 636.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 615.
 (./finalreport_template.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 636.
-Package atveryend Info: Empty hook `AtEndAfterFileList' on input line 636.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 615.
+Package atveryend Info: Empty hook `AtEndAfterFileList' on input line 615.
  ) 
 Here is how much of TeX's memory you used:
- 14793 strings out of 483183
- 216420 string characters out of 5966291
- 513510 words of memory out of 5000000
- 29325 multiletter control sequences out of 15000+600000
- 580823 words of font info for 159 fonts, out of 8000000 for 9000
+ 14785 strings out of 483183
+ 216271 string characters out of 5966291
+ 514505 words of memory out of 5000000
+ 29319 multiletter control sequences out of 15000+600000
+ 576506 words of font info for 158 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  41i,10n,45p,819b,390s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texmf/fonts/enc/dvips/lm/lm-rm.enc}{/usr/share/texlive/texmf-dist
@@ -787,10 +783,10 @@ Here is how much of TeX's memory you used:
 /usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/share/texl
 ive/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/share/texlive/texmf-dist/
 fonts/type1/urw/times/utmri8a.pfb>
-Output written on finalreport_template.pdf (10 pages, 226452 bytes).
+Output written on finalreport_template.pdf (10 pages, 224399 bytes).
 PDF statistics:
- 242 PDF objects out of 1000 (max. 8388607)
- 205 compressed objects within 3 object streams
- 45 named destinations out of 1000 (max. 500000)
+ 227 PDF objects out of 1000 (max. 8388607)
+ 191 compressed objects within 2 object streams
+ 44 named destinations out of 1000 (max. 500000)
  10390 words of extra memory for PDF output out of 12000 (max. 10000000)
 

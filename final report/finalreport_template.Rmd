@@ -6,8 +6,7 @@ output:
     fig_crop: no
     highlight: pygments
     keep_tex: no
-    toc: yes
-    toc_depth: 4
+    toc: no
 fontsize: 11pt
 header-includes:
   \usepackage{float}
@@ -40,7 +39,7 @@ library(ggplot2)
 
 ## Abstract
 
-Healthcare expenditures provide a unique insight into the way health care is given, which is why we hope to use this as a tool to understand trends in the emergency department, one of the healthcare system’s most vital yet pressed branches. We conducted an open investigation of personal healthcare spending in the emergency departments of US hospitals, using data from the Disease Expenditure Project (DEX) at IHME, which provides spending means from 2006 to 2016 for the US healthcare system’s three key payers: public insurance, private insurance, and out-of-pocket spending. The data compiled is used to investigate the existence of a relationship between demographic markers (sex and age), disease type, and expenditure. In the following report, we hypothesize demographic, disease, and type of expenditure from our three included groups are not independent of one another. For example, we expect that results will suggest that public healthcare spending will be higher in older populations when compared to younger populations, whereas private spending will be higher in those younger populations. From the analysis included in this report, we conclude the following: 1) Gender does not play a statistically significant role in healthcare expenditures, 2) Age and health category affect healthcare expenditures for all three payers, and 3) Interaction of multiple social factors beyond only the factors themselves significantly affects spending.
+Healthcare expenditures provide unique insight into the way health care is given and can be used as a tool to understand trends in the emergency department. Our team conducted an investigation of personal healthcare spending in the emergency departments of US hospitals, using data from the Disease Expenditure Project (DEX) at IHME, which provides spending means from 2006 to 2016 for the US healthcare system’s three key payers: public insurance, private insurance, and out-of-pocket spending. The data compiled is used to investigate the existence of a relationship between demographic markers (sex and age), disease type, and expenditure. From our analysis, we conclude the following: 1) Gender does not play a statistically significant role in healthcare expenditures, 2) Age and health category affect healthcare expenditures for all three payers, and 3) Interaction of multiple social factors beyond only the factors themselves significantly affects spending.
 
 \newpage
 
@@ -148,9 +147,7 @@ Overall, we conclude that age is a statistically significant factor in influenci
 
 ### Health Category
 
-Along with demographic factors that may influence expenditure, this DEX dataset allows for evaluation of the relationship between aggregate cause for care in the emergency department (health category) and the resulting expenditure. Our third research question is as follows: *Does health category have an impact on emergency department expenditures?*
-
-
+This dataset also allows for evaluation of the relationship between aggregate cause for care in the emergency department (health category) and the resulting mean ED expenditure. Our third research question is as follows: *Does health category have an impact on emergency department expenditures?*
 
 ```{r ANOVAtest, echo= FALSE, warning = FALSE, message = FALSE, eval = FALSE}
 
@@ -170,7 +167,7 @@ nrow(sigpairs)
 
 ```
 
-A one-way ANOVA (ndf = 14, ddf = 6035) was performed to compare the effect of aggregate cause of spending (log scale) on mean ED expenditure (Table 5, Test 3), revealing that there was a statistically significant difference in mean ED expenditure between at least two groups (F = 639.5). Based on our significance testing, we rejected the overall null hypothesis of no effect. Thereafter, we performed step-down tests using a Holm correction for multiple comparisons, which indicated that 92 out of the 105 category pairs differ in mean expenditures. There is significant variation in almost all of the category pairs, consistent with the hypothesis that there is a relationship between cause of expenditure and the expenditure result.
+A one-way ANOVA (ndf = 14, ddf = 6035) was performed (Table 5, Test 3), revealing a statistically significant difference in expenditure between at least two groups (F = 639.5), leading us to reject the overall null hypothesis of no variance. Thereafter, we performed step-down tests using a Holm correction for multiple comparisons, which indicated that 92 out of the 105 category pairs differ in mean expenditures. There is significant variation in almost all of the category pairs, consistent with the hypothesis that there is a relationship between cause of expenditure and the expenditure result.
 
 ```{r spending_time_fit, echo = FALSE, warning = FALSE, message = FALSE, eval = FALSE}
 
@@ -192,13 +189,13 @@ glance(spendingovertime_fit)$adj.r.squared
 
 ```
 
-Because our ANOVA testing showed significant variance, we performed a linear regression with the referent group mean spending (log scale) for those with behavioral health and substance use disorders (Table 1). For each health category, all else held constant, the predicted average log spending either increases or decreases based on the amount shown in the table compared to the referent group. All predictors were found to be significant in predicting mean spending except for the diabetes and kidney diseases predictor. The r-squared value indicated that this linear regression model is an acceptable predictor considering human study standards (Table 5).
+Because our ANOVA testing showed significant variance, we performed a linear regression with the referent group mean spending (log scale) for those with behavioral health and substance use disorders (Table 1). All else held constant, the predicted average log spending for each aggregate cause either increases or decreases significantly compared to the referent group. The exception was the diabetes and kidney diseases predictor. The adjusted R-squared value (0.5964) indicated that this linear regression model is an acceptable predictor considering human study standards (Table 2).
 
-Our final health category analysis involved ED spending variation over time by cause of expenditure. In order to visualize the all mean spending differences (log scale), we visualized the data in a bar plot showing aggregate spending over time faceted by health category (Figure 4). 
+Our final health category analysis involved ED spending variation over time by cause of expenditure. In order to visualize the all mean spending differences (log scale), we visualized the data in a bar plot showing aggregate spending over time faceted by health category (Figure 4).
 
-As a general trend, our plots showed a steady, slight spending increase from 2006 to 2016. By health category, maternal and neonatal conditions resulted in the least expenditure over time; cardiovascular diseases, communicable and nutrition disorders, digestive diseases, and injuries showed the highest overall expenditure over time, on average. To statistically confirm the trends shown in our plot, we performed a linear regression predicting log of all mean spending based on health category and year with a health category-year interaction term. This linear regression model has a referent group of the behavioral health and substance use disorder group in 2006. 
+As a general trend, our plots showed a steady, slight spending increase from 2006 to 2016. To statistically confirm the trends shown in our plot, we performed a linear regression predicting log of all mean spending based on health category and year with a health category-year interaction term. This linear regression model has a referent group of the behavioral health and substance use disorder group in 2006.
 
-Results (Table 4) showed that most health categories are statistically significant predictors for expenditure (with all else held constant) in comparison to the referent group. However, no category-year interaction terms were significant, and p-values for the 2016 predictor (p = 0.133) and diabetes and kidney disease predictor (p = 0.788) denied adequate predictability. The adjusted R-squared value associated with this model turned out smaller than the adjusted R-squared value for the linear regression model not including year (Tables 2 & 7). In an attempt to find the most parsimonious and accurate model, the model without year as an interaction is preferred.
+Results (Table 4) showed that no category-year interaction terms were significant, and p-values for the 2016 predictor (p = 0.133) and diabetes and kidney disease predictor (p = 0.788) denied adequate predictability. The adjusted R-squared value associated with this model is smaller than the adjusted R-squared value for the linear regression model not including year (Tables 2 & 7). In an attempt to find the most parsimonious and accurate model, the model without year interaction is preferred.
 
 ### Gender and Age Interaction
 
